@@ -283,7 +283,7 @@ namespace consoleXstream.Menu.MainMenu
                 if (t.Display == title) t.ActiveWatcher = title;
         }
 
-        private void CheckDisplaySettings()
+        public void CheckDisplaySettings()
         {
             _data.Checked.Clear();
 

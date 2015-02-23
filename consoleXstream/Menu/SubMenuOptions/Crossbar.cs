@@ -48,7 +48,7 @@ namespace consoleXstream.Menu.SubMenuOptions
             }
         }
 
-        private void Change(string strSet)
+        public void Change(string strSet)
         {
             /*
             var intIndex = _videoCapture.listCrossbarInput.IndexOf(strSet);

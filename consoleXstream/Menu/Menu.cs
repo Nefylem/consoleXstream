@@ -197,56 +197,6 @@ namespace consoleXstream.Menu
 
 
 
-        private void ChangeSetting(string strCommand)
-        {
-            /*
-            strCommand = strCommand.ToLower();
-            if (strCommand == "ds4 emulation") _system.changeDS4Emulation();
-            if (strCommand == "normalize") _system.changeNormalizeGamepad();
-            if (strCommand == "controllermax") _system.changeControllerMax();
-            
-            if (strCommand == "titanone") ChangeTitanOne(); 
-
-            if (strCommand == "resolution") ListCaptureResolution();
-            if (strCommand == "avirender") _system.changeAVIRender();
-            if (strCommand == "checkcaptureres") _system.changeCaptureAutoRes();
-
-            CheckDisplaySettings();
-             */
-        }
-
-        private void ChangeTitanOne()
-        {
-            /*
-            if (_listTo.GetToCount("TitanOne") > 1)
-                ListAllTitanOne();
-            else
-                _system.changeTitanOne();
-             */
-        }
-
-        private void ListAllTitanOne()
-        {
-            /*
-            var toList = _listTo.FindDevices("TitanOne");
-            _var.ShowSubSelection = true;
-             */
-        }
-
-
-
-
-        private void ChangeVideoDisplay(string command)
-        {
-            /*
-            command = command.ToLower();
-            if (command == "autoset") ChangeAutoRes();
-            if (command == "resolution") ListDisplayResolution();
-            if (command == "refresh") ListDisplayRefresh();
-            if (command == "stayontop") ChangeStayOnTop();
-             */
-        }
-
         #endregion
 
         private void DeclareClasses()
@@ -298,6 +248,7 @@ namespace consoleXstream.Menu
 
         private void SetupSubAction()
         {
+            _subAction.GetActionHandle(_action);
             _subAction.GetDataHandle(_data);
             _subAction.GetForm1Handle(_form1);
             _subAction.GetNavigationHandle(_nav);

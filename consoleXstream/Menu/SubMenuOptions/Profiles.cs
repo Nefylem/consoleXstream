@@ -34,7 +34,7 @@ namespace consoleXstream.Menu.SubMenuOptions
             return listData;
         }
 
-        private void Save(string strCommand)
+        public void Save(string strCommand)
         {
             /*
             _data.Checked.Clear();
@@ -90,7 +90,7 @@ namespace consoleXstream.Menu.SubMenuOptions
              */
         }
 
-        private void LoadProfile(string strFile)
+        public void Load(string strFile)
         {
             /*
             var strDevice = "";

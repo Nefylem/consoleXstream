@@ -52,7 +52,7 @@ namespace consoleXstream.Menu.SubMenuOptions
             }
         }
 
-        private void Change(string strSet)
+        public void Change(string strSet)
         {
             /*
             if (!_system.boolInternalCapture)
