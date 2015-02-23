@@ -11,6 +11,7 @@ namespace consoleXstream.Menu.SubMenuOptions
     {
         private void ListDisplayRefresh()
         {
+            /*
             _data.ClearButtons();
 
             _shutter.Scroll = 0;
@@ -33,10 +34,12 @@ namespace consoleXstream.Menu.SubMenuOptions
             }
 
             _action.SelectSubItem();
+             */
         }
 
         private void ListDisplayResolution()
         {
+            /*
             _data.ClearButtons();
 
             _shutter.Scroll = 0;
@@ -61,10 +64,12 @@ namespace consoleXstream.Menu.SubMenuOptions
             _action.SelectSubItem();
             //Set scroll position
             //Set most used to front of list
+             */
         }
 
         private void ChangeVideoResolution(string command)
         {
+            /*
             if (command.ToLower() == "resolution")
                 return;
 
@@ -75,10 +80,12 @@ namespace consoleXstream.Menu.SubMenuOptions
             //save set res
             Left = (Screen.PrimaryScreen.Bounds.Width / 2) - (Properties.Resources.imgMainMenu.Width / 2);
             Top = (Screen.PrimaryScreen.Bounds.Height / 2) - (Properties.Resources.imgMainMenu.Height / 2);
+             */
         }
 
         private void ChangeVideoRefresh(string command)
         {
+            /*
             if (command.ToLower() == "refresh")
                 return;
 
@@ -88,26 +95,31 @@ namespace consoleXstream.Menu.SubMenuOptions
 
             Left = (Screen.PrimaryScreen.Bounds.Width / 2) - (Properties.Resources.imgMainMenu.Width / 2);
             Top = (Screen.PrimaryScreen.Bounds.Height / 2) - (Properties.Resources.imgMainMenu.Height / 2);
+             */
         }
 
         private void ChangeAutoRes()
         {
+            /*
             if (_data.Checked.IndexOf("Auto Set") > -1)
                 _data.Checked.RemoveAt(_data.Checked.IndexOf("Auto Set"));
             else
                 _data.Checked.Add("Auto Set");
 
             _system.setAutoChangeDisplay();
+             */
         }
 
         private void ChangeStayOnTop()
         {
+            /*
             if (_data.Checked.IndexOf("Stay On Top") > -1)
                 _data.Checked.RemoveAt(_data.Checked.IndexOf("Stay On Top"));
             else
                 _data.Checked.Add("Stay On Top");
 
             _system.setStayOnTop();
+             */
         }
 
     }

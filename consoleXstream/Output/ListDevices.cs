@@ -17,7 +17,7 @@ namespace consoleXstream.Output
             using (var searcher = new ManagementObjectSearcher(@"Select * From Win32_USBControllerDevice"))
                 collection = searcher.Get();
 
-            return collection.Cast<ManagementBaseObject>().Select(
+             return collection.Cast<ManagementBaseObject>().Select(
                 device => device.GetPropertyValue("Dependent").ToString().ToLower()).Where(
                 strSearch => strSearch.IndexOf(search.ToLower(), StringComparison.Ordinal) > -1).Count(CheckDevice);
         }

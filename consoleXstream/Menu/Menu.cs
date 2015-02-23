@@ -1,19 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Linq;
 using System.Windows.Forms;
-using System.IO;
-using System.Xml;
 using consoleXstream.Config;
 using consoleXstream.DrawGui;
 using consoleXstream.Input;
 using consoleXstream.Menu.Data;
 using consoleXstream.Menu.MainMenu;
 using consoleXstream.Remap;
-using consoleXstream.Output;
-using consoleXstream.VideoCapture;
 
 namespace consoleXstream.Menu
 {
@@ -45,12 +39,6 @@ namespace consoleXstream.Menu
 
         private readonly List<PreviewItem> _previewVideo = new List<PreviewItem>();
 
-        private int _intMenuOk;
-
-        private int _gamepadCount;
-
-        private bool _boolShowPreview;
-
         private string _strRemapSelected;
 
 
@@ -63,7 +51,7 @@ namespace consoleXstream.Menu
         public void GetSystemHandle(Configuration inSystem) { _system = inSystem; }
         public void GetKeyboardHookHandle(KeyboardHook inKey) { _keyboardHook = inKey; }
         public void GetVideoCaptureHandle(VideoCapture.VideoCapture inVideo) { _videoCapture = inVideo; }
-        public void GetRemapHandle(Remap.Remapping inMap) { _remap = inMap; }
+        public void GetRemapHandle(Remapping inMap) { _remap = inMap; }
         public void GetKeymapHandle(Keymap keymap) { _keymap = keymap; }
 
         private void frmMenu_Load(object sender, EventArgs e)
@@ -186,13 +174,6 @@ namespace consoleXstream.Menu
             _drawGui.drawImage(new Rectangle(15, 240, 570, 100), subSelect);
         }
 
-
-        private void RegisterWatcher(string title)
-        {
-            foreach (var t in _data.SubItems)
-                if (t.Display == title) t.ActiveWatcher = title;
-        }
-
         private void CheckControls()
         {
             _keyboard.CheckInput();
@@ -205,11 +186,6 @@ namespace consoleXstream.Menu
         private void imgDisplay_Click(object sender, EventArgs e) { _mouse.Click(e); }
 
         #region Action Handlers
-
-        private bool CheckSystemSetting(string strCommand)
-        {
-            return _system.checkUserSetting(strCommand.ToLower()).ToLower() == "true";
-        }
 
         //TODO: look into list for last selected object / scroll. For now, just revert to 1
         #endregion
@@ -257,46 +233,6 @@ namespace consoleXstream.Menu
              */
         }
 
-        private void CheckDisplaySettings()
-        {
-            _data.Checked.Clear();
-
-            foreach (var t in _data.SubItems)
-            {
-                if (t.Command.ToLower() == "ds4 emulation")
-                    if (_system.boolPS4ControllerMode) _data.Checked.Add("DS4 Emulation");
-              
-                if (t.Command.ToLower() == "normalize")
-                    if (_system.boolNormalizeControls) _data.Checked.Add("Normalize");
-
-                if (t.Command.ToLower() == "controllermax")
-                    if (_system.boolControllerMax) _data.Checked.Add("ControllerMax");
-
-                if (t.Command.ToLower() == "titanone")
-                    if (_system.boolTitanOne) _data.Checked.Add("TitanOne");
-
-                if (t.Command.ToLower() == "gimx")
-                    if (_system.boolGIMX) _data.Checked.Add("GIMX");
-
-                if (t.Command.ToLower() == "remote gimx")
-                    if (_system.boolRemoteGIMX) _data.Checked.Add("remote gimx");
-
-                if (t.Command.ToLower() == "McShield")
-                    if (_system.boolMcShield) _data.Checked.Add("McShield");
-
-                if (t.Command.ToLower() == "control vjoy")
-                    if (_system.boolControlVJOY) _data.Checked.Add("Control VJOY");
-
-                if (t.Command.ToLower() == "crossbar")
-                    if (CheckSystemSetting("Crossbar")) _data.Checked.Add("Crossbar");
-
-                if (t.Command.ToLower() == "avirender")
-                    if (CheckSystemSetting("AVIRender")) _data.Checked.Add("AVI Renderer");
-
-                if (t.Command.ToLower() == "checkcaptureres")
-                    if (CheckSystemSetting("CheckCaptureRes")) _data.Checked.Add("Check Capture");
-            }
-        }
 
 
 
@@ -357,6 +293,7 @@ namespace consoleXstream.Menu
             _action.GetVariableHandle(_var);
             _action.GetShutterHandle(_shutter);
             _action.GetSubActionHandle(_subAction);
+            _action.GetVideoCapture(_videoCapture);
         }
 
         private void SetupSubAction()
@@ -406,6 +343,7 @@ namespace consoleXstream.Menu
 
         private void SetupSubMenu()
         {
+            _subMenu.GetActionHandle(_subAction);
             _subMenu.GetButtonHandle(_button);
             _subMenu.GetDataHandle(_data);
             _subMenu.GetDrawGuiHandle(_drawGui);

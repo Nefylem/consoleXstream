@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using consoleXstream.Menu.Data;
 
 namespace consoleXstream.Menu
 {
@@ -11,6 +13,7 @@ namespace consoleXstream.Menu
         //TODO: create second device by crossbar
         private void AddNewVideoCapture(string strVideoDevice)
         {
+            /*
             var intIndex = -1;
             for (var intCount = 0; intCount < _previewVideo.Count; intCount++)
             {
@@ -46,10 +49,12 @@ namespace consoleXstream.Menu
             _previewVideo[intIndex].VideoPreview.runGraph();
 
             _boolShowPreview = true;
+             */
         }
 
         private void DrawPreviewWindow(Bitmap bmpShutter, Rectangle displayRect, string strCommand)
         {
+            /*
             var intIndex = -1;
             for (var intCount = 0; intCount < _previewVideo.Count; intCount++)
             {
@@ -59,6 +64,7 @@ namespace consoleXstream.Menu
 
             if (intIndex > -1)
                 _drawGui.drawImage(bmpShutter, displayRect, _previewVideo[intIndex].Display);
+             */
         }
 
     }

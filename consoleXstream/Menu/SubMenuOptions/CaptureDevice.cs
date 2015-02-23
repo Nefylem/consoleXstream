@@ -3,16 +3,30 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using consoleXstream.Config;
+using consoleXstream.Menu.Data;
 
 namespace consoleXstream.Menu.SubMenuOptions
 {
     class CaptureDevice
     {
+        private Interaction _data;
+        private SubMenu.Shutter _shutter;
+        private SubMenu.Action _subAction;
+        private Configuration _system;
+        private VideoCapture.VideoCapture _videoCapture;
+
+        public void GetDataHandle(Interaction data) { _data = data; }
+        public void GetShutterHandle(SubMenu.Shutter shutter) { _shutter = shutter; }
+        public void GetSystemHandle(Configuration system) { _system = system; }
+        public void GetSubActionHandle(SubMenu.Action subAction) { _subAction = subAction; }
+        public void GetVideoCapture(VideoCapture.VideoCapture videoCapture) { _videoCapture = videoCapture; }
+
         public void Find()
         {
             if (_system.boolInternalCapture)
             {
-                for (int intCount = 0; intCount < _videoCapture.listVideoCapture.Count; intCount++)
+                for (var intCount = 0; intCount < _videoCapture.listVideoCapture.Count; intCount++)
                 {
                     _subAction.AddSubItem(_videoCapture.listVideoCaptureName[intCount], _videoCapture.listVideoCaptureName[intCount]);
                     //addNewVideoCapture(videoCapture.listVideoCaptureName[intCount]);
@@ -27,7 +41,6 @@ namespace consoleXstream.Menu.SubMenuOptions
                 }
                 else
                 {
-                    _action.SelectSubItem();
                     _data.Checked.Clear();
                     _data.Checked.Add(_videoCapture.strVideoCaptureDevice);
                 }
@@ -41,6 +54,7 @@ namespace consoleXstream.Menu.SubMenuOptions
 
         private void Change(string strSet)
         {
+            /*
             if (!_system.boolInternalCapture)
                 return;
             var intIndex = _videoCapture.listVideoCaptureName.IndexOf(strSet);
@@ -53,10 +67,12 @@ namespace consoleXstream.Menu.SubMenuOptions
             _videoCapture.runGraph();
             _data.Checked.Clear();
             _data.Checked.Add(_videoCapture.strVideoCaptureDevice);
+             */
         }
 
         private void ListCaptureResolution()
         {
+            /*
             _data.ClearButtons();
 
             _shutter.Scroll = 0;
@@ -93,10 +109,12 @@ namespace consoleXstream.Menu.SubMenuOptions
             }
 
             _action.SelectSubItem();
+             */
         }
 
         private void ChangeResolution(string resolution)
         {
+            /*
             _system.strCurrentResolution = resolution;
             resolution = resolution.ToLower();
             if (resolution == "resolution")
@@ -115,6 +133,7 @@ namespace consoleXstream.Menu.SubMenuOptions
 
                 break;
             }
+             */
         }
 
 

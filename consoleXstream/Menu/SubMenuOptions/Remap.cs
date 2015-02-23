@@ -19,14 +19,17 @@ namespace consoleXstream.Menu.SubMenuOptions
 
         private void SetupGamepadRemap()
         {
+            /*
             _data.ClearButtons();
             _var.Setup = true;
             _var.SetupGamepad = true;
             _user.SubSelected = "";
+             */
         }
 
         private void DrawGamepadRemap()
         {
+            /*
             if (_gamepadCount == 0)
                 _gamepadCount = Enum.GetNames(typeof(xbox)).Length;
 
@@ -49,22 +52,28 @@ namespace consoleXstream.Menu.SubMenuOptions
                 DrawButtonRemap(new Rectangle(120, start - 1, 75, 15), set, isSelected);
                 start += 15;
             }
+             */
         }
 
         private void DrawButtonRemap(Rectangle rect, string write, bool isHigh)
         {
+            /*
             _button.Create(rect, write);
 
             _drawGui.drawImage(rect.X, rect.Y, rect.Width, rect.Height,
                 isHigh ? Properties.Resources.imgTileHigh : Properties.Resources.imgTileLow);
 
             _drawGui.drawText(rect.X + 10, rect.Y + 1, write);
+             */
         }
 
         private string FindRemapValue(string title)
         {
-            var find = _remap.findRemapName(title);
+            /*
+            //var find = _remap.findRemapName(title);
             return FindGamepadValue(find);
+             */
+            return "";
         }
 
         private static string FindGamepadValue(int value)

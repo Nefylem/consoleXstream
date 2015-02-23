@@ -3,11 +3,25 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using consoleXstream.Config;
+using consoleXstream.Menu.Data;
 
 namespace consoleXstream.Menu.SubMenuOptions
 {
     class Crossbar
     {
+        private Interaction _data;
+        private SubMenu.Shutter _shutter;
+        private SubMenu.Action _subAction;
+        private Configuration _system;
+        private VideoCapture.VideoCapture _videoCapture;
+
+        public void GetDataHandle(Interaction data) { _data = data; }
+        public void GetShutterHandle(SubMenu.Shutter shutter) { _shutter = shutter; }
+        public void GetSystemHandle(Configuration system) { _system = system; }
+        public void GetSubActionHandle(SubMenu.Action subAction) { _subAction = subAction; }
+        public void GetVideoCapture(VideoCapture.VideoCapture videoCapture) { _videoCapture = videoCapture; }
+
         public void Find()
         {
             if (_system.boolInternalCapture)
@@ -23,13 +37,9 @@ namespace consoleXstream.Menu.SubMenuOptions
                     _subAction.AddSubItem(t, strTitle);
                 }
 
-                if (_data.SubItems.Count == 0)
-                {
-                    _shutter.Error = "No connections found";
-                    _shutter.Explain = "Your capture device has no available crossbar information";
-                }
-                else
-                    _action.SelectSubItem();
+                if (_data.SubItems.Count != 0) return;
+                _shutter.Error = "No connections found";
+                _shutter.Explain = "Your capture device has no available crossbar information";
             }
             else
             {
@@ -40,6 +50,7 @@ namespace consoleXstream.Menu.SubMenuOptions
 
         private void Change(string strSet)
         {
+            /*
             var intIndex = _videoCapture.listCrossbarInput.IndexOf(strSet);
             if (intIndex <= -1)
                 return;
@@ -65,6 +76,7 @@ namespace consoleXstream.Menu.SubMenuOptions
             _system.addUserData("crossbarAudioPin", strSet);
             _videoCapture.setCrossbar(strSet);
             _videoCapture.runGraph();
+             */
         }
 
 

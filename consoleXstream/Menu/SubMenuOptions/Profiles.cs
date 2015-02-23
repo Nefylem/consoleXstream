@@ -36,6 +36,7 @@ namespace consoleXstream.Menu.SubMenuOptions
 
         private void Save(string strCommand)
         {
+            /*
             _data.Checked.Clear();
             _data.Checked.Add(strCommand);
 
@@ -86,10 +87,12 @@ namespace consoleXstream.Menu.SubMenuOptions
             var writer = XmlWriter.Create(@"Profiles\" + strCommand + ".connectProfile", settings);
             doc.Save(writer);
             writer.Close();
+             */
         }
 
         private void LoadProfile(string strFile)
         {
+            /*
             var strDevice = "";
             var strAudio = "";
             var strVideoPin = "";
@@ -137,6 +140,7 @@ namespace consoleXstream.Menu.SubMenuOptions
             _videoCapture.setCrossbar(strVideoPin);
             _videoCapture.setCrossbar(strAudioPin);
             _videoCapture.runGraph();
+             */
         }
 
     }

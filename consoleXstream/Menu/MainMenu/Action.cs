@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using consoleXstream.Config;
 using consoleXstream.Menu.Data;
 using consoleXstream.Menu.SubMenuOptions;
@@ -17,7 +15,7 @@ namespace consoleXstream.Menu.MainMenu
         private User _user;
         private Variables _var;
         private SubMenu.Shutter _shutter;
-
+        private VideoCapture.VideoCapture _videoCapture;
 
         private readonly ListDevices _listTo = new ListDevices();
 
@@ -28,6 +26,7 @@ namespace consoleXstream.Menu.MainMenu
         public void GetUserHandle(User user) { _user = user; }
         public void GetVariableHandle(Variables inVar) { _var = inVar; }
         public void GetShutterHandle(SubMenu.Shutter shutter) { _shutter = shutter; }
+        public void GetVideoCapture(VideoCapture.VideoCapture videoCapture) { _videoCapture = videoCapture; }
 
         public void MainMenu(string command)
         {
@@ -136,111 +135,113 @@ namespace consoleXstream.Menu.MainMenu
         {
             SetMenu(command);
             ClearSub();
+            
             var crossbar = new Crossbar();
+            crossbar.GetDataHandle(_data);
+            crossbar.GetShutterHandle(_shutter);
+            crossbar.GetSubActionHandle(_subAction);
+            crossbar.GetSystemHandle(_system);
+            crossbar.GetVideoCapture(_videoCapture);
+            
             crossbar.Find();
-            //FindVideoCrossbar();
-            //ActivateShutter(intCurrentRow + 1);
+            SelectSubItem();
+            _shutter.SetActive(currentRow + 1);
         }
 
         private void VideoDevice(string command, int currentRow)
         {
             SetMenu(command);
             ClearSub();
+
             var capture = new CaptureDevice();
+
+            capture.GetDataHandle(_data);
+            capture.GetShutterHandle(_shutter);
+            capture.GetSubActionHandle(_subAction);
+            capture.GetSystemHandle(_system);
+            capture.GetVideoCapture(_videoCapture);
+
             capture.Find();
-            //ClearSub(strCommand);
-            //FindVideoDevice();
-            //ActivateShutter(intCurrentRow + 1);
+            SelectSubItem();
+            _shutter.SetActive(currentRow + 1);
         }
 
         private void VideoSettings(string command, int currentRow)
         {
             SetMenu(command);
             ClearSub();
-            /*
-            ClearSub(strCommand);
-            ActivateShutter(intCurrentRow + 1);
 
-            AddSubItem("Crossbar", "Crossbar", CheckSystemSetting("Crossbar"));
-            AddSubItem("AVIRender", "AVI Renderer", CheckSystemSetting("AVIRender"));
-            AddSubItem("CheckCaptureRes", "Check Capture", CheckSystemSetting("CheckCaptureRes"));
-            AddSubItemFolder("Resolution", "Resolution", "Capture Resolution");
+            _subAction.AddSubItem("Crossbar", "Crossbar", CheckSystemSetting("Crossbar"));
+            _subAction.AddSubItem("AVIRender", "AVI Renderer", CheckSystemSetting("AVIRender"));
+            _subAction.AddSubItem("CheckCaptureRes", "Check Capture", CheckSystemSetting("CheckCaptureRes"));
+            _subAction.AddSubItemFolder("Resolution", "Resolution", "Capture Resolution");
 
             SelectSubItem();
-            */
+            _shutter.SetActive(currentRow + 1);
         }
 
         private void VideoDisplay(string command, int currentRow)
         {
-            /*
-            ClearSub(strCommand);
-            ActivateShutter(intCurrentRow + 1);
+            SetMenu(command);
+            ClearSub();
 
-            AddSubItem("AutoSet", "Auto Set", _system.boolAutoSetResolution);
-            AddSubItemFolder("Device", "Graphics Device", "Graphics Card");
-            AddSubItemFolder("Resolution", "Resolution", "Display Resolution");
-            AddSubItemFolder("Refresh", "Refresh Rate", "Screen Refresh");
-            AddSubItemFolder("Volume", "Volume", "Volume");
-
-            AddSubItem("StayOnTop", "Stay On Top", _system.boolAutoSetResolution);
+            _subAction.AddSubItem("AutoSet", "Auto Set", _system.boolAutoSetResolution);
+            _subAction.AddSubItemFolder("Device", "Graphics Device", "Graphics Card");
+            _subAction.AddSubItemFolder("Resolution", "Resolution", "Display Resolution");
+            _subAction.AddSubItemFolder("Refresh", "Refresh Rate", "Screen Refresh");
+            _subAction.AddSubItemFolder("Volume", "Volume", "Volume");
+            _subAction.AddSubItem("StayOnTop", "Stay On Top", _system.boolAutoSetResolution);
 
             SelectSubItem();
-            */
+            _shutter.SetActive(currentRow + 1);
         }
 
         private void Device(string command, int currentRow)
         {
-            /*
-            ClearSub(strCommand);
-            ActivateShutter(intCurrentRow + 1);
+            SetMenu(command);
+            ClearSub();
 
-            AddSubItem("AutoSet", "Auto Set", _system.boolAutoSetResolution);
-            AddSubItemFolder("Device", "Graphics Device", "Graphics Card");
-            AddSubItemFolder("Resolution", "Resolution", "Display Resolution");
-            AddSubItemFolder("Refresh", "Refresh Rate", "Screen Refresh");
-            AddSubItemFolder("Volume", "Volume", "Volume");
+            _subAction.AddSubItem("DS4 Emulation", "DS4 Emulation");
+            _subAction.AddSubItem("Normalize", "Normalize");
 
-            AddSubItem("StayOnTop", "Stay On Top", _system.boolAutoSetResolution);
+            CheckDisplaySettings();
 
             SelectSubItem();
-            */
+            _shutter.SetActive(currentRow - 1);
         }
 
         private void ControllerOutput(string command, int currentRow)
         {
-            /*
-            ClearSub(strCommand);
+            SetMenu(command);
+            ClearSub();
 
-            AddSubItem("ControllerMax", "ControllerMax");
+            _subAction.AddSubItem("ControllerMax", "ControllerMax");
 
-            AddSubItem("TitanOne", "TitanOne", _listTo.GetToCount("TitanOne").ToString());
+            _subAction.AddSubItem("TitanOne", "TitanOne", _listTo.GetToCount("TitanOne").ToString());
             RegisterWatcher("TitanOne");
 
-            AddSubItem("GIMX", "GIMX");
-            AddSubItem("Remote GIMX", "Remote GIMX");
-            AddSubItem("McShield", "McShield");
-            AddSubItem("Control VJOY", "Control VJOY");
+            _subAction.AddSubItem("GIMX", "GIMX");
+            _subAction.AddSubItem("Remote GIMX", "Remote GIMX");
+            _subAction.AddSubItem("McShield", "McShield");
+            _subAction.AddSubItem("Control VJOY", "Control VJOY");
 
             CheckDisplaySettings();
-            _user.SubSelected = _listSubItems[0].Command;
-
-            ActivateShutter(intCurrentRow - 1);
-            */
+            SelectSubItem();
+            _shutter.SetActive(currentRow - 1);
         }
 
         private void Remap(string command, int currentRow)
         {
-            /*
-            ClearSub(strCommand);
+            SetMenu(command);
+            ClearSub();
 
-            AddSubItem("Gamepad", "Gamepad");
-            AddSubItem("Keyboard", "Keyboard");
-            AddSubItem("Mouse", "Mouse");
-            //addSubItem("Touch", "Touch");
+            _subAction.AddSubItem("Gamepad", "Gamepad");
+            _subAction.AddSubItem("Keyboard", "Keyboard");
+            _subAction.AddSubItem("Mouse", "Mouse");
+            _subAction.AddSubItem("Touch", "Touch");
 
-            _user.SubSelected = _listSubItems[0].Command;
-            ActivateShutter(intCurrentRow - 1);
-            */
+            SelectSubItem();
+            _shutter.SetActive(currentRow - 1);
         }
 
         private void Config(string command, int currentRow)
@@ -270,6 +271,59 @@ namespace consoleXstream.Menu.MainMenu
                 _user.SubSelected = _data.SubItems[0].Command;
             }
         }
+
+        private bool CheckSystemSetting(string strCommand)
+        {
+            return _system.checkUserSetting(strCommand.ToLower()).ToLower() == "true";
+        }
+
+        private void RegisterWatcher(string title)
+        {
+            foreach (var t in _data.SubItems)
+                if (t.Display == title) t.ActiveWatcher = title;
+        }
+
+        private void CheckDisplaySettings()
+        {
+            _data.Checked.Clear();
+
+            foreach (var t in _data.SubItems)
+            {
+                if (t.Command.ToLower() == "ds4 emulation")
+                    if (_system.boolPS4ControllerMode) _data.Checked.Add("DS4 Emulation");
+
+                if (t.Command.ToLower() == "normalize")
+                    if (_system.boolNormalizeControls) _data.Checked.Add("Normalize");
+
+                if (t.Command.ToLower() == "controllermax")
+                    if (_system.boolControllerMax) _data.Checked.Add("ControllerMax");
+
+                if (t.Command.ToLower() == "titanone")
+                    if (_system.boolTitanOne) _data.Checked.Add("TitanOne");
+
+                if (t.Command.ToLower() == "gimx")
+                    if (_system.boolGIMX) _data.Checked.Add("GIMX");
+
+                if (t.Command.ToLower() == "remote gimx")
+                    if (_system.boolRemoteGIMX) _data.Checked.Add("remote gimx");
+
+                if (t.Command.ToLower() == "McShield")
+                    if (_system.boolMcShield) _data.Checked.Add("McShield");
+
+                if (t.Command.ToLower() == "control vjoy")
+                    if (_system.boolControlVJOY) _data.Checked.Add("Control VJOY");
+
+                if (t.Command.ToLower() == "crossbar")
+                    if (CheckSystemSetting("Crossbar")) _data.Checked.Add("Crossbar");
+
+                if (t.Command.ToLower() == "avirender")
+                    if (CheckSystemSetting("AVIRender")) _data.Checked.Add("AVI Renderer");
+
+                if (t.Command.ToLower() == "checkcaptureres")
+                    if (CheckSystemSetting("CheckCaptureRes")) _data.Checked.Add("Check Capture");
+            }
+        }
+
 
     }
 }
