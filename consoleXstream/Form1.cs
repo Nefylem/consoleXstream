@@ -9,6 +9,12 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
 using System.Reflection;
+using consoleXstream.Config;
+using consoleXstream.Input;
+using consoleXstream.Menu;
+using consoleXstream.Output;
+using consoleXstream.Remap;
+using consoleXstream.Scripting;
 
 namespace consoleXstream
 {
@@ -19,24 +25,25 @@ namespace consoleXstream
         string strPath = @"\\gamer-pc\shield\consoleXstream\";
         public bool boolIDE = false;
         #endregion
-        #region Classes
-        private classSystem system;
-        private classExternalScripting external;
 
-        private classGamepadXInput gamepad;
+        private Configuration system;
+        private ExternalScript external;
+
+        private GamepadXInput gamepad;
         private classMouseHook mouse;
-        private classKeyboardHook keyboard;
-        private classKeyboardInterface keyboardInterface;
+        private KeyboardHook keyboard;
+        private KeyboardInterface keyboardInterface;
 
-        private classControllerMax controllerMax;
-        private classTitanOne titanOne;
-        private classGimx gimx;
-        private classVideoCapture videoCapture;
-        private classVideoResolution videoResolution;
-        private classRemap remap;
+        private ControllerMax controllerMax;
+        private TitanOne titanOne;
+        private Gimx gimx;
+        private VideoCapture.VideoCapture videoCapture;
+        private VideoResolution videoResolution;
+        private Remap.Remapping remap;
+        private Remap.Keymap _keymap;
 
-        private frmMenu formMenu;
-        #endregion
+        private ShowMenu formMenu;
+
         public int intSampleFPS;
         public int intLineSample;
         public int intReplaceX;
@@ -83,25 +90,26 @@ namespace consoleXstream
         //Definitions for calling from classes
         private void declareClasses()
         {
-            formMenu = new frmMenu();
+            formMenu = new ShowMenu(this);
 
-            system = new classSystem(this);
-            external = new classExternalScripting(this);
+            system = new Configuration(this);
+            external = new ExternalScript(this);
 
-            gamepad = new classGamepadXInput(this);
-            keyboard = new classKeyboardHook(this);
+            gamepad = new GamepadXInput(this);
+            keyboard = new KeyboardHook(this);
 
-            keyboardInterface = new classKeyboardInterface(this);
+            keyboardInterface = new KeyboardInterface(this);
 
             mouse = new classMouseHook(this);
 
-            controllerMax = new classControllerMax(this);
-            titanOne = new classTitanOne(this);
-            gimx = new classGimx(this);
+            controllerMax = new ControllerMax(this);
+            titanOne = new TitanOne(this);
+            gimx = new Gimx(this);
 
-            videoCapture = new classVideoCapture(this);
-            videoResolution = new classVideoResolution(this);
-            remap = new classRemap();
+            videoCapture = new VideoCapture.VideoCapture(this);
+            videoResolution = new Config.VideoResolution(this);
+            remap = new Remap.Remapping();
+            _keymap = new Keymap();
 
             //Pass to subforms as needed
             system.getVideoCaptureHandle(videoCapture);
@@ -124,8 +132,10 @@ namespace consoleXstream
 
             videoCapture.getSystemHandle(system);
 
-            formMenu.getRemapHandle(remap);
+            formMenu.GetRemapHandle(remap);
+            formMenu.GetKeymapHandle(_keymap);
         }
+
         //Deletes the log files on startup so only shows latest information
         private void deleteLogs()
         {
@@ -166,7 +176,7 @@ namespace consoleXstream
                     controllerMax.closeControllerMaxInterface();
 
                 if (system.boolInternalCapture)
-                    videoCapture.closeGraph();
+                    videoCapture.CloseGraph();
             }
             Application.Exit();
         }
@@ -267,7 +277,7 @@ namespace consoleXstream
                 else
                 {
                     system.debug("[3] Configure ControllerMax using TitanOne API");
-                    titanOne.setTOInterface(classTitanOne.DevPID.ControllerMax);
+                    titanOne.setTOInterface(Output.TitanOne.DevPID.ControllerMax);
                     titanOne.initTitanOne();
                     configureTitanOne();
                 }
@@ -276,7 +286,7 @@ namespace consoleXstream
             if (system.boolTitanOne)
             {
                 system.debug("[3] Configure TitanOne API");
-                titanOne.setTOInterface(classTitanOne.DevPID.TitanOne);
+                titanOne.setTOInterface(Output.TitanOne.DevPID.TitanOne);
                 titanOne.initTitanOne();
                 configureTitanOne();
             }
@@ -306,7 +316,10 @@ namespace consoleXstream
         {
             system.initializeUserData();
             system.loadDefaults();
-            system.initializeKeyboardDefaults();
+            
+            _keymap.InitializeKeyboardDefaults();
+            _keymap.LoadKeyboardInputs();
+
             system.loadSetupXML();
             system.checkUserSettings();
         }
@@ -392,7 +405,7 @@ namespace consoleXstream
 
             if (system.boolEnableKeyboard)
             {
-                if (keyboard.getKey(system.keyDef.strButtonBack))
+                if (keyboard.getKey(_keymap.KeyDef.ButtonBack))
                 {
                     if (_intBlockMenu == 0)
                         openMenu();
@@ -455,7 +468,7 @@ namespace consoleXstream
             if (!system.IsOverrideOnExit)
             {
                 Application.DoEvents();
-                videoCapture.debugVideo("[0] Reset after display change: " + Screen.PrimaryScreen.Bounds.Width + " / " + Screen.PrimaryScreen.Bounds.Height);
+                videoCapture.DebugVideo("[0] Reset after display change: " + Screen.PrimaryScreen.Bounds.Width + " / " + Screen.PrimaryScreen.Bounds.Height);
 
                 this.BringToFront();
                 this.Focus();
@@ -469,7 +482,7 @@ namespace consoleXstream
                 imgDisplay.BringToFront();
                 imgDisplay.Focus();
 
-                videoCapture.forceRebuildAfterResolution();
+                videoCapture.ForceRebuildAfterResolution();
             }
         }
         #endregion
@@ -486,11 +499,11 @@ namespace consoleXstream
                     this.TopMost = false;
 
                 //Pass in various handles it needs
-                formMenu.getSystemHandle(system);
-                formMenu.getKeyboardHandle(keyboard);
-                formMenu.getVideoCaptureHandle(videoCapture);
+                formMenu.GetSystemHandle(system);
+                formMenu.GetKeyboardHookHandle(keyboard);
+                formMenu.GetVideoCaptureHandle(videoCapture);
 
-                formMenu.showPanel();
+                formMenu.ShowPanel();
             }
         }
 

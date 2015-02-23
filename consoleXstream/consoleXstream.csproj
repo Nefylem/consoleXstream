@@ -38,6 +38,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Management" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -48,51 +49,64 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="classControllerMax.cs" />
-    <Compile Include="classExternalScripting.cs" />
-    <Compile Include="classGamepadXInput.cs" />
-    <Compile Include="classGimx.cs" />
-    <Compile Include="classGUIDraw.cs" />
-    <Compile Include="classKeyboardHook.cs" />
-    <Compile Include="classKeyboardInterface.cs" />
-    <Compile Include="classMouseHook.cs" />
-    <Compile Include="classRemap.cs" />
-    <Compile Include="classSystem.cs" />
-    <Compile Include="classTitanOne.cs" />
-    <Compile Include="classVideoCapture.cs" />
-    <Compile Include="classVideoResolution.cs" />
+    <Compile Include="Menu\Data\ButtonItem.cs" />
+    <Compile Include="Menu\Data\DisplayItem.cs" />
+    <Compile Include="Menu\Data\FrameCount.cs" />
+    <Compile Include="Menu\Data\Interaction.cs" />
+    <Compile Include="Menu\Data\PreviewItem.cs" />
+    <Compile Include="Menu\Data\User.cs" />
+    <Compile Include="Menu\Data\Variables.cs" />
+    <Compile Include="Menu\Gamepad.cs" />
+    <Compile Include="Menu\Keyboard.cs" />
+    <Compile Include="Menu\MainMenu\Action.cs" />
+    <Compile Include="Menu\MainMenu\Create.cs" />
+    <Compile Include="Menu\MainMenu\Menu.cs" />
+    <Compile Include="Menu\Mouse.cs" />
+    <Compile Include="Menu\Navigation.cs" />
+    <Compile Include="Menu\PreviewVideo.cs" />
+    <Compile Include="Menu\SubMenuOptions\CaptureDevice.cs" />
+    <Compile Include="Menu\SubMenuOptions\Crossbar.cs" />
+    <Compile Include="Menu\SubMenuOptions\Display.cs" />
+    <Compile Include="Menu\SubMenuOptions\Profiles.cs" />
+    <Compile Include="Menu\SubMenuOptions\Remap.cs" />
+    <Compile Include="Menu\SubMenu\Action.cs" />
+    <Compile Include="Menu\SubMenu\Menu.cs" />
+    <Compile Include="Menu\SubMenu\Shutter.cs" />
+    <Compile Include="Output\ControllerMax.cs" />
+    <Compile Include="Remap\Keymap.cs" />
+    <Compile Include="Scripting\ExternalScript.cs" />
+    <Compile Include="Input\GamepadXInput.cs" />
+    <Compile Include="Output\Gimx.cs" />
+    <Compile Include="DrawGui\DrawGui.cs" />
+    <Compile Include="Input\KeyboardHook.cs" />
+    <Compile Include="Input\KeyboardInterface.cs" />
+    <Compile Include="Output\ListDevices.cs" />
+    <Compile Include="Input\classMouseHook.cs" />
+    <Compile Include="Remap\Remaping.cs" />
+    <Compile Include="Config\Configuration.cs" />
+    <Compile Include="Output\TitanOne.cs" />
+    <Compile Include="VideoCapture\VideoCapture.cs" />
+    <Compile Include="Config\VideoResolution.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="frmDialog.cs">
+    <Compile Include="Menu\Menu.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frmDialog.Designer.cs">
-      <DependentUpon>frmDialog.cs</DependentUpon>
+    <Compile Include="Menu\Menu.Designer.cs">
+      <DependentUpon>Menu.cs</DependentUpon>
     </Compile>
-    <Compile Include="frmMenu.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="frmMenu.Designer.cs">
-      <DependentUpon>frmMenu.cs</DependentUpon>
-    </Compile>
-    <Compile Include="frmNotify.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="frmNotify.Designer.cs">
-      <DependentUpon>frmNotify.cs</DependentUpon>
-    </Compile>
-    <Compile Include="KeyboardHook.cs" />
+    <Compile Include="Input\KeyboardHookDef.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="frmMenu.resx">
-      <DependentUpon>frmMenu.cs</DependentUpon>
+    <EmbeddedResource Include="Menu\Menu.resx">
+      <DependentUpon>Menu.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -174,6 +188,13 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Images\ThreeDots.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Images\imgSubSelect.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Dialog\" />
+    <Folder Include="Notify\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

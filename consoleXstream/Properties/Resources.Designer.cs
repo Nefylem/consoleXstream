@@ -203,6 +203,16 @@ namespace consoleXstream.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap imgSubSelect {
+            get {
+                object obj = ResourceManager.GetObject("imgSubSelect", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap imgTick {
             get {
                 object obj = ResourceManager.GetObject("imgTick", resourceCulture);
