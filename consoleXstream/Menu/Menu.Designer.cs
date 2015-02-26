@@ -54,7 +54,7 @@
             // frmMenu
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScaleMode = global::System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(723, 451);
             this.Controls.Add(this.imgDisplay);
             this.Name = "FrmMenu";

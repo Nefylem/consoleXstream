@@ -5,13 +5,31 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using consoleXstream.Config;
 using consoleXstream.Input;
+using consoleXstream.Menu.Data;
 
 namespace consoleXstream.Menu.SubMenuOptions
 {
     class Remap
     {
-        private void ChangeRemapScreen(string command)
+        private Configuration _system;
+        private Interaction _data;
+        private User _user;
+        private SubMenu.Action _subAction;
+        private SubMenu.Shutter _shutter;
+        private Variables _var;
+        private VideoCapture.VideoCapture _videoCapture;
+
+        public void GetSystemHandle(Configuration system) { _system = system; }
+        public void GetDataHandle(Interaction data) { _data = data; }
+        public void GetUserHandle(User user) { _user = user; }
+        public void GetSubActionHandle(SubMenu.Action subAction) { _subAction = subAction; }
+        public void GetShutterHandle(SubMenu.Shutter shutter) { _shutter = shutter; }
+        public void GetVariableHandle(Variables var) { _var = var; }
+        public void GetVideoCaptureHandle(VideoCapture.VideoCapture video) { _videoCapture = video; }
+
+        public void ChangeRemapScreen(string command)
         {
             command = command.ToLower();
             if (command == "gamepad") SetupGamepadRemap();
@@ -19,12 +37,10 @@ namespace consoleXstream.Menu.SubMenuOptions
 
         private void SetupGamepadRemap()
         {
-            /*
             _data.ClearButtons();
             _var.Setup = true;
             _var.SetupGamepad = true;
             _user.SubSelected = "";
-             */
         }
 
         private void DrawGamepadRemap()

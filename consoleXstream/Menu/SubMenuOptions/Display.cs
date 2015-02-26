@@ -1,17 +1,48 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using consoleXstream.Config;
+using consoleXstream.Menu.Data;
 
 namespace consoleXstream.Menu.SubMenuOptions
 {
     class Display
     {
+        private Configuration _system;
+        private Interaction _data;
+        private User _user;
+        private SubMenu.Action _subAction;
+        private SubMenu.Shutter _shutter;
+        private VideoCapture.VideoCapture _videoCapture;
+
+        public void GetSystemHandle(Configuration system) { _system = system; }
+        public void GetDataHandle(Interaction data) { _data = data; }
+        public void GetUserHandle(User user) { _user = user; }
+        public void GetSubActionHandle(SubMenu.Action subAction) { _subAction = subAction; }
+        public void GetShutterHandle(SubMenu.Shutter shutter) { _shutter = shutter; }
+        public void GetVideoCaptureHandle(VideoCapture.VideoCapture video) { _videoCapture = video; }
+        
+        public void ChangeResolution(string resolution)
+        {
+            _system.strCurrentResolution = resolution;
+            resolution = resolution.ToLower();
+            if (resolution == "resolution")
+                return;
+
+            var listRes = _videoCapture.getVideoResolution();
+            for (var count = 0; count < listRes.Count; count++)
+            {
+                if (resolution != listRes[count].ToLower())
+                    continue;
+
+                _videoCapture.setVideoResolution(count);
+                _videoCapture.runGraph();
+
+                _system.addUserData("CaptureResolution", resolution);
+
+                break;
+            }
+        }
+
         private void ListDisplayRefresh()
         {
-            /*
             _data.ClearButtons();
 
             _shutter.Scroll = 0;
@@ -33,13 +64,11 @@ namespace consoleXstream.Menu.SubMenuOptions
                     _subAction.AddSubItem(title, title);
             }
 
-            _action.SelectSubItem();
-             */
+            SelectSubItem();
         }
 
         private void ListDisplayResolution()
         {
-            /*
             _data.ClearButtons();
 
             _shutter.Scroll = 0;
@@ -61,15 +90,11 @@ namespace consoleXstream.Menu.SubMenuOptions
                     _subAction.AddSubItem(title, title);
             }
 
-            _action.SelectSubItem();
-            //Set scroll position
-            //Set most used to front of list
-             */
+            SelectSubItem();
         }
 
-        private void ChangeVideoResolution(string command)
+        public void ChangeVideoResolution(string command)
         {
-            /*
             if (command.ToLower() == "resolution")
                 return;
 
@@ -77,15 +102,15 @@ namespace consoleXstream.Menu.SubMenuOptions
             _data.Checked.Clear();
             _data.Checked.Add(command);
 
+            /*
             //save set res
             Left = (Screen.PrimaryScreen.Bounds.Width / 2) - (Properties.Resources.imgMainMenu.Width / 2);
             Top = (Screen.PrimaryScreen.Bounds.Height / 2) - (Properties.Resources.imgMainMenu.Height / 2);
              */
         }
 
-        private void ChangeVideoRefresh(string command)
+        public void ChangeVideoRefresh(string command)
         {
-            /*
             if (command.ToLower() == "refresh")
                 return;
 
@@ -93,34 +118,47 @@ namespace consoleXstream.Menu.SubMenuOptions
             _data.Checked.Clear();
             _data.Checked.Add(command);
 
-            Left = (Screen.PrimaryScreen.Bounds.Width / 2) - (Properties.Resources.imgMainMenu.Width / 2);
-            Top = (Screen.PrimaryScreen.Bounds.Height / 2) - (Properties.Resources.imgMainMenu.Height / 2);
-             */
+            //Left = (Screen.PrimaryScreen.Bounds.Width / 2) - (Properties.Resources.imgMainMenu.Width / 2);
+            //Top = (Screen.PrimaryScreen.Bounds.Height / 2) - (Properties.Resources.imgMainMenu.Height / 2);
         }
 
         private void ChangeAutoRes()
         {
-            /*
             if (_data.Checked.IndexOf("Auto Set") > -1)
                 _data.Checked.RemoveAt(_data.Checked.IndexOf("Auto Set"));
             else
                 _data.Checked.Add("Auto Set");
 
             _system.setAutoChangeDisplay();
-             */
         }
 
         private void ChangeStayOnTop()
         {
-            /*
             if (_data.Checked.IndexOf("Stay On Top") > -1)
                 _data.Checked.RemoveAt(_data.Checked.IndexOf("Stay On Top"));
             else
                 _data.Checked.Add("Stay On Top");
 
             _system.setStayOnTop();
-             */
         }
+
+        public void ChangeVideoDisplay(string command)
+        {
+            command = command.ToLower();
+            if (command == "autoset") ChangeAutoRes();
+            if (command == "resolution") ListDisplayResolution();
+            if (command == "refresh") ListDisplayRefresh();
+            if (command == "stayontop") ChangeStayOnTop();
+        }
+
+        private void SelectSubItem()
+        {
+            if (_data.SubItems.Count > 0)
+            {
+                _user.SubSelected = _data.SubItems[0].Command;
+            }
+        }
+
 
     }
 }

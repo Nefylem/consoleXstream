@@ -14,6 +14,10 @@ namespace consoleXstream.Menu.SubMenu
         private User _user;
         private Variables _var;
         private MainMenu.Action _action;
+        private SubMenuOptions.Display _display;
+        private Shutter _shutter;
+        private VideoCapture.VideoCapture _videoCapture;
+        private SubMenuOptions.Remap _remap;
 
         private readonly ListDevices _listTo = new ListDevices();
 
@@ -24,6 +28,8 @@ namespace consoleXstream.Menu.SubMenu
         public void GetNavigationHandle(Navigation nav) { _nav = nav; }
         public void GetUserHandle(User user) { _user = user; }
         public void GetVariableHandle(Variables var) { _var = var; }
+        public void GetShutterHandle(Shutter shutter) { _shutter = shutter; }
+        public void GetVideoCaptureHandle(VideoCapture.VideoCapture videoCapture) { _videoCapture = videoCapture; }
 
         public void ProcessSubMenu(string command)
         {
@@ -34,26 +40,15 @@ namespace consoleXstream.Menu.SubMenu
                 case "video device": ChangeVideoDevice(command); break;
                 case "safe profile": SaveProfile(command); break;
                 case "controller output": ChangeSetting(command); break;
-                case "device": break;
-                case "video settings": break;
-                case "resolution": break;
-                case "video display": break;
-                case "remap": break;
-                case "video resolution": break;
-                case "video refresh": break;
-                case "exit": Exit(command);break;
+                case "device": ChangeSetting(command); break;
+                case "video settings": ChangeSetting(command); break;
+                case "resolution": ChangeResolution(command); break;
+                case "video display": ChangeVideoDisplay(command); break;
+                case "remap": ChangeRemapScreen(command); break;
+                case "video resolution": ChangeVideoResolution(command); break;
+                case "video refresh": ChangeVideoRefresh(command); break;
+                case "exit": Exit(command); break;
             }
-            /*
-            if (_user.Menu == "device") ChangeSetting(strCommand);
-            if (_user.Menu == "video settings") ChangeSetting(strCommand);
-            if (_user.Menu == "resolution") ChangeResolution(strCommand);
-            if (_user.Menu == "video display") ChangeVideoDisplay(strCommand);
-            if (_user.Menu == "remap") ChangeRemapScreen(strCommand);
-
-            if (_user.Menu == "videoresolution") ChangeVideoResolution(strCommand);
-            if (_user.Menu == "videorefresh") ChangeVideoRefresh(strCommand);
-
-             */
         }
 
         public void AddSubItem(string strCommand, string strTitle)
@@ -178,9 +173,8 @@ namespace consoleXstream.Menu.SubMenu
             if (strCommand == "ds4 emulation") _system.changeDS4Emulation();
             if (strCommand == "normalize") _system.changeNormalizeGamepad();
             if (strCommand == "controllermax") _system.changeControllerMax();
-            //if (strCommand == "titanone") ChangeTitanOne(); 
-
-            //if (strCommand == "resolution") ListCaptureResolution();
+            if (strCommand == "titanone") ChangeTitanOne(); 
+            if (strCommand == "resolution") ListCaptureResolution();
             if (strCommand == "avirender") _system.changeAVIRender();
             if (strCommand == "checkcaptureres") _system.changeCaptureAutoRes();
 
@@ -189,31 +183,27 @@ namespace consoleXstream.Menu.SubMenu
 
         private void ChangeTitanOne()
         {
-            /*
             if (_listTo.GetToCount("TitanOne") > 1)
                 ListAllTitanOne();
             else
                 _system.changeTitanOne();
-             */
         }
 
         private void ListAllTitanOne()
         {
-            /*
             var toList = _listTo.FindDevices("TitanOne");
             _var.ShowSubSelection = true;
-             */
         }
 
         private void ChangeVideoDisplay(string command)
         {
-            /*
-            command = command.ToLower();
-            if (command == "autoset") ChangeAutoRes();
-            if (command == "resolution") ListDisplayResolution();
-            if (command == "refresh") ListDisplayRefresh();
-            if (command == "stayontop") ChangeStayOnTop();
-             */
+            _display = new SubMenuOptions.Display();
+            _display.GetSystemHandle(_system);
+            _display.GetDataHandle(_data);
+            _display.GetShutterHandle(_shutter);
+            _display.GetUserHandle(_user);
+            _display.GetSubActionHandle(this);
+            _display.ChangeVideoDisplay(command);
         }
 
         private void Exit(string command)
@@ -222,6 +212,52 @@ namespace consoleXstream.Menu.SubMenu
             if (command == "exit") _form1.closeSystem();
             if (command == "back") _nav.MenuBack();
         }
+
+        private void ChangeResolution(string command)
+        {
+            _display = new SubMenuOptions.Display();
+            _display.GetSystemHandle(_system);
+            _display.GetVideoCaptureHandle(_videoCapture);
+
+            _display.ChangeResolution(command);
+        }
+
+        private void ChangeVideoRefresh(string command)
+        {
+            _display = new SubMenuOptions.Display();
+            _display.GetSystemHandle(_system);
+            _display.GetDataHandle(_data);
+
+            _display.ChangeVideoRefresh(command);
+        }
+
+        private void ChangeVideoResolution(string command)
+        {
+            _display = new SubMenuOptions.Display();
+            _display.GetSystemHandle(_system);
+            _display.GetDataHandle(_data);
+
+            _display.ChangeVideoResolution(command);
+        }
+
+        private void ChangeRemapScreen(string command)
+        {
+            _remap = new SubMenuOptions.Remap();
+            _remap.GetDataHandle(_data);
+            _remap.GetVariableHandle(_var);
+            _remap.GetUserHandle(_user);
+
+            _remap.ChangeRemapScreen(command);
+        }
+
+        private void ListCaptureResolution()
+        {
+            var videoDevice = new SubMenuOptions.CaptureDevice();
+            videoDevice.GetUserHandle(_user);
+            videoDevice.ListCaptureResolution();
+
+        }
+
 
     }
 }

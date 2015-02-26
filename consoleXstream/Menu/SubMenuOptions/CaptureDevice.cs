@@ -14,12 +14,14 @@ namespace consoleXstream.Menu.SubMenuOptions
         private SubMenu.Shutter _shutter;
         private SubMenu.Action _subAction;
         private Configuration _system;
+        private User _user;
         private VideoCapture.VideoCapture _videoCapture;
 
         public void GetDataHandle(Interaction data) { _data = data; }
         public void GetShutterHandle(SubMenu.Shutter shutter) { _shutter = shutter; }
         public void GetSystemHandle(Configuration system) { _system = system; }
         public void GetSubActionHandle(SubMenu.Action subAction) { _subAction = subAction; }
+        public void GetUserHandle(User user) { _user = user; }
         public void GetVideoCapture(VideoCapture.VideoCapture videoCapture) { _videoCapture = videoCapture; }
 
         public void Find()
@@ -70,9 +72,8 @@ namespace consoleXstream.Menu.SubMenuOptions
              */
         }
 
-        private void ListCaptureResolution()
+        public void ListCaptureResolution()
         {
-            /*
             _data.ClearButtons();
 
             _shutter.Scroll = 0;
@@ -108,8 +109,7 @@ namespace consoleXstream.Menu.SubMenuOptions
                     _subAction.AddSubItem(listVideoRes[count], listVideoRes[count]);
             }
 
-            _action.SelectSubItem();
-             */
+            SelectSubItem();
         }
 
         private void ChangeResolution(string resolution)
@@ -136,6 +136,13 @@ namespace consoleXstream.Menu.SubMenuOptions
              */
         }
 
+        private void SelectSubItem()
+        {
+            if (_data.SubItems.Count > 0)
+            {
+                _user.SubSelected = _data.SubItems[0].Command;
+            }
+        }
 
 
     }

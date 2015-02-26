@@ -185,20 +185,6 @@ namespace consoleXstream.Menu
         private void imgDisplay_MouseLeave(object sender, EventArgs e) { _mouse.Set(false); }
         private void imgDisplay_Click(object sender, EventArgs e) { _mouse.Click(e); }
 
-        #region Action Handlers
-
-        //TODO: look into list for last selected object / scroll. For now, just revert to 1
-        #endregion
-
-        #region Menu Actions
-
-
-
-
-
-
-        #endregion
-
         private void DeclareClasses()
         {
             CreateClasses();
@@ -255,6 +241,8 @@ namespace consoleXstream.Menu
             _subAction.GetSystemHandle(_system);
             _subAction.GetUserHandle(_user);
             _subAction.GetVariableHandle(_var);
+            _subAction.GetShutterHandle(_shutter);
+            _subAction.GetVideoCaptureHandle(_videoCapture);
         }
 
         private void SetupButton()
