@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 
@@ -404,14 +405,14 @@ namespace consoleXstream.DrawGui
             _graph.DrawString(strWrite, new Font(FontName, _floatFontSize), _fontBrush, checkRect, setFormat);
         }
 
-        private void outlineText(Bitmap bmpSource, int intX, int intY, string strWrite)
+        private void outlineText(Bitmap bmpSource, int intX, int intY, string write)
         {
             if (_listOutline.Count > 0)
             {
                 for (int intCount = 0; intCount < _listOutline.Count; intCount++)
                 {
                     bool boolFound = true;
-                    if (_listOutline[intCount].strWrite != strWrite) boolFound = false;
+                    if (_listOutline[intCount].strWrite != write) boolFound = false;
                     if (_listOutline[intCount].strFontName != FontName) boolFound = false;
                     if (_listOutline[intCount].floatSize != _floatFontSize) boolFound = false;
 
@@ -423,33 +424,29 @@ namespace consoleXstream.DrawGui
                 }
             }
 
+            var fontSet = new Font(FontName, _floatFontSize, FontStyle.Bold, GraphicsUnit.Pixel);
+            var textSize = _graph.MeasureString(write, fontSet);
 
-            Font fontSet = new Font(FontName, _floatFontSize, FontStyle.Bold, GraphicsUnit.Pixel);
-            SizeF textSize = _graph.MeasureString(strWrite, fontSet);
+            var bmpFontoutline = new Bitmap((int)textSize.Width + 20, (int)textSize.Height + 20);
+            var graph = Graphics.FromImage(bmpFontoutline);
 
-            Bitmap bmpFontoutline = new Bitmap((int)textSize.Width + 20, (int)textSize.Height + 20);
-            Graphics graph = Graphics.FromImage(bmpFontoutline);
+            var strFormat = new StringFormat {LineAlignment = StringAlignment.Near};
 
-            StringFormat strFormat = new StringFormat();
-            strFormat.LineAlignment = StringAlignment.Near;
+            graph.SmoothingMode = SmoothingMode.AntiAlias;
+            graph.InterpolationMode = InterpolationMode.HighQualityBicubic;
+            graph.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
-            graph.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-            graph.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
-            graph.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
+            var penOutline = new Pen(_colOutline, OutlineSize) {LineJoin = LineJoin.Round};
 
-            Pen penOutline = new Pen(_colOutline, OutlineSize);
-            penOutline.LineJoin = LineJoin.Round;
+            var rectText = new Rectangle(intX, intY, (int)(intX + textSize.Width), (int)(intY + textSize.Height));
+            if (rectText.Height == 0) rectText.Height = 1;
+            var gradBrush = new LinearGradientBrush(rectText, _colorFont, _colorFontMinor, 90);
 
-            Rectangle rectText = new Rectangle(intX, intY, (int)(intX + textSize.Width), (int)(intY + textSize.Height));
-            LinearGradientBrush gradBrush = new LinearGradientBrush(rectText, _colorFont, _colorFontMinor, 90);
+            var textRect = new RectangleF(0, 0, textSize.Width, textSize.Height);
 
-            RectangleF textRect = new RectangleF(0, 0, textSize.Width, textSize.Height);
+            var graphPath = new GraphicsPath();
 
-            Brush fontBrush = Brushes.Black;
-
-            GraphicsPath graphPath = new GraphicsPath();
-
-            graphPath.AddString(strWrite, fontSet.FontFamily, (int)fontSet.Style, _floatFontSize, textRect, strFormat);
+            graphPath.AddString(write, fontSet.FontFamily, (int)fontSet.Style, _floatFontSize, textRect, strFormat);
 
             graph.SmoothingMode = SmoothingMode.AntiAlias;
             graph.PixelOffsetMode = PixelOffsetMode.HighQuality;
@@ -469,7 +466,7 @@ namespace consoleXstream.DrawGui
             _listOutline.Add(new OutlineText());
 
             int intIndex = _listOutline.Count - 1;
-            _listOutline[intIndex].strWrite = strWrite;
+            _listOutline[intIndex].strWrite = write;
             _listOutline[intIndex].strFontName = FontName;
             _listOutline[intIndex].floatSize = _floatFontSize;
             _listOutline[intIndex].bmpImage = bmpFontoutline;

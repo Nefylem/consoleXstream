@@ -121,7 +121,7 @@ namespace consoleXstream.Config
             var setDev = GetDevmode(cardId, setRes);
             if (!(setDev.dmBitsPerPel != 0 & setDev.dmPelsWidth != 0 & setDev.dmPelsHeight != 0)) return;
             ChangeDisplaySettings(ref setDev, 0);
-            _frmMain.changeDisplayRes();
+            _frmMain.ChangeDisplayRes();
         }
 
         public List<string> ListDisplayResolutions(int cardId)
@@ -142,9 +142,9 @@ namespace consoleXstream.Config
 
         private void EnumDevices()
         { 
-            DisplayDevice d = new DisplayDevice(0);
+            var d = new DisplayDevice(0);
 
-            int devNum = 0;
+            var devNum = 0;
             bool result;
             do
             {
@@ -152,7 +152,7 @@ namespace consoleXstream.Config
 
                 if (result)
                 {
-                    string item = devNum.ToString() +
+                    var item = devNum +
                         ". " + d.DeviceString.Trim();
                     if ((d.StateFlags & 4) != 0) item += " - main";
                     _listDisplayDevices.Add(item);

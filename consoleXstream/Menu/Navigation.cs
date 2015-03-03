@@ -3,18 +3,23 @@ using consoleXstream.Menu.Data;
 
 namespace consoleXstream.Menu
 {
-    class Navigation
+    public class Navigation
     {
+        private readonly Classes _class;
+
+        public Navigation(Classes inClass) { _class = inClass; }
+
+        /*
         private MainMenu.Action _act;
         private SubMenu.Action _subAct;
-        private Variables _var;
+        private Variables _class.Var;
         private ShowMenu _menu;
-        private Interaction _data;
-        private User _user;
-        private FrameCount _fps;
-        private Mouse _mouse;
-        private SubMenu.Shutter _shutter;
-
+        private Interaction _class.Data;
+        private User _class.User;
+        private FrameCount _class.Fps;
+        private Mouse _class.Mouse;
+        private SubMenu.Shutter _class.Shutter;
+        */
         public List<string> ListHistory;
 
         private int _moveUpWait;
@@ -23,17 +28,17 @@ namespace consoleXstream.Menu
         private int _moveRightWait;
         private int _moveOkWait;
         private int _menuBackWait;
-
+        /*
         public void GetActionVariable(MainMenu.Action action) { _act = action; }
         public void GetSubActionVariable(SubMenu.Action action) { _subAct = action; }
-        public void GetVariableHandle(Variables inVar) { _var = inVar; }
+        public void GetVariableHandle(Variables inVar) { _class.Var = inVar; }
         public void GetMenuHandle(ShowMenu inMenu) { _menu = inMenu; }
-        public void GetDataHandle(Interaction data) { _data = data; }
-        public void GetUserHandle(User user) { _user = user; }
-        public void GetFpsHandle(FrameCount fps) { _fps = fps; }
-        public void GetMouseHandle(Mouse mouse) { _mouse = mouse; }
-        public void GetShutterHandle(SubMenu.Shutter shutter) { _shutter = shutter; }
-
+        public void GetDataHandle(Interaction data) { _class.Data = data; }
+        public void GetUserHandle(User user) { _class.User = user; }
+        public void GetFpsHandle(FrameCount fps) { _class.Fps = fps; }
+        public void GetMouseHandle(Mouse mouse) { _class.Mouse = mouse; }
+        public void GetShutterHandle(SubMenu.Shutter shutter) { _class.Shutter = shutter; }
+        */
         public void CheckCommand(string command)
         {
             command = command.ToLower();
@@ -47,12 +52,12 @@ namespace consoleXstream.Menu
 
         public void MenuUp()
         {
-            foreach (var t in _data.Buttons)
+            foreach (var t in _class.Data.Buttons)
             {
-                if (t.Command != _user.Selected && t.Command != _user.SubSelected) continue;
+                if (t.Command != _class.User.Selected && t.Command != _class.User.SubSelected) continue;
                 var intX = t.Rect.Left + (t.Rect.Width / 2);
                 var intY = t.Rect.Top + (t.Rect.Height / 2);
-                if (FindNewLocation(intX, intY - _var.CellHeight))
+                if (FindNewLocation(intX, intY - _class.Var.CellHeight))
                     _moveUpWait = SetMoveWait();
                 break;
             }
@@ -60,12 +65,12 @@ namespace consoleXstream.Menu
 
         public void MenuDown()
         {
-            foreach (var t in _data.Buttons)
+            foreach (var t in _class.Data.Buttons)
             {
-                if (t.Command != _user.Selected && t.Command != _user.SubSelected) continue;
+                if (t.Command != _class.User.Selected && t.Command != _class.User.SubSelected) continue;
                 var intX = t.Rect.Left + (t.Rect.Width / 2);
                 var intY = t.Rect.Top + (t.Rect.Height / 2);
-                if (FindNewLocation(intX, intY + _var.CellHeight))
+                if (FindNewLocation(intX, intY + _class.Var.CellHeight))
                     _moveDownWait = SetMoveWait();
                 break;
             }
@@ -73,24 +78,24 @@ namespace consoleXstream.Menu
 
         public void MenuLeft()
         {
-            foreach (var t in _data.Buttons)
+            foreach (var t in _class.Data.Buttons)
             {
-                if (t.Command != _user.Selected && t.Command != _user.SubSelected) continue;
+                if (t.Command != _class.User.Selected && t.Command != _class.User.SubSelected) continue;
                 var intX = t.Rect.Left + (t.Rect.Width / 2);
                 var intY = t.Rect.Top + (t.Rect.Height / 2);
-                if (FindNewLocation(intX - _var.CellWidth, intY))
+                if (FindNewLocation(intX - _class.Var.CellWidth, intY))
                 {
                     _moveLeftWait = SetMoveWait();
-                    if (_shutter.Open)
+                    if (_class.Shutter.Open)
                     {
-                        var index = _shutter.FindScrollIndex();
+                        var index = _class.Shutter.FindScrollIndex();
                         if (index > -1)
                         {
-                            if (index - _shutter.Scroll < 1)
-                                _shutter.Scroll = index - 1;
+                            if (index - _class.Shutter.Scroll < 1)
+                                _class.Shutter.Scroll = index - 1;
 
-                            if (_shutter.Scroll < 0)
-                                _shutter.Scroll = 0;
+                            if (_class.Shutter.Scroll < 0)
+                                _class.Shutter.Scroll = 0;
                         }
                     }
                 }
@@ -100,26 +105,26 @@ namespace consoleXstream.Menu
 
         public void MenuRight()
         {
-            for (var intCount = _shutter.Scroll; intCount < _data.Buttons.Count; intCount++)
+            for (var intCount = _class.Shutter.Scroll; intCount < _class.Data.Buttons.Count; intCount++)
             {
-                if (_data.Buttons[intCount].Command != _user.Selected &&
-                    _data.Buttons[intCount].Command != _user.SubSelected) continue;
-                var intX = _data.Buttons[intCount].Rect.Left + (_data.Buttons[intCount].Rect.Width / 2);
-                var intY = _data.Buttons[intCount].Rect.Top + (_data.Buttons[intCount].Rect.Height / 2);
+                if (_class.Data.Buttons[intCount].Command != _class.User.Selected &&
+                    _class.Data.Buttons[intCount].Command != _class.User.SubSelected) continue;
+                var intX = _class.Data.Buttons[intCount].Rect.Left + (_class.Data.Buttons[intCount].Rect.Width / 2);
+                var intY = _class.Data.Buttons[intCount].Rect.Top + (_class.Data.Buttons[intCount].Rect.Height / 2);
 
-                if (FindNewLocation(intX + _var.CellWidth, intY))
+                if (FindNewLocation(intX + _class.Var.CellWidth, intY))
                 {
                     _moveRightWait = SetMoveWait();
-                    if (_shutter.Open)
+                    if (_class.Shutter.Open)
                     {
-                        var index = _shutter.FindScrollIndex();
+                        var index = _class.Shutter.FindScrollIndex();
                         if (index > -1)
                         {
-                            if (index > _shutter.Scroll + 2)
+                            if (index > _class.Shutter.Scroll + 2)
                             {
-                                _shutter.Scroll = index - 2;
-                                if (_shutter.Scroll + 4 > _data.Buttons.Count)
-                                    _shutter.Scroll = _data.Buttons.Count - 4;
+                                _class.Shutter.Scroll = index - 2;
+                                if (_class.Shutter.Scroll + 4 > _class.Data.Buttons.Count)
+                                    _class.Shutter.Scroll = _class.Data.Buttons.Count - 4;
                             }
                         }
                     }
@@ -130,26 +135,26 @@ namespace consoleXstream.Menu
 
         public void MenuBack()
         {
-            if (_var.Setup)
+            if (_class.Var.Setup)
             {
-                _var.Setup = false;
-                _var.SetupGamepad = false;
+                _class.Var.Setup = false;
+                _class.Var.SetupGamepad = false;
             }
             else
             {
                 if (ListHistory.Count == 0)
-                    _menu.ClosePanel();
+                    _class.DisplayMenu.ClosePanel();
                 else
                 {
-                    if (_var.ShowSubSelection)
+                    if (_class.Var.ShowSubSelection)
                     {
-                        _var.ShowSubSelection = false;
+                        _class.Var.ShowSubSelection = false;
                         return;
                     }
                     _menuBackWait = 5;
                     ListHistory.RemoveAt(ListHistory.Count - 1);
                     if (ListHistory.Count == 0)
-                        _shutter.Hide = true;
+                        _class.Shutter.Hide = true;
                 }
             }
         }
@@ -157,26 +162,26 @@ namespace consoleXstream.Menu
         public void MenuOk()
         {
             _moveOkWait = 5;
-            if (_var.IsMainMenu)
-                _act.MainMenu(_user.Selected);
+            if (_class.Var.IsMainMenu)
+                _class.Action.MainMenu(_class.User.Selected);
             else
             {
-                _subAct.ProcessSubMenu(_user.SubSelected);
+                _class.SubAction.ProcessSubMenu(_class.User.SubSelected);
             }
         }
 
 
         public bool FindNewLocation(int intX, int intY)
         {
-            foreach (var t in _data.Buttons)
+            foreach (var t in _class.Data.Buttons)
             {
                 if (intY < t.Rect.Top || intY > t.Rect.Bottom) continue;
                 if (intX < t.Rect.Left || intX > t.Rect.Right) continue;
-                if (_mouse.Hover == t.Command) return true;
-                if (_var.IsMainMenu)
-                    _user.Selected = t.Command;
+                if (_class.Mouse.Hover == t.Command) return true;
+                if (_class.Var.IsMainMenu)
+                    _class.User.Selected = t.Command;
                 else
-                    _user.SubSelected = t.Command;
+                    _class.User.SubSelected = t.Command;
                 return true;
             }
             return false;
@@ -185,18 +190,18 @@ namespace consoleXstream.Menu
         //Sets motion if moved by mouse
         public bool FindNewLocation(int intX, int intY, bool boolMouseMove)
         {
-            foreach (var t in _data.Buttons)
+            foreach (var t in _class.Data.Buttons)
             {
                 if (intY < t.Rect.Top || intY > t.Rect.Bottom) continue;
                 if (intX < t.Rect.Left || intX > t.Rect.Right) continue;
 
-                if (_mouse.Hover == t.Command) return true;
-                _mouse.Hover = t.Command;
+                if (_class.Mouse.Hover == t.Command) return true;
+                _class.Mouse.Hover = t.Command;
 
-                if (_var.IsMainMenu)
-                    _user.Selected = t.Command;
+                if (_class.Var.IsMainMenu)
+                    _class.User.Selected = t.Command;
                 else
-                    _user.SubSelected = t.Command;
+                    _class.User.SubSelected = t.Command;
                 return true;
             }
             return false;
@@ -205,8 +210,8 @@ namespace consoleXstream.Menu
 
         public int SetMoveWait()
        {
-            if (_fps.Frames > 20)
-                return _fps.Frames/6;
+            if (_class.Fps.Frames > 20)
+                return _class.Fps.Frames/6;
             else
                 return 3;
         }

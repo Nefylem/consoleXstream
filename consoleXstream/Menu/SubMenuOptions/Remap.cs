@@ -11,7 +11,7 @@ using consoleXstream.Menu.Data;
 
 namespace consoleXstream.Menu.SubMenuOptions
 {
-    class Remap
+    public class Remap
     {
         private Configuration _system;
         private Interaction _data;
@@ -94,7 +94,7 @@ namespace consoleXstream.Menu.SubMenuOptions
 
         private static string FindGamepadValue(int value)
         {
-            var xboxValue = (xbox)value;
+            var xboxValue = (Xbox)value;
             return GetEnumDescription(xboxValue);
         }
 

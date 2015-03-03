@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace consoleXstream.Menu.Data
 {
-    class Variables
+    public class Variables
     {
         public bool IsMainMenu;
         public bool Setup;

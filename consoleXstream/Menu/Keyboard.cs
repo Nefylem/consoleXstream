@@ -9,26 +9,22 @@ using consoleXstream.Remap;
 
 namespace consoleXstream.Menu
 {
-    class Keyboard
+    public class Keyboard
     {
-        private Navigation _nav;
-        private KeyboardHook _keyboard;
-        private Keymap _keymap;
+        private readonly Classes _class;
 
-        public void GetNavHandle(Navigation nav) { _nav = nav; }
-        public void GetKeyHookHandle(KeyboardHook keyHook) { _keyboard = keyHook; }
-        public void GetKeymapHandle(Keymap keymap) { _keymap = keymap; }
+        public Keyboard(Classes inClass) { _class = inClass; }
 
         public void CheckInput()
         {
-            if (_keyboard.getKey(_keymap.KeyDef.DpadUp) || _keyboard.getKey(_keymap.KeyAltDef.DpadUp)) _nav.CheckCommand("up");
-            if (_keyboard.getKey(_keymap.KeyDef.DpadDown) || _keyboard.getKey(_keymap.KeyAltDef.DpadDown)) _nav.CheckCommand("down");
-            if (_keyboard.getKey(_keymap.KeyDef.DpadLeft) || _keyboard.getKey(_keymap.KeyAltDef.DpadLeft)) _nav.CheckCommand("left");
-            if (_keyboard.getKey(_keymap.KeyDef.DpadRight) || _keyboard.getKey(_keymap.KeyAltDef.DpadRight)) _nav.CheckCommand("right");
-            if (_keyboard.getKey(_keymap.KeyDef.ButtonB) || _keyboard.getKey(_keymap.KeyAltDef.ButtonB)) _nav.CheckCommand("back");
-            if (_keyboard.getKey(_keymap.KeyDef.ButtonBack) || _keyboard.getKey(_keymap.KeyAltDef.ButtonBack)) _nav.CheckCommand("back");
-            if (_keyboard.getKey(_keymap.KeyDef.ButtonA) || _keyboard.getKey(_keymap.KeyAltDef.ButtonA)) _nav.CheckCommand("ok");
-            if (_keyboard.getKey(_keymap.KeyDef.ButtonStart) || _keyboard.getKey(_keymap.KeyAltDef.ButtonStart)) _nav.CheckCommand("ok");
+            if (_class.KeyboardHook.getKey(_class.Keymap.KeyDef.DpadUp) || _class.KeyboardHook.getKey(_class.Keymap.KeyAltDef.DpadUp)) _class.Nav.CheckCommand("up");
+            if (_class.KeyboardHook.getKey(_class.Keymap.KeyDef.DpadDown) || _class.KeyboardHook.getKey(_class.Keymap.KeyAltDef.DpadDown)) _class.Nav.CheckCommand("down");
+            if (_class.KeyboardHook.getKey(_class.Keymap.KeyDef.DpadLeft) || _class.KeyboardHook.getKey(_class.Keymap.KeyAltDef.DpadLeft)) _class.Nav.CheckCommand("left");
+            if (_class.KeyboardHook.getKey(_class.Keymap.KeyDef.DpadRight) || _class.KeyboardHook.getKey(_class.Keymap.KeyAltDef.DpadRight)) _class.Nav.CheckCommand("right");
+            if (_class.KeyboardHook.getKey(_class.Keymap.KeyDef.ButtonB) || _class.KeyboardHook.getKey(_class.Keymap.KeyAltDef.ButtonB)) _class.Nav.CheckCommand("back");
+            if (_class.KeyboardHook.getKey(_class.Keymap.KeyDef.ButtonBack) || _class.KeyboardHook.getKey(_class.Keymap.KeyAltDef.ButtonBack)) _class.Nav.CheckCommand("back");
+            if (_class.KeyboardHook.getKey(_class.Keymap.KeyDef.ButtonA) || _class.KeyboardHook.getKey(_class.Keymap.KeyAltDef.ButtonA)) _class.Nav.CheckCommand("ok");
+            if (_class.KeyboardHook.getKey(_class.Keymap.KeyDef.ButtonStart) || _class.KeyboardHook.getKey(_class.Keymap.KeyAltDef.ButtonStart)) _class.Nav.CheckCommand("ok");
         }
     }
 }

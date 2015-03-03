@@ -258,21 +258,21 @@ namespace consoleXstream.Output
                 //Update gamepad status
                 _controls = GamePad.GetState(PlayerIndex.One);
                 
-                if (_intXboxCount == 0) { _intXboxCount = Enum.GetNames(typeof(xbox)).Length; }
+                if (_intXboxCount == 0) { _intXboxCount = Enum.GetNames(typeof(Xbox)).Length; }
                 byte[] output = new byte[_intXboxCount];
 
-                if (_controls.DPad.Left) { output[(int)xbox.left] = Convert.ToByte(100); }
-                if (_controls.DPad.Right) { output[(int)xbox.right] = Convert.ToByte(100); }
-                if (_controls.DPad.Up) { output[(int)xbox.up] = Convert.ToByte(100); }
-                if (_controls.DPad.Down) { output[(int)xbox.down] = Convert.ToByte(100); }
+                if (_controls.DPad.Left) { output[(int)Xbox.Left] = Convert.ToByte(100); }
+                if (_controls.DPad.Right) { output[(int)Xbox.Right] = Convert.ToByte(100); }
+                if (_controls.DPad.Up) { output[(int)Xbox.Up] = Convert.ToByte(100); }
+                if (_controls.DPad.Down) { output[(int)Xbox.Down] = Convert.ToByte(100); }
 
-                if (_controls.Buttons.A) { output[(int)xbox.a] = Convert.ToByte(100); }
-                if (_controls.Buttons.B) { output[(int)xbox.b] = Convert.ToByte(100); }
-                if (_controls.Buttons.X) { output[(int)xbox.x] = Convert.ToByte(100); }
-                if (_controls.Buttons.Y) { output[(int)xbox.y] = Convert.ToByte(100); }
+                if (_controls.Buttons.A) { output[(int)Xbox.A] = Convert.ToByte(100); }
+                if (_controls.Buttons.B) { output[(int)Xbox.B] = Convert.ToByte(100); }
+                if (_controls.Buttons.X) { output[(int)Xbox.X] = Convert.ToByte(100); }
+                if (_controls.Buttons.Y) { output[(int)Xbox.Y] = Convert.ToByte(100); }
 
-                if (_controls.Buttons.Start) { output[(int)xbox.start] = Convert.ToByte(100); }
-                if (_controls.Buttons.Guide) { output[(int)xbox.home] = Convert.ToByte(100); }
+                if (_controls.Buttons.Start) { output[(int)Xbox.Start] = Convert.ToByte(100); }
+                if (_controls.Buttons.Guide) { output[(int)Xbox.Home] = Convert.ToByte(100); }
                 if (_controls.Buttons.Back)
                 {
                     if (system.boolBlockMenuButton == false)
@@ -285,18 +285,18 @@ namespace consoleXstream.Output
 
                     //Remap back buton to touchpad
                     if (system.boolPS4ControllerMode)
-                        output[(int)xbox.touch] = Convert.ToByte(100);
+                        output[(int)Xbox.Touch] = Convert.ToByte(100);
                     else
-                        output[(int)xbox.back] = Convert.ToByte(100);
+                        output[(int)Xbox.Back] = Convert.ToByte(100);
                 }
 
-                if (_controls.Buttons.LeftShoulder) { output[(int)xbox.leftShoulder] = Convert.ToByte(100); }
-                if (_controls.Buttons.RightShoulder) { output[(int)xbox.rightShoulder] = Convert.ToByte(100); }
-                if (_controls.Buttons.LeftStick) { output[(int)xbox.leftStick] = Convert.ToByte(100); }
-                if (_controls.Buttons.RightStick) { output[(int)xbox.rightStick] = Convert.ToByte(100); }
+                if (_controls.Buttons.LeftShoulder) { output[(int)Xbox.LeftShoulder] = Convert.ToByte(100); }
+                if (_controls.Buttons.RightShoulder) { output[(int)Xbox.RightShoulder] = Convert.ToByte(100); }
+                if (_controls.Buttons.LeftStick) { output[(int)Xbox.LeftStick] = Convert.ToByte(100); }
+                if (_controls.Buttons.RightStick) { output[(int)Xbox.RightStick] = Convert.ToByte(100); }
 
-                if (_controls.Triggers.Left > 0) { output[(int)xbox.leftTrigger] = Convert.ToByte(_controls.Triggers.Left * 100); }
-                if (_controls.Triggers.Right > 0) { output[(int)xbox.rightTrigger] = Convert.ToByte(_controls.Triggers.Right * 100); }
+                if (_controls.Triggers.Left > 0) { output[(int)Xbox.LeftTrigger] = Convert.ToByte(_controls.Triggers.Left * 100); }
+                if (_controls.Triggers.Right > 0) { output[(int)Xbox.RightTrigger] = Convert.ToByte(_controls.Triggers.Right * 100); }
 
                 double dblLX = _controls.ThumbSticks.Left.X * 100;
                 double dblLY = _controls.ThumbSticks.Left.Y * 100;
@@ -314,26 +314,26 @@ namespace consoleXstream.Output
                     dblRY = -dblRY;
                 }
 
-                if (dblLX != 0) { output[(int)xbox.leftX] = (byte)Convert.ToSByte((int)(dblLX)); }
-                if (dblLY != 0) { output[(int)xbox.leftY] = (byte)Convert.ToSByte((int)(dblLY)); }
-                if (dblRX != 0) { output[(int)xbox.rightX] = (byte)Convert.ToSByte((int)(dblRX)); }
-                if (dblRY != 0) { output[(int)xbox.rightY] = (byte)Convert.ToSByte((int)(dblRY)); }
+                if (dblLX != 0) { output[(int)Xbox.LeftX] = (byte)Convert.ToSByte((int)(dblLX)); }
+                if (dblLY != 0) { output[(int)Xbox.LeftY] = (byte)Convert.ToSByte((int)(dblLY)); }
+                if (dblRX != 0) { output[(int)Xbox.RightX] = (byte)Convert.ToSByte((int)(dblRX)); }
+                if (dblRY != 0) { output[(int)Xbox.RightY] = (byte)Convert.ToSByte((int)(dblRY)); }
 
                 if (intCMHomeCount > 0)
                 {
-                    output[(int)xbox.home] = Convert.ToByte(100);
+                    output[(int)Xbox.Home] = Convert.ToByte(100);
                     intCMHomeCount--;
                 }
 
                 if (boolPs4Touchpad == true)
-                    output[(int)xbox.touch] = Convert.ToByte(100);
+                    output[(int)Xbox.Touch] = Convert.ToByte(100);
 
 
                 if (_boolLoadShortcuts)
                     output = checkKeys(output);
 
                 int intTarget = -1;
-                if (system.boolPS4ControllerMode == false) { intTarget = (int)xbox.back; } else { intTarget = (int)xbox.touch; }
+                if (system.boolPS4ControllerMode == false) { intTarget = (int)Xbox.Back; } else { intTarget = (int)Xbox.Touch; }
 
                 //Back button. Wait until released as its also the menu button
                 if (intTarget > -1)
@@ -406,7 +406,7 @@ namespace consoleXstream.Output
                         if (!system.boolMenu)
                         {
                             if (_intMenuWait >= _intMenuShow + 20)
-                                frmMain.openMenu();
+                                frmMain.OpenMenu();
                         }
                     }
                 }
@@ -479,15 +479,15 @@ namespace consoleXstream.Output
 
             //Load these in incase there is no shortcut file
             //Home - normal mode
-            _intShortcut[0, 0] = (int)xbox.back;
-            _intShortcut[1, 0] = (int)xbox.b;
-            _intShortcut[2, 0] = (int)xbox.home;
+            _intShortcut[0, 0] = (int)Xbox.Back;
+            _intShortcut[1, 0] = (int)Xbox.B;
+            _intShortcut[2, 0] = (int)Xbox.Home;
             _intShortcutCount++;
 
             //Home - PS4 mode
-            _intShortcut[0, 1] = (int)xbox.touch;
-            _intShortcut[1, 1] = (int)xbox.b;
-            _intShortcut[2, 1] = (int)xbox.home;
+            _intShortcut[0, 1] = (int)Xbox.Touch;
+            _intShortcut[1, 1] = (int)Xbox.B;
+            _intShortcut[2, 1] = (int)Xbox.Home;
             _intShortcutCount++;
 
             if (File.Exists(@"Data\shortcutGamepad.txt") == true)
@@ -530,7 +530,7 @@ namespace consoleXstream.Output
             _boolHoldBack = false;
             _intMenuWait = 0;
 
-            frmMain.openMenu();
+            frmMain.OpenMenu();
         }
 
     }

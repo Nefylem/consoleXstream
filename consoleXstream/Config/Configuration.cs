@@ -16,7 +16,8 @@ namespace consoleXstream.Config
         private VideoCapture.VideoCapture videoCapture;
         private Output.ControllerMax controllerMax;
         private Output.TitanOne titanOne;
-        private Config.VideoResolution videoResolution;
+        private VideoResolution videoResolution;
+        private VrMode _vrMode;
 
         public bool boolFPS { get; private set; }
         public bool boolHideMouse { get; private set; }
@@ -44,8 +45,10 @@ namespace consoleXstream.Config
         public bool boolAutoSetCaptureResolution { get; private set; }
         
         public bool boolMenu { get; set; }
-        public bool boolStayOnTop { get; set; }
+        public bool BoolStayOnTop { get; set; }
         public bool IsOverrideOnExit { get; set; }
+        public bool IsVr { get; set; }
+        public int MouseMode { get; set; }
 
         public int intDebugLevel = 5;           //All debug commands
 
@@ -53,7 +56,6 @@ namespace consoleXstream.Config
         public string strCurrentResolution { get; set; }
         public string strSetResolution { get; set; }
         
-
         private List<string> _listUserTitle;
         private List<string> _listUserData;
 
@@ -154,6 +156,8 @@ namespace consoleXstream.Config
         {
             _listUserTitle = new List<string>();
             _listUserData = new List<string>();
+
+            _vrMode = new VrMode(this);
         }
 
         public void loadDefaults()
@@ -168,7 +172,7 @@ namespace consoleXstream.Config
             addUserData("HideMouse", "true");
             //boolEnableMouse = true;
             useTitanOneAPI = true;
-            boolStayOnTop = true;
+            BoolStayOnTop = true;
             boolAutoSetCaptureResolution = true;
         }
 
@@ -239,9 +243,10 @@ namespace consoleXstream.Config
             if (checkUserSetting("controllermax").ToLower() == "true") boolControllerMax = true;
             if (checkUserSetting("titanone").ToLower() == "true") boolTitanOne = true;
             if (checkUserSetting("showfps").ToLower() == "true") boolFPS = true;
-            if (checkUserSetting("stayontop").ToLower() == "true") boolStayOnTop = true;
+            if (checkUserSetting("stayontop").ToLower() == "true") BoolStayOnTop = true;
             if (checkUserSetting("checkcaptureres").ToLower() == "true") boolAutoSetCaptureResolution = true;
-            if (checkUserSetting("AutoResolution").ToLower() == "true") boolAutoSetResolution = true;  
+            if (checkUserSetting("AutoResolution").ToLower() == "true") boolAutoSetResolution = true;
+            if (checkUserSetting("VRMode").ToLower() == "true") setupVR();
           
             _refreshRate = checkUserSetting("RefreshRate");
             _displayResolution = checkUserSetting("Resolution");
@@ -487,13 +492,18 @@ namespace consoleXstream.Config
             }
         }
 
-        public void changeAVIRender()
+        public void ChangeCrossbar()
         {
-            string set = checkUserSetting("AVIRender").ToLower();
-            if (set == "true")
-                addUserData("AVIRender", "false");
-            else
-                addUserData("AVIRender", "true");
+            var set = checkUserSetting("Crossbar").ToLower();
+            addUserData("Crossbar", set == "true" ? "false" : "true");
+            videoCapture.loadUserSettings();
+            videoCapture.runGraph();
+        }
+
+        public void ChangeAviRender()
+        {
+            var set = checkUserSetting("AVIRender").ToLower();
+            addUserData("AVIRender", set == "true" ? "false" : "true");
 
             videoCapture.loadUserSettings();
             videoCapture.runGraph();
@@ -564,7 +574,7 @@ namespace consoleXstream.Config
             string set = _displayResolution + " - " + refresh;
 
             videoResolution.SetDisplayResolution(_graphicsCardID, set);
-            frmMain.changeDisplayRes();
+            frmMain.ChangeDisplayRes();
 
             addUserData("RefreshRate", refresh);
 
@@ -610,8 +620,8 @@ namespace consoleXstream.Config
 
         public void setStayOnTop()
         {
-            boolStayOnTop = !boolStayOnTop;
-            addUserData("StayOnTop", boolStayOnTop.ToString());
+            BoolStayOnTop = !BoolStayOnTop;
+            addUserData("StayOnTop", BoolStayOnTop.ToString());
         }
 
         private void changeResolution(string resolution)
@@ -642,6 +652,16 @@ namespace consoleXstream.Config
             boolAutoSetCaptureResolution = !boolAutoSetCaptureResolution;
 
             addUserData("CheckCaptureRes", boolAutoSetCaptureResolution.ToString());
+        }
+
+        private void setupVR()
+        {
+            _vrMode.InitializeVr();
+        }
+
+        public void SetupMouse(int mouseType)
+        {
+            boolEnableMouse = true;
         }
     }
 }

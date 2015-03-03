@@ -3,12 +3,11 @@ using consoleXstream.Menu.Data;
 
 namespace consoleXstream.Menu.SubMenu
 {
-    class Shutter
+    public class Shutter
     {
-        private Interaction _data;
-        private FrameCount _fps;
-        private User _user;
-        private Variables _var;
+        private readonly Classes _class;
+
+        public Shutter(Classes inClass) { _class = inClass; }
 
         public int Height { get; private set; }
         public int Start { get; private set; }
@@ -23,16 +22,11 @@ namespace consoleXstream.Menu.SubMenu
 
         public int Scroll;
 
-        public void GetDataHandle(Interaction data) { _data = data; }
-        public void GetFrameHandle(FrameCount fps) { _fps = fps; }
-        public void GetUserHandle(User user) { _user = user; }
-        public void GetVarHandle(Variables var) { _var = var; }
-
         public int FindScrollIndex()
         {
-            for (var count = 0; count < _data.Buttons.Count; count++)
+            for (var count = 0; count < _class.Data.Buttons.Count; count++)
             {
-                if (String.Equals(_user.SubSelected, _data.Buttons[count].Command, StringComparison.CurrentCultureIgnoreCase))
+                if (String.Equals(_class.User.SubSelected, _class.Data.Buttons[count].Command, StringComparison.CurrentCultureIgnoreCase))
                     return count;
             }
             return -1;
@@ -40,15 +34,15 @@ namespace consoleXstream.Menu.SubMenu
 
         public void SetActive(int targetRow)
         {
-            if (targetRow < 0 || targetRow > _data.Row.Count)
+            if (targetRow < 0 || targetRow > _class.Data.Row.Count)
                 return;
 
-            Start = _data.Row[targetRow];
-            End = _data.Row[targetRow] + _var.CellHeight;
+            Start = _class.Data.Row[targetRow];
+            End = _class.Data.Row[targetRow] + _class.Var.CellHeight;
 
             Height = 0;
-            if (_fps.Frames > 20)
-                _slide = _fps.Frames / 3;
+            if (_class.Fps.Frames > 20)
+                _slide = _class.Fps.Frames / 3;
             else
                 _slide = 10;
 
@@ -70,7 +64,7 @@ namespace consoleXstream.Menu.SubMenu
             }
 
             if (!Hide) return;
-            if (Height > 1)
+            if (Height > 0)
                 Height -= _slide;
 
             if (Height > 0) return;
@@ -78,13 +72,13 @@ namespace consoleXstream.Menu.SubMenu
             Height = 0;
             Hide = false;
             Open = false;
-            _var.IsMainMenu = true;
-            _data.ClearButtons();
+            _class.Var.IsMainMenu = true;
+            _class.Data.ClearButtons();
         }
 
         public bool IsOpen()
         {
-            return !_var.IsMainMenu;
+            return !_class.Var.IsMainMenu;
         }
 
         public void Close()

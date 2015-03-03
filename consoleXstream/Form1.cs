@@ -1,16 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
 using System.Reflection;
 using consoleXstream.Config;
 using consoleXstream.Input;
+using consoleXstream.Input.Mouse;
 using consoleXstream.Menu;
 using consoleXstream.Output;
 using consoleXstream.Remap;
@@ -26,20 +23,20 @@ namespace consoleXstream
         public bool boolIDE = false;
         #endregion
 
-        private Configuration system;
-        private ExternalScript external;
+        private Configuration _system;
+        private ExternalScript _external;
 
-        private GamepadXInput gamepad;
-        private classMouseHook mouse;
-        private KeyboardHook keyboard;
-        private KeyboardInterface keyboardInterface;
+        private GamepadXInput _gamepad;
+        private Input.Mouse.Hook _mouse;
+        private KeyboardHook _keyboard;
+        private KeyboardInterface _keyboardInterface;
 
-        private ControllerMax controllerMax;
-        private TitanOne titanOne;
-        private Gimx gimx;
-        private VideoCapture.VideoCapture videoCapture;
-        private VideoResolution videoResolution;
-        private Remap.Remapping remap;
+        private ControllerMax _controllerMax;
+        private TitanOne _titanOne;
+        private Gimx _gimx;
+        private VideoCapture.VideoCapture _videoCapture;
+        private VideoResolution _videoResolution;
+        private Remap.Remapping _remap;
         private Remap.Keymap _keymap;
 
         private ShowMenu formMenu;
@@ -60,7 +57,7 @@ namespace consoleXstream
         private bool _boolChangeFullscreen;
         //private int _intScreenWidth;
         //private int _intScreenHeight;
-
+        private Bitmap captureImage;
         #endregion
 
         public Form1()
@@ -70,145 +67,142 @@ namespace consoleXstream
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            captureImage = new Bitmap(Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height);
+
             _MouseScreenBounds = 25;
-            deleteLogs();
+            DeleteLogs();
 
             if (System.Diagnostics.Debugger.IsAttached)
                 boolIDE = true;
 
-            declareClasses();
-            checkDevelopment();
+            DeclareClasses();
+            CheckDevelopment();
 
-            runStartup();
+            RunStartup();
         }
 
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {
-            closeSystem();
+            CloseSystem();
         }
 
         //Definitions for calling from classes
-        private void declareClasses()
+        private void DeclareClasses()
         {
             formMenu = new ShowMenu(this);
 
-            system = new Configuration(this);
-            external = new ExternalScript(this);
+            _system = new Configuration(this);
+            _external = new ExternalScript(this);
 
-            gamepad = new GamepadXInput(this);
-            keyboard = new KeyboardHook(this);
+            _gamepad = new GamepadXInput(this);
+            _keyboard = new KeyboardHook(this);
 
-            keyboardInterface = new KeyboardInterface(this);
+            _keyboardInterface = new KeyboardInterface(this);
 
-            mouse = new classMouseHook(this);
+            _mouse = new Hook(this);
 
-            controllerMax = new ControllerMax(this);
-            titanOne = new TitanOne(this);
-            gimx = new Gimx(this);
+            _controllerMax = new ControllerMax(this);
+            _titanOne = new TitanOne(this);
+            _gimx = new Gimx(this);
 
-            videoCapture = new VideoCapture.VideoCapture(this);
-            videoResolution = new Config.VideoResolution(this);
-            remap = new Remap.Remapping();
+            _videoCapture = new VideoCapture.VideoCapture(this);
+            _videoResolution = new VideoResolution(this);
+            _remap = new Remapping();
             _keymap = new Keymap();
 
             //Pass to subforms as needed
-            system.getVideoCaptureHandle(videoCapture);
-            system.getControllerMaxHandle(controllerMax);
-            system.getTitanOneHandle(titanOne);
-            system.getVideoResolutionHandle(videoResolution);
+            _system.getVideoCaptureHandle(_videoCapture);
+            _system.getControllerMaxHandle(_controllerMax);
+            _system.getTitanOneHandle(_titanOne);
+            _system.getVideoResolutionHandle(_videoResolution);
 
-            controllerMax.getSystemHandle(system);
-            controllerMax.getKeyboardInterfaceHandle(keyboardInterface);
+            _controllerMax.getSystemHandle(_system);
+            _controllerMax.getKeyboardInterfaceHandle(_keyboardInterface);
 
-            titanOne.getSystemHandle(system);
-            titanOne.getKeyboardInterfaceHandle(keyboardInterface);
-            titanOne.getRemapHandle(remap);
+            _titanOne.getSystemHandle(_system);
+            _titanOne.getKeyboardInterfaceHandle(_keyboardInterface);
+            _titanOne.getRemapHandle(_remap);
 
-            keyboardInterface.getSystemHandle(system);
+            _keyboardInterface.getSystemHandle(_system);
 
-            mouse.getSystemHandle(system);
-            mouse.getKeyboardInterfaceHandle(keyboardInterface);
-            mouse.getMenuHandle(formMenu);
+            _mouse.GetSystemHandle(_system);
+            _mouse.GetKeyboardInterfaceHandle(_keyboardInterface);
+            _mouse.GetMenuHandle(formMenu);
 
-            videoCapture.getSystemHandle(system);
+            _videoCapture.getSystemHandle(_system);
 
-            formMenu.GetRemapHandle(remap);
+            formMenu.GetRemapHandle(_remap);
             formMenu.GetKeymapHandle(_keymap);
         }
 
         //Deletes the log files on startup so only shows latest information
-        private void deleteLogs()
+        private void DeleteLogs()
         {
-            if (File.Exists("system.log") == true) File.Delete("system.log"); 
-            if (File.Exists("video.log") == true) File.Delete("video.log"); 
-            if (File.Exists("menu.log") == true) File.Delete("menu.log"); 
-            if (File.Exists("titanOne.log") == true) File.Delete("titanOne.log"); 
+            if (File.Exists("system.log")) File.Delete("system.log"); 
+            if (File.Exists("video.log")) File.Delete("video.log"); 
+            if (File.Exists("menu.log")) File.Delete("menu.log"); 
+            if (File.Exists("titanOne.log")) File.Delete("titanOne.log"); 
         }
         //Copies files to test environment 
-        private void checkDevelopment()
+        private void CheckDevelopment()
         {
-            if (boolIDE)
+            if (!boolIDE) return;
+            if (!Directory.Exists(strPath)) return;
+            try
             {
-                //Go do a dns check on the name. No need at this stage 
-                //Also consider a manifest to check if things have changed. 
-                if (Directory.Exists(strPath))
-                {
-                    try
-                    {
-                        if (File.Exists(strPath + @"\consoleXstream.exe"))
-                            File.Delete(strPath + @"\consoleXstream.exe");
+                if (File.Exists(strPath + @"\consoleXstream.exe"))
+                    File.Delete(strPath + @"\consoleXstream.exe");
 
-                        File.Copy("consoleXstream.exe", strPath + @"\consoleXstream.exe");
-                    }
-                    catch { }
-                }
+                File.Copy("consoleXstream.exe", strPath + @"\consoleXstream.exe");
+            }
+            catch (Exception)
+            {
+                // ignored
             }
         }
+
         //Kill active functions
-        public void closeSystem()
+        public void CloseSystem()
         {
-            if (system != null)
+            if (_system != null)
             {
-                system.IsOverrideOnExit = true;
-                system.setInitialDisplay();
+                _system.IsOverrideOnExit = true;
+                _system.setInitialDisplay();
 
-                if (system.boolControllerMax)
-                    controllerMax.closeControllerMaxInterface();
+                if (_system.boolControllerMax)
+                    _controllerMax.closeControllerMaxInterface();
 
-                if (system.boolInternalCapture)
-                    videoCapture.CloseGraph();
+                if (_system.boolInternalCapture)
+                    _videoCapture.CloseGraph();
             }
             Application.Exit();
         }
 
         private void tmrSystem_Tick(object sender, EventArgs e)
         {
-            runMainLoop();
+            RunMainLoop();
 
-            if (system.boolFPS)
+            if (!_system.boolFPS) return;
+            if (_strFPSCheck != DateTime.Now.ToString("ss"))
             {
-                if (_strFPSCheck != DateTime.Now.ToString("ss"))
-                {
-                    _intWatchFPS = _intCurrentFPS;
-                    _intCurrentFPS = 0;
-                    _strFPSCheck = DateTime.Now.ToString("ss");
+                _intWatchFPS = _intCurrentFPS;
+                _intCurrentFPS = 0;
+                _strFPSCheck = DateTime.Now.ToString("ss");
 
-                    label1.Text = "control: " + _intWatchFPS.ToString() + "ups";
-                    label2.Text = "capture: " + intSampleFPS.ToString() + "fps";
-                }
-                else
-                    _intCurrentFPS++;
+                label1.Text = @"control: " + _intWatchFPS + "ups";
+                label2.Text = @"capture: " + intSampleFPS + "fps";
             }
-
+            else
+                _intCurrentFPS++;
         }
 
         #region Startup Configuration
         //Configures system on startup
-        private void runStartup()
+        private void RunStartup()
         {
-            system.getInitialDisplay();
+            _system.getInitialDisplay();
 
-            system.debug("[3] runStartup");
+            _system.debug("[3] runStartup");
             this.BackColor = Color.Black;
 
             if (!boolIDE)
@@ -227,77 +221,77 @@ namespace consoleXstream
             loadBackground();                           //If theres a background in the resource file, splash that
             loadUserConfig();
 
-            remap.setDefaultGamepad();
-            remap.loadGamepadRemap();
+            _remap.setDefaultGamepad();
+            _remap.loadGamepadRemap();
             //remap.saveGamepadRemap();
 
             if (boolIDE)
-                system.boolStayOnTop = false;
+                _system.BoolStayOnTop = false;
 
-            if (system.boolStayOnTop)
+            if (_system.BoolStayOnTop)
                 this.TopMost = true;
 
-            if (system.boolEnableKeyboard)
+            if (_system.boolEnableKeyboard)
             {
-                system.debug("[3] Init keyboard hook");
-                keyboardInterface.getKeyboardHandle(keyboard);
-                keyboard.enableKeyboardHook();
+                _system.debug("[3] Init keyboard hook");
+                _keyboardInterface.getKeyboardHandle(_keyboard);
+                _keyboard.enableKeyboardHook();
             }
 
-            if (system.boolEnableMouse)
+            if (_system.boolEnableMouse)
             {
-                system.debug("[3] Init mouse event hook");
-                mouse.enableMouseHook();
+                _system.debug("[3] Init mouse event hook");
+                _mouse.enableMouseHook();
             }
 
-            if (system.boolInternalCapture)
+            if (_system.boolInternalCapture)
             {
-                system.debug("[3] Init video capture variables");
+                _system.debug("[3] Init video capture variables");
                 configureVideoCapture();
 
-                if (system.strSetResolution != null)
+                if (_system.strSetResolution != null)
                 {
-                    system.debug("[3] set user res ");
-                    if (system.strSetResolution.Length > 0)
+                    _system.debug("[3] set user res ");
+                    if (_system.strSetResolution.Length > 0)
                     {
-                        system.debug("[3] set user res [" + system.strSetResolution + "]");
-                        system.changeCaptureResolution(system.strSetResolution);
+                        _system.debug("[3] set user res [" + _system.strSetResolution + "]");
+                        _system.changeCaptureResolution(_system.strSetResolution);
                     }
                 }
             }
 
-            if (system.boolControllerMax)
+            if (_system.boolControllerMax)
             {
-                if (!system.useTitanOneAPI)
+                if (!_system.useTitanOneAPI)
                 {
-                    system.debug("[3] Configure ControllerMax API");
-                    controllerMax.initControllerMax();
+                    _system.debug("[3] Configure ControllerMax API");
+                    _controllerMax.initControllerMax();
                     configureControllerMax();
                 }
                 else
                 {
-                    system.debug("[3] Configure ControllerMax using TitanOne API");
-                    titanOne.setTOInterface(Output.TitanOne.DevPID.ControllerMax);
-                    titanOne.initTitanOne();
+                    _system.debug("[3] Configure ControllerMax using TitanOne API");
+                    _titanOne.setTOInterface(Output.TitanOne.DevPID.ControllerMax);
+                    _titanOne.initTitanOne();
                     configureTitanOne();
                 }
             }
 
-            if (system.boolTitanOne)
+            if (_system.boolTitanOne)
             {
-                system.debug("[3] Configure TitanOne API");
-                titanOne.setTOInterface(Output.TitanOne.DevPID.TitanOne);
-                titanOne.initTitanOne();
+                _system.debug("[3] Configure TitanOne API");
+                _titanOne.setTOInterface(Output.TitanOne.DevPID.TitanOne);
+                _titanOne.initTitanOne();
                 configureTitanOne();
             }
 
-            if (system.boolFPS)
+            if (_system.boolFPS)
             {
                 label1.Visible = true;
                 label2.Visible = true;
             }
 
-            if (system.boolHideMouse)
+            if (_system.boolHideMouse)
                 Cursor.Hide();
 
             tmrSystem.Enabled = true;
@@ -314,34 +308,34 @@ namespace consoleXstream
 
         private void loadUserConfig()
         {
-            system.initializeUserData();
-            system.loadDefaults();
+            _system.initializeUserData();
+            _system.loadDefaults();
             
             _keymap.InitializeKeyboardDefaults();
             _keymap.LoadKeyboardInputs();
 
-            system.loadSetupXML();
-            system.checkUserSettings();
+            _system.loadSetupXML();
+            _system.checkUserSettings();
         }
 
         //Sends the settings into the video capture class. User settings already sent to class
         private void configureVideoCapture()
         {
-            videoCapture.initialzeCapture();            //List everything so the user settings can pass into it
-            videoCapture.runGraph();
+            _videoCapture.initialzeCapture();            //List everything so the user settings can pass into it
+            _videoCapture.runGraph();
         }
 
         private void configureControllerMax()
         {
-            mouse.getControllerMaxHandle(controllerMax);
-            mouse.enableMouseHook();
+            _mouse.GetControllerMaxHandle(_controllerMax);
+            _mouse.enableMouseHook();
         }
 
         private void configureTitanOne()
         {
             
-            mouse.getTitanOneHandle(titanOne);
-            mouse.enableMouseHook();
+            _mouse.GetTitanOneHandle(_titanOne);
+            _mouse.enableMouseHook();
         }
 
         public int Clamp(int value, int min, int max)
@@ -349,12 +343,12 @@ namespace consoleXstream
             return (value < min) ? min : (value > max) ? max : value;
         }
 
-        private void checkMouse()
+        private void CheckMouse()
         {
 
             label4.Text = Cursor.Position.ToString();
-            int intModifierX = -35;
-            int intModifierY = -25;
+            const int intModifierX = -35;
+            const int intModifierY = -25;
 
             intReplaceX = Clamp((_intMouseX - Cursor.Position.X) * intModifierX, -100, 100);
             intReplaceY = Clamp((_intMouseY - Cursor.Position.Y) * intModifierY, -100, 100);
@@ -362,28 +356,28 @@ namespace consoleXstream
             _intMouseX = Cursor.Position.X;
             _intMouseY = Cursor.Position.Y;
 
-            label5.Text = intReplaceX.ToString() + " / " + intReplaceY.ToString();
+            label5.Text = intReplaceX + @" / " + intReplaceY;
 
             if (Cursor.Position.Y > Screen.PrimaryScreen.Bounds.Height - _MouseScreenBounds)
-                centerMouseY();
+                CenterMouseY();
 
             if (Cursor.Position.Y < _MouseScreenBounds)
-                centerMouseY();
+                CenterMouseY();
 
             if (Cursor.Position.X < _MouseScreenBounds)
-                centerMouseX();
+                CenterMouseX();
 
             if (Cursor.Position.X > Screen.PrimaryScreen.Bounds.Width - _MouseScreenBounds)
-                centerMouseX();
+                CenterMouseX();
         }
 
-        private void centerMouseY()
+        private void CenterMouseY()
         {
             Cursor.Position = new Point(Cursor.Position.X, Screen.PrimaryScreen.Bounds.Height / 2);
             _intMouseY = Cursor.Position.Y;
         }
 
-        private void centerMouseX()
+        private void CenterMouseX()
         {
             Cursor.Position = new Point(Screen.PrimaryScreen.Bounds.Width / 2, Cursor.Position.Y);
             _intMouseX = Cursor.Position.X;
@@ -392,129 +386,129 @@ namespace consoleXstream
         #endregion
 
         //Main control loop
-        private void runMainLoop()
+        private void RunMainLoop()
         {
             if (_intBlockMenu > 0)
                 _intBlockMenu--;
 
-            if (system.boolInternalCapture)
-                checkRunningGraph();
+            if (_system.boolInternalCapture)
+                CheckRunningGraph();
 
-            if (system.boolMenu)
+            if (_system.boolMenu)
                 return;
 
-            if (system.boolEnableKeyboard)
+            if (_system.boolEnableKeyboard)
             {
-                if (keyboard.getKey(_keymap.KeyDef.ButtonBack))
+                if (_keyboard.getKey(_keymap.KeyDef.ButtonBack))
                 {
                     if (_intBlockMenu == 0)
-                        openMenu();
+                        OpenMenu();
                     else
                         _intBlockMenu = 3;
                 }
-                keyboardInterface.checkKeys();
+                _keyboardInterface.checkKeys();
             }
 
-            if (system.boolEnableMouse)
-                checkMouse();
+            if (_system.boolEnableMouse)
+                CheckMouse();
 
-            checkControllerInput();
+            CheckControllerInput();
         }
 
-        private void checkControllerInput()
+        private void CheckControllerInput()
         {
-            if (system.useTitanOneAPI)
+            if (_system.useTitanOneAPI)
             {
-                titanOne.checkControllerInput();
+                _titanOne.checkControllerInput();
             }
             else
             {
-                if (system.boolControllerMax)
-                    controllerMax.checkControllerInput();
+                if (_system.boolControllerMax)
+                    _controllerMax.checkControllerInput();
 
-                if (system.boolTitanOne)
-                    titanOne.checkControllerInput();
+                if (_system.boolTitanOne)
+                    _titanOne.checkControllerInput();
             }
         }
 
         #region Video capture links to main form
-        private void checkRunningGraph()
+        private void CheckRunningGraph()
         {
-            if (videoCapture.boolActiveVideo)
-                videoCapture.checkVideoOutput();
+            if (_videoCapture.boolActiveVideo)
+                _videoCapture.checkVideoOutput();
         }
 
-        public IntPtr returnVideoHandle()
+        public IntPtr ReturnVideoHandle()
         {
-            return imgDisplay.Handle;
+            return captureImage.GetHbitmap();
+            //return captureImage;
+            //return imgDisplay.Handle;
         }
 
-        public void showVideoWindow()
+        public void ShowVideoWindow()
         {
             imgDisplay.Visible = true;
         }
 
-        public Point setVideoWindowBounds()
+        public Point SetVideoWindowBounds()
         {
-            Point ptReturn = new Point(this.ClientSize.Width, this.ClientSize.Height);
-            imgDisplay.SetBounds(0, 0, this.ClientSize.Width, this.ClientSize.Height);
+            var ptReturn = new Point(ClientSize.Width, ClientSize.Height);
+            imgDisplay.SetBounds(0, 0, ClientSize.Width, ClientSize.Height);
 
             return ptReturn;
         }
 
         //Resizes the display video after resolution change
-        public void changeDisplayRes()
+        public void ChangeDisplayRes()
         {
-            if (!system.IsOverrideOnExit)
-            {
-                Application.DoEvents();
-                videoCapture.DebugVideo("[0] Reset after display change: " + Screen.PrimaryScreen.Bounds.Width + " / " + Screen.PrimaryScreen.Bounds.Height);
+            if (_system.IsOverrideOnExit) return;
 
-                this.BringToFront();
-                this.Focus();
+            Application.DoEvents();
+            _videoCapture.DebugVideo("[0] Reset after display change: " + Screen.PrimaryScreen.Bounds.Width + " / " + Screen.PrimaryScreen.Bounds.Height);
 
-                imgDisplay.Dock = DockStyle.None;
-                Application.DoEvents();
-                imgDisplay.Dock = DockStyle.Fill;
+            BringToFront();
+            Focus();
 
-                videoCapture.setupVideoWindow();
+            imgDisplay.Dock = DockStyle.None;
+            Application.DoEvents();
+            imgDisplay.Dock = DockStyle.Fill;
 
-                imgDisplay.BringToFront();
-                imgDisplay.Focus();
+            _videoCapture.setupVideoWindow();
 
-                videoCapture.ForceRebuildAfterResolution();
-            }
+            imgDisplay.BringToFront();
+            imgDisplay.Focus();
+
+            _videoCapture.ForceRebuildAfterResolution();
         }
         #endregion
 
-        public void openMenu()
+        public void OpenMenu()
         {
-            if (_intBlockMenu == 0)
-            {
-                system.boolMenu = true;
+            if (_intBlockMenu != 0) return;
 
-                Cursor.Show();
+            _system.boolMenu = true;
 
-                if (system.boolStayOnTop)
-                    this.TopMost = false;
+            Cursor.Show();
 
-                //Pass in various handles it needs
-                formMenu.GetSystemHandle(system);
-                formMenu.GetKeyboardHookHandle(keyboard);
-                formMenu.GetVideoCaptureHandle(videoCapture);
+            if (_system.BoolStayOnTop)
+                TopMost = false;
 
-                formMenu.ShowPanel();
-            }
+            //Pass in various handles it needs
+            formMenu.GetSystemHandle(_system);
+            formMenu.GetKeyboardHookHandle(_keyboard);
+            formMenu.GetVideoCaptureHandle(_videoCapture);
+
+            formMenu.ShowPanel();
         }
 
-        public void closeMenuForm()
+        public void CloseMenuForm()
         {
-            if (system.boolStayOnTop)
-                this.TopMost = true;
+            if (_system.BoolStayOnTop)
+                TopMost = true;
 
-            system.boolMenu = false;
+            _system.boolMenu = false;
             
-            if (system.boolHideMouse)
+            if (_system.boolHideMouse)
                 Cursor.Hide();
 
             _intBlockMenu = 3;
@@ -522,29 +516,28 @@ namespace consoleXstream
 
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Alt && e.KeyCode.ToString().ToLower() == "return" && _boolChangeFullscreen == false)
-            {
-                _boolChangeFullscreen = true;
-                if (this.FormBorderStyle != FormBorderStyle.None)
-                {
-                    this.FormBorderStyle = FormBorderStyle.None;
-                    if (system.boolHideMouse)
-                        Cursor.Hide();
-                }
-                else
-                {
-                    this.FormBorderStyle = FormBorderStyle.Fixed3D;
-                    Cursor.Show();
-                }
+            if (!e.Alt || e.KeyCode.ToString().ToLower() != "return" || _boolChangeFullscreen) return;
 
-                this.Top = 0;           //Reset position
-                this.Left = 0;
+            _boolChangeFullscreen = true;
+            if (FormBorderStyle != FormBorderStyle.None)
+            {
+                FormBorderStyle = FormBorderStyle.None;
+                if (_system.boolHideMouse)
+                    Cursor.Hide();
             }
+            else
+            {
+                FormBorderStyle = FormBorderStyle.Fixed3D;
+                Cursor.Show();
+            }
+
+            Top = 0;           //Reset position
+            Left = 0;
         }
 
         private void Form1_KeyUp(object sender, KeyEventArgs e)
         {
-            if (e.Alt && e.KeyCode.ToString().ToLower() == "return" && _boolChangeFullscreen == true)
+            if (e.Alt && e.KeyCode.ToString().ToLower() == "return" && _boolChangeFullscreen)
                 _boolChangeFullscreen = false;
         }
     }

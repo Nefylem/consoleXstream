@@ -8,7 +8,7 @@ using consoleXstream.Menu.Data;
 
 namespace consoleXstream.Menu.SubMenuOptions
 {
-    class CaptureDevice
+    public class CaptureDevice
     {
         private Interaction _data;
         private SubMenu.Shutter _shutter;
@@ -56,7 +56,6 @@ namespace consoleXstream.Menu.SubMenuOptions
 
         public void Change(string strSet)
         {
-            /*
             if (!_system.boolInternalCapture)
                 return;
             var intIndex = _videoCapture.listVideoCaptureName.IndexOf(strSet);
@@ -69,7 +68,6 @@ namespace consoleXstream.Menu.SubMenuOptions
             _videoCapture.runGraph();
             _data.Checked.Clear();
             _data.Checked.Add(_videoCapture.strVideoCaptureDevice);
-             */
         }
 
         public void ListCaptureResolution()

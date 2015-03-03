@@ -306,15 +306,15 @@ namespace consoleXstream.Output
 
             //Load these in incase there is no shortcut file
             //Home - normal mode
-            _intShortcut[0, 0] = (int)xbox.back;
-            _intShortcut[1, 0] = (int)xbox.b;
-            _intShortcut[2, 0] = (int)xbox.home;
+            _intShortcut[0, 0] = (int)Xbox.Back;
+            _intShortcut[1, 0] = (int)Xbox.B;
+            _intShortcut[2, 0] = (int)Xbox.Home;
             _intShortcutCount++;
 
             //Home - PS4 mode
-            _intShortcut[0, 1] = (int)xbox.touch;
-            _intShortcut[1, 1] = (int)xbox.b;
-            _intShortcut[2, 1] = (int)xbox.home;
+            _intShortcut[0, 1] = (int)Xbox.Touch;
+            _intShortcut[1, 1] = (int)Xbox.B;
+            _intShortcut[2, 1] = (int)Xbox.Home;
             _intShortcutCount++;
 
             if (File.Exists(@"Data\shortcutGamepad.txt") == true)
@@ -390,7 +390,7 @@ namespace consoleXstream.Output
                 //Update gamepad status
                 _controls = GamePad.GetState(PlayerIndex.One);
 
-                if (_XboxCount == 0) { _XboxCount = Enum.GetNames(typeof(xbox)).Length; }
+                if (_XboxCount == 0) { _XboxCount = Enum.GetNames(typeof(Xbox)).Length; }
                 byte[] output = new byte[_XboxCount];
 
                 if (_controls.DPad.Left) { output[remap.remapGamepad.left] = Convert.ToByte(100); }
@@ -569,7 +569,7 @@ namespace consoleXstream.Output
                         if (!system.boolMenu)
                         {
                             if (_MenuWait >= _MenuShow + 20)
-                                frmMain.openMenu();
+                                frmMain.OpenMenu();
                         }
                     }
                 }
@@ -636,7 +636,7 @@ namespace consoleXstream.Output
             _boolHoldBack = false;
             _MenuWait = 0;
 
-            frmMain.openMenu();
+            frmMain.OpenMenu();
         }
 
 

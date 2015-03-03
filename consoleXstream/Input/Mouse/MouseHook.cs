@@ -1,15 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
-using System.Drawing;
 
-namespace consoleXstream
+namespace consoleXstream.Input.Mouse
 {
-    class classMouseHook
+    class Hook
     {
         private Form1 frmMain;
         private Menu.ShowMenu formMenu;
@@ -17,7 +11,7 @@ namespace consoleXstream
         private Output.ControllerMax controllerMax;
         private Output.TitanOne titanOne;
         private Input.KeyboardInterface keyboard;
-        public classMouseHook(Form1 mainForm) { frmMain = mainForm; }
+        public Hook(Form1 mainForm) { frmMain = mainForm; }
 
         public void enableMouseHook()
         {
@@ -31,11 +25,11 @@ namespace consoleXstream
             Application.AddMessageFilter(mouseFilter);
         }
 
-        public void getSystemHandle(Config.Configuration inSystem) { system = inSystem; }
-        public void getControllerMaxHandle(Output.ControllerMax inMax) { controllerMax = inMax; }
-        public void getTitanOneHandle(Output.TitanOne inTO) { titanOne = inTO; }
-        public void getKeyboardInterfaceHandle(Input.KeyboardInterface inKey) { keyboard = inKey; }
-        public void getMenuHandle(Menu.ShowMenu inMenu) { formMenu = inMenu; }
+        public void GetSystemHandle(Config.Configuration inSystem) { system = inSystem; }
+        public void GetControllerMaxHandle(Output.ControllerMax inMax) { controllerMax = inMax; }
+        public void GetTitanOneHandle(Output.TitanOne inTo) { titanOne = inTo; }
+        public void GetKeyboardInterfaceHandle(Input.KeyboardInterface inKey) { keyboard = inKey; }
+        public void GetMenuHandle(Menu.ShowMenu inMenu) { formMenu = inMenu; }
             
         void mouseFilter_leftClick(object sender, EventArgs e)
         {

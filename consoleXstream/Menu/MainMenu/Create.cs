@@ -3,33 +3,31 @@ using consoleXstream.Menu.Data;
 
 namespace consoleXstream.Menu.MainMenu
 {
-    class Create
+    public class Create
     {
-        private Interaction _data;
-        private User _user;
+        private readonly Classes _class;
 
-        public void GetDataHandle(Interaction data) { _data = data; }
-        public void GetUserHandle(User user) { _user = user; }
+        public Create(Classes inClass) { _class = inClass; }
 
         private int NewMenu()
         {
-            _data.Items.Add(new List<DisplayItem>());
-            return _data.Items.Count - 1;
+            _class.Data.Items.Add(new List<DisplayItem>());
+            return _class.Data.Items.Count - 1;
         }
 
         private void AddMenuItem(int index, string command, string title)
         {
-            _data.Items[index].Add(new DisplayItem());
+            _class.Data.Items[index].Add(new DisplayItem());
 
-            var id = _data.Items[index].Count - 1;
+            var id = _class.Data.Items[index].Count - 1;
 
-            _data.Items[index][id].Command = command;
-            _data.Items[index][id].Display = title;
+            _class.Data.Items[index][id].Command = command;
+            _class.Data.Items[index][id].Display = title;
         }
 
         public void Menu()
         {
-            _data.Items.Clear();
+            _class.Data.Items.Clear();
             //Console
             int intIndex = NewMenu();
             AddMenuItem(intIndex, "Console Select", "Connect To");
@@ -57,7 +55,7 @@ namespace consoleXstream.Menu.MainMenu
             AddMenuItem(intIndex, "Config", "Configuration");
             AddMenuItem(intIndex, "Exit", "Exit");
 
-            _user.Selected = "Console Select";
+            _class.User.Selected = "Console Select";
         }
 
     }

@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms.Design;
+using System.Xml;
+using consoleXstream.Config;
 using consoleXstream.Menu.Data;
 
 namespace consoleXstream.Menu.SubMenuOptions
@@ -15,11 +14,15 @@ namespace consoleXstream.Menu.SubMenuOptions
         private SubMenu.Action _subAction;
         private SubMenu.Shutter _shutter;
         private User _user;
-        
+        private Configuration _system;
+        private VideoCapture.VideoCapture _videoCapture;
+
         public void GetDataHandle(Interaction data) { _data = data; }
         public void GetSubActionHandle(SubMenu.Action subAction) { _subAction = subAction; }
         public void GetShutterHandle(SubMenu.Shutter shutter) { _shutter = shutter; }
         public void GetUserHandle(User user) { _user = user; }
+        public void GetSystemHandle(Configuration system) { _system = system; }
+        public void GetVideoCaptureHandle(VideoCapture.VideoCapture video) { _videoCapture = video; }
 
         public List<string> List()
         {
@@ -36,7 +39,6 @@ namespace consoleXstream.Menu.SubMenuOptions
 
         public void Save(string strCommand)
         {
-            /*
             _data.Checked.Clear();
             _data.Checked.Add(strCommand);
 
@@ -87,12 +89,10 @@ namespace consoleXstream.Menu.SubMenuOptions
             var writer = XmlWriter.Create(@"Profiles\" + strCommand + ".connectProfile", settings);
             doc.Save(writer);
             writer.Close();
-             */
         }
 
         public void Load(string strFile)
         {
-            /*
             var strDevice = "";
             var strAudio = "";
             var strVideoPin = "";
@@ -140,7 +140,6 @@ namespace consoleXstream.Menu.SubMenuOptions
             _videoCapture.setCrossbar(strVideoPin);
             _videoCapture.setCrossbar(strAudioPin);
             _videoCapture.runGraph();
-             */
         }
 
     }

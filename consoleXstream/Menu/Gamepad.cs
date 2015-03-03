@@ -7,7 +7,7 @@ using consoleXstream.Input;
 
 namespace consoleXstream.Menu
 {
-    class Gamepad
+    public class Gamepad
     {
         private Navigation _nav;
 

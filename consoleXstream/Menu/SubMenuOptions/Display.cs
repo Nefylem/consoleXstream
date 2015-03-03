@@ -1,9 +1,10 @@
-﻿using consoleXstream.Config;
+﻿using System.Windows.Forms;
+using consoleXstream.Config;
 using consoleXstream.Menu.Data;
 
 namespace consoleXstream.Menu.SubMenuOptions
 {
-    class Display
+    public class Display
     {
         private Configuration _system;
         private Interaction _data;
@@ -11,6 +12,7 @@ namespace consoleXstream.Menu.SubMenuOptions
         private SubMenu.Action _subAction;
         private SubMenu.Shutter _shutter;
         private VideoCapture.VideoCapture _videoCapture;
+        private ShowMenu _menu;
 
         public void GetSystemHandle(Configuration system) { _system = system; }
         public void GetDataHandle(Interaction data) { _data = data; }
@@ -18,7 +20,8 @@ namespace consoleXstream.Menu.SubMenuOptions
         public void GetSubActionHandle(SubMenu.Action subAction) { _subAction = subAction; }
         public void GetShutterHandle(SubMenu.Shutter shutter) { _shutter = shutter; }
         public void GetVideoCaptureHandle(VideoCapture.VideoCapture video) { _videoCapture = video; }
-        
+        public void GetMenuHandle(ShowMenu menu) { _menu = menu; }
+
         public void ChangeResolution(string resolution)
         {
             _system.strCurrentResolution = resolution;
@@ -101,12 +104,8 @@ namespace consoleXstream.Menu.SubMenuOptions
             _system.setDisplayResolution(command);
             _data.Checked.Clear();
             _data.Checked.Add(command);
-
-            /*
-            //save set res
-            Left = (Screen.PrimaryScreen.Bounds.Width / 2) - (Properties.Resources.imgMainMenu.Width / 2);
-            Top = (Screen.PrimaryScreen.Bounds.Height / 2) - (Properties.Resources.imgMainMenu.Height / 2);
-             */
+            
+            _menu.PositionMenu();
         }
 
         public void ChangeVideoRefresh(string command)
@@ -118,8 +117,7 @@ namespace consoleXstream.Menu.SubMenuOptions
             _data.Checked.Clear();
             _data.Checked.Add(command);
 
-            //Left = (Screen.PrimaryScreen.Bounds.Width / 2) - (Properties.Resources.imgMainMenu.Width / 2);
-            //Top = (Screen.PrimaryScreen.Bounds.Height / 2) - (Properties.Resources.imgMainMenu.Height / 2);
+            _menu.PositionMenu();
         }
 
         private void ChangeAutoRes()

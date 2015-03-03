@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace consoleXstream.Menu.Data
 {
-    class FrameCount
+    public class FrameCount
     {
         public int Frames;
 

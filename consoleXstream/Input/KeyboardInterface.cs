@@ -26,7 +26,7 @@ namespace consoleXstream.Input
         public void checkKeys()
         {
             
-            if (_intXboxCount == 0) { _intXboxCount = Enum.GetNames(typeof(xbox)).Length; }
+            if (_intXboxCount == 0) { _intXboxCount = Enum.GetNames(typeof(Xbox)).Length; }
             output = new byte[_intXboxCount];
             /*
             if (keyboard.getKey(system.keyDef.strDpadDown)) output[(int)xbox.down] = Convert.ToByte(100);

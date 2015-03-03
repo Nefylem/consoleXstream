@@ -49,6 +49,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Config\VRMode.cs" />
+    <Compile Include="Input\Mouse\MouseHook.cs" />
+    <Compile Include="Input\Mouse\MouseCircularMovement.cs" />
+    <Compile Include="Input\Mouse\MouseEvents.cs" />
+    <Compile Include="Input\Mouse\MouseFreeMovement.cs" />
+    <Compile Include="Menu\Classes.cs" />
     <Compile Include="Menu\Data\ButtonItem.cs" />
     <Compile Include="Menu\Data\DisplayItem.cs" />
     <Compile Include="Menu\Data\FrameCount.cs" />
@@ -73,6 +79,12 @@
     <Compile Include="Menu\SubMenu\Menu.cs" />
     <Compile Include="Menu\SubMenu\Shutter.cs" />
     <Compile Include="Output\ControllerMax.cs" />
+    <Compile Include="Overlays\MouseInterface.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Overlays\MouseInterface.Designer.cs">
+      <DependentUpon>MouseInterface.cs</DependentUpon>
+    </Compile>
     <Compile Include="Remap\Keymap.cs" />
     <Compile Include="Scripting\ExternalScript.cs" />
     <Compile Include="Input\GamepadXInput.cs" />
@@ -81,7 +93,6 @@
     <Compile Include="Input\KeyboardHook.cs" />
     <Compile Include="Input\KeyboardInterface.cs" />
     <Compile Include="Output\ListDevices.cs" />
-    <Compile Include="Input\classMouseHook.cs" />
     <Compile Include="Remap\Remaping.cs" />
     <Compile Include="Config\Configuration.cs" />
     <Compile Include="Output\TitanOne.cs" />
@@ -107,6 +118,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Menu\Menu.resx">
       <DependentUpon>Menu.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Overlays\MouseInterface.resx">
+      <DependentUpon>MouseInterface.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

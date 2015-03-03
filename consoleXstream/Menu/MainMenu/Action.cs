@@ -6,27 +6,13 @@ using consoleXstream.Output;
 
 namespace consoleXstream.Menu.MainMenu
 {
-    class Action
+    public class Action
     {
-        private SubMenu.Action _subAction;
-        private Configuration _system;
-        private Interaction _data;
-        private Navigation _nav;
-        private User _user;
-        private Variables _var;
-        private SubMenu.Shutter _shutter;
-        private VideoCapture.VideoCapture _videoCapture;
+        private readonly Classes _class;
+
+        public Action(Classes inClass) { _class = inClass; }
 
         private readonly ListDevices _listTo = new ListDevices();
-
-        public void GetSubActionHandle(SubMenu.Action subAction) { _subAction = subAction; }
-        public void GetConfigHandle(Configuration config) { _system = config; }
-        public void GetDataHandle(Interaction data) { _data = data; }
-        public void GetNavHandle(Navigation nav) { _nav = nav; }
-        public void GetUserHandle(User user) { _user = user; }
-        public void GetVariableHandle(Variables inVar) { _var = inVar; }
-        public void GetShutterHandle(SubMenu.Shutter shutter) { _shutter = shutter; }
-        public void GetVideoCapture(VideoCapture.VideoCapture videoCapture) { _videoCapture = videoCapture; }
 
         public void MainMenu(string command)
         {
@@ -36,19 +22,19 @@ namespace consoleXstream.Menu.MainMenu
             var currentRow = -1;
 
             //Find where the button is
-            foreach (var t in _data.Buttons)
+            foreach (var t in _class.Data.Buttons)
             {
-                if (t.Command != _user.Selected) continue;
+                if (t.Command != _class.User.Selected) continue;
                 rowTop = t.Rect.Top;
                 break;
             }
 
-            _data.ClearButtons();                     //Stop the mouse from being able to select main menu buttons
+            _class.Data.ClearButtons();                     //Stop the mouse from being able to select main menu buttons
 
             //Find what row it belongs too
-            for (var intCount = 0; intCount < _data.Row.Count; intCount++)
+            for (var intCount = 0; intCount < _class.Data.Row.Count; intCount++)
             {
-                if (_data.Row[intCount] == rowTop)
+                if (_class.Data.Row[intCount] == rowTop)
                     currentRow = intCount;
             }
 
@@ -70,20 +56,20 @@ namespace consoleXstream.Menu.MainMenu
 
         private void SetMenu(string command)
         {
-            _user.Menu = command;
-            _nav.ListHistory.Add(command);            
+            _class.User.Menu = command;
+            _class.Nav.ListHistory.Add(command);            
         }
 
         private void ClearSub()
         {
-            _var.IsMainMenu = false;
+            _class.Var.IsMainMenu = false;
 
-            _data.SubItems.Clear();
+            _class.Data.SubItems.Clear();
 
-            _shutter.Scroll = 0;
+            _class.Shutter.Scroll = 0;
 
-            _shutter.Error = "";
-            _shutter.Explain = "";
+            _class.Shutter.Error = "";
+            _class.Shutter.Explain = "";
         }
 
         private void ConsoleSelect(string command, int currentRow)
@@ -92,28 +78,28 @@ namespace consoleXstream.Menu.MainMenu
             ClearSub();
 
             var profiles = new Profiles();
-            profiles.GetDataHandle(_data);
-            profiles.GetSubActionHandle(_subAction);
-            profiles.GetShutterHandle(_shutter);
+            profiles.GetDataHandle(_class.Data);
+            profiles.GetSubActionHandle(_class.SubAction);
+            profiles.GetShutterHandle(_class.Shutter);
 
             var listData = profiles.List();
 
-            _data.SubItems.Clear();            
+            _class.Data.SubItems.Clear();            
             foreach (var profile in listData)
             {
-                _subAction.AddSubItem(profile, profile);
-                if (String.Equals(_user.ConnectProfile, profile, StringComparison.CurrentCultureIgnoreCase)) _data.Checked.Add(profile);
+                _class.SubAction.AddSubItem(profile, profile);
+                if (String.Equals(_class.User.ConnectProfile, profile, StringComparison.CurrentCultureIgnoreCase)) _class.Data.Checked.Add(profile);
             }
             
-            if (_data.SubItems.Count == 0)
+            if (_class.Data.SubItems.Count == 0)
             {
-                _shutter.Error = "No profiles found";
-                _shutter.Explain = "Please set up your console display then use Save Profile";
+                _class.Shutter.Error = "No profiles found";
+                _class.Shutter.Explain = "Please set up your console display then use Save Profile";
             }
             else
             {
                 SelectSubItem();
-                _shutter.SetActive(currentRow + 1);
+                _class.Shutter.SetActive(currentRow + 1);
             }
         }
 
@@ -122,13 +108,13 @@ namespace consoleXstream.Menu.MainMenu
             SetMenu(command);
             ClearSub();
 
-            _subAction.AddSubItem("PlayStation3", "PlayStation3");
-            _subAction.AddSubItem("PlayStation4", "PlayStation4");
-            _subAction.AddSubItem("Xbox360", "Xbox360");
-            _subAction.AddSubItem("XboxOne", "XboxOne");
+            _class.SubAction.AddSubItem("PlayStation3", "PlayStation3");
+            _class.SubAction.AddSubItem("PlayStation4", "PlayStation4");
+            _class.SubAction.AddSubItem("Xbox360", "Xbox360");
+            _class.SubAction.AddSubItem("XboxOne", "XboxOne");
 
             SelectSubItem();
-            _shutter.SetActive(currentRow + 1);
+            _class.Shutter.SetActive(currentRow + 1);
         }
 
         private void VideoInput(string command, int currentRow)
@@ -137,15 +123,15 @@ namespace consoleXstream.Menu.MainMenu
             ClearSub();
             
             var crossbar = new Crossbar();
-            crossbar.GetDataHandle(_data);
-            crossbar.GetShutterHandle(_shutter);
-            crossbar.GetSubActionHandle(_subAction);
-            crossbar.GetSystemHandle(_system);
-            crossbar.GetVideoCapture(_videoCapture);
+            crossbar.GetDataHandle(_class.Data);
+            crossbar.GetShutterHandle(_class.Shutter);
+            crossbar.GetSubActionHandle(_class.SubAction);
+            crossbar.GetSystemHandle(_class.System);
+            crossbar.GetVideoCapture(_class.VideoCapture);
             
             crossbar.Find();
             SelectSubItem();
-            _shutter.SetActive(currentRow + 1);
+            _class.Shutter.SetActive(currentRow + 1);
         }
 
         private void VideoDevice(string command, int currentRow)
@@ -155,15 +141,15 @@ namespace consoleXstream.Menu.MainMenu
 
             var capture = new CaptureDevice();
 
-            capture.GetDataHandle(_data);
-            capture.GetShutterHandle(_shutter);
-            capture.GetSubActionHandle(_subAction);
-            capture.GetSystemHandle(_system);
-            capture.GetVideoCapture(_videoCapture);
+            capture.GetDataHandle(_class.Data);
+            capture.GetShutterHandle(_class.Shutter);
+            capture.GetSubActionHandle(_class.SubAction);
+            capture.GetSystemHandle(_class.System);
+            capture.GetVideoCapture(_class.VideoCapture);
 
             capture.Find();
             SelectSubItem();
-            _shutter.SetActive(currentRow + 1);
+            _class.Shutter.SetActive(currentRow + 1);
         }
 
         private void VideoSettings(string command, int currentRow)
@@ -171,13 +157,13 @@ namespace consoleXstream.Menu.MainMenu
             SetMenu(command);
             ClearSub();
 
-            _subAction.AddSubItem("Crossbar", "Crossbar", CheckSystemSetting("Crossbar"));
-            _subAction.AddSubItem("AVIRender", "AVI Renderer", CheckSystemSetting("AVIRender"));
-            _subAction.AddSubItem("CheckCaptureRes", "Check Capture", CheckSystemSetting("CheckCaptureRes"));
-            _subAction.AddSubItemFolder("Resolution", "Resolution", "Capture Resolution");
+            _class.SubAction.AddSubItem("Crossbar", "Crossbar", CheckSystemSetting("Crossbar"));
+            _class.SubAction.AddSubItem("AVIRender", "AVI Renderer", CheckSystemSetting("AVIRender"));
+            _class.SubAction.AddSubItem("CheckCaptureRes", "Check Capture", CheckSystemSetting("CheckCaptureRes"));
+            _class.SubAction.AddSubItemFolder("Resolution", "Resolution", "Capture Resolution");
 
             SelectSubItem();
-            _shutter.SetActive(currentRow + 1);
+            _class.Shutter.SetActive(currentRow + 1);
         }
 
         private void VideoDisplay(string command, int currentRow)
@@ -185,15 +171,15 @@ namespace consoleXstream.Menu.MainMenu
             SetMenu(command);
             ClearSub();
 
-            _subAction.AddSubItem("AutoSet", "Auto Set", _system.boolAutoSetResolution);
-            _subAction.AddSubItemFolder("Device", "Graphics Device", "Graphics Card");
-            _subAction.AddSubItemFolder("Resolution", "Resolution", "Display Resolution");
-            _subAction.AddSubItemFolder("Refresh", "Refresh Rate", "Screen Refresh");
-            _subAction.AddSubItemFolder("Volume", "Volume", "Volume");
-            _subAction.AddSubItem("StayOnTop", "Stay On Top", _system.boolAutoSetResolution);
+            _class.SubAction.AddSubItem("AutoSet", "Auto Set", _class.System.boolAutoSetResolution);
+            _class.SubAction.AddSubItemFolder("Device", "Graphics Device", "Graphics Card");
+            _class.SubAction.AddSubItemFolder("Resolution", "Resolution", "Display Resolution");
+            _class.SubAction.AddSubItemFolder("Refresh", "Refresh Rate", "Screen Refresh");
+            _class.SubAction.AddSubItemFolder("Volume", "Volume", "Volume");
+            _class.SubAction.AddSubItem("StayOnTop", "Stay On Top", _class.System.boolAutoSetResolution);
 
             SelectSubItem();
-            _shutter.SetActive(currentRow + 1);
+            _class.Shutter.SetActive(currentRow + 1);
         }
 
         private void Device(string command, int currentRow)
@@ -201,13 +187,13 @@ namespace consoleXstream.Menu.MainMenu
             SetMenu(command);
             ClearSub();
 
-            _subAction.AddSubItem("DS4 Emulation", "DS4 Emulation");
-            _subAction.AddSubItem("Normalize", "Normalize");
+            _class.SubAction.AddSubItem("DS4 Emulation", "DS4 Emulation");
+            _class.SubAction.AddSubItem("Normalize", "Normalize");
 
             CheckDisplaySettings();
 
             SelectSubItem();
-            _shutter.SetActive(currentRow - 1);
+            _class.Shutter.SetActive(currentRow - 1);
         }
 
         private void ControllerOutput(string command, int currentRow)
@@ -215,19 +201,19 @@ namespace consoleXstream.Menu.MainMenu
             SetMenu(command);
             ClearSub();
 
-            _subAction.AddSubItem("ControllerMax", "ControllerMax");
+            _class.SubAction.AddSubItem("ControllerMax", "ControllerMax");
 
-            _subAction.AddSubItem("TitanOne", "TitanOne", _listTo.GetToCount("TitanOne").ToString());
+            _class.SubAction.AddSubItem("TitanOne", "TitanOne", _listTo.GetToCount("TitanOne").ToString());
             RegisterWatcher("TitanOne");
 
-            _subAction.AddSubItem("GIMX", "GIMX");
-            _subAction.AddSubItem("Remote GIMX", "Remote GIMX");
-            _subAction.AddSubItem("McShield", "McShield");
-            _subAction.AddSubItem("Control VJOY", "Control VJOY");
+            _class.SubAction.AddSubItem("GIMX", "GIMX");
+            _class.SubAction.AddSubItem("Remote GIMX", "Remote GIMX");
+            _class.SubAction.AddSubItem("McShield", "McShield");
+            _class.SubAction.AddSubItem("Control VJOY", "Control VJOY");
 
             CheckDisplaySettings();
             SelectSubItem();
-            _shutter.SetActive(currentRow - 1);
+            _class.Shutter.SetActive(currentRow - 1);
         }
 
         private void Remap(string command, int currentRow)
@@ -235,13 +221,13 @@ namespace consoleXstream.Menu.MainMenu
             SetMenu(command);
             ClearSub();
 
-            _subAction.AddSubItem("Gamepad", "Gamepad");
-            _subAction.AddSubItem("Keyboard", "Keyboard");
-            _subAction.AddSubItem("Mouse", "Mouse");
-            _subAction.AddSubItem("Touch", "Touch");
+            _class.SubAction.AddSubItem("Gamepad", "Gamepad");
+            _class.SubAction.AddSubItem("Keyboard", "Keyboard");
+            _class.SubAction.AddSubItem("Mouse", "Mouse");
+            _class.SubAction.AddSubItem("Touch", "Touch");
 
             SelectSubItem();
-            _shutter.SetActive(currentRow - 1);
+            _class.Shutter.SetActive(currentRow - 1);
         }
 
         private void Config(string command, int currentRow)
@@ -249,7 +235,7 @@ namespace consoleXstream.Menu.MainMenu
             SetMenu(command);
             ClearSub();
 
-            _shutter.SetActive(currentRow - 1);
+            _class.Shutter.SetActive(currentRow - 1);
         }
 
         private void Exit(string command, int currentRow)
@@ -257,70 +243,70 @@ namespace consoleXstream.Menu.MainMenu
             SetMenu(command);
             ClearSub();
 
-            _subAction.AddSubItem("exit", "Yes");
-            _subAction.AddSubItem("back", "No");
+            _class.SubAction.AddSubItem("exit", "Yes");
+            _class.SubAction.AddSubItem("back", "No");
 
-            _user.SubSelected = _data.SubItems[1].Command;
-            _shutter.SetActive(currentRow - 1);
+            _class.User.SubSelected = _class.Data.SubItems[1].Command;
+            _class.Shutter.SetActive(currentRow - 1);
         }
 
         public void SelectSubItem()
         {
-            if (_data.SubItems.Count > 0)
+            if (_class.Data.SubItems.Count > 0)
             {
-                _user.SubSelected = _data.SubItems[0].Command;
+                _class.User.SubSelected = _class.Data.SubItems[0].Command;
             }
         }
 
         private bool CheckSystemSetting(string strCommand)
         {
-            return _system.checkUserSetting(strCommand.ToLower()).ToLower() == "true";
+            return _class.System.checkUserSetting(strCommand.ToLower()).ToLower() == "true";
         }
 
         private void RegisterWatcher(string title)
         {
-            foreach (var t in _data.SubItems)
+            foreach (var t in _class.Data.SubItems)
                 if (t.Display == title) t.ActiveWatcher = title;
         }
 
         public void CheckDisplaySettings()
         {
-            _data.Checked.Clear();
+            _class.Data.Checked.Clear();
 
-            foreach (var t in _data.SubItems)
+            foreach (var t in _class.Data.SubItems)
             {
                 if (t.Command.ToLower() == "ds4 emulation")
-                    if (_system.boolPS4ControllerMode) _data.Checked.Add("DS4 Emulation");
+                    if (_class.System.boolPS4ControllerMode) _class.Data.Checked.Add("DS4 Emulation");
 
                 if (t.Command.ToLower() == "normalize")
-                    if (_system.boolNormalizeControls) _data.Checked.Add("Normalize");
+                    if (_class.System.boolNormalizeControls) _class.Data.Checked.Add("Normalize");
 
                 if (t.Command.ToLower() == "controllermax")
-                    if (_system.boolControllerMax) _data.Checked.Add("ControllerMax");
+                    if (_class.System.boolControllerMax) _class.Data.Checked.Add("ControllerMax");
 
                 if (t.Command.ToLower() == "titanone")
-                    if (_system.boolTitanOne) _data.Checked.Add("TitanOne");
+                    if (_class.System.boolTitanOne) _class.Data.Checked.Add("TitanOne");
 
                 if (t.Command.ToLower() == "gimx")
-                    if (_system.boolGIMX) _data.Checked.Add("GIMX");
+                    if (_class.System.boolGIMX) _class.Data.Checked.Add("GIMX");
 
                 if (t.Command.ToLower() == "remote gimx")
-                    if (_system.boolRemoteGIMX) _data.Checked.Add("remote gimx");
+                    if (_class.System.boolRemoteGIMX) _class.Data.Checked.Add("remote gimx");
 
                 if (t.Command.ToLower() == "McShield")
-                    if (_system.boolMcShield) _data.Checked.Add("McShield");
+                    if (_class.System.boolMcShield) _class.Data.Checked.Add("McShield");
 
                 if (t.Command.ToLower() == "control vjoy")
-                    if (_system.boolControlVJOY) _data.Checked.Add("Control VJOY");
+                    if (_class.System.boolControlVJOY) _class.Data.Checked.Add("Control VJOY");
 
                 if (t.Command.ToLower() == "crossbar")
-                    if (CheckSystemSetting("Crossbar")) _data.Checked.Add("Crossbar");
+                    if (CheckSystemSetting("Crossbar")) _class.Data.Checked.Add("Crossbar");
 
                 if (t.Command.ToLower() == "avirender")
-                    if (CheckSystemSetting("AVIRender")) _data.Checked.Add("AVI Renderer");
+                    if (CheckSystemSetting("AVIRender")) _class.Data.Checked.Add("AVI Renderer");
 
                 if (t.Command.ToLower() == "checkcaptureres")
-                    if (CheckSystemSetting("CheckCaptureRes")) _data.Checked.Add("Check Capture");
+                    if (CheckSystemSetting("CheckCaptureRes")) _class.Data.Checked.Add("Check Capture");
             }
         }
 

@@ -237,7 +237,7 @@ namespace consoleXstream.Remap
 
         private string findGamepadValue(int value)
         {
-            xbox xboxValue = (xbox)value;
+            Xbox xboxValue = (Xbox)value;
             return GetEnumDescription(xboxValue);
         }
 

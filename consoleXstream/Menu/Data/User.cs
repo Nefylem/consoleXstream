@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace consoleXstream.Menu.Data
 {
-    class User
+    public class User
     {
         public string Menu;
 

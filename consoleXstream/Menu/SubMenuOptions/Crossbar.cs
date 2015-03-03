@@ -50,7 +50,6 @@ namespace consoleXstream.Menu.SubMenuOptions
 
         public void Change(string strSet)
         {
-            /*
             var intIndex = _videoCapture.listCrossbarInput.IndexOf(strSet);
             if (intIndex <= -1)
                 return;
@@ -76,7 +75,6 @@ namespace consoleXstream.Menu.SubMenuOptions
             _system.addUserData("crossbarAudioPin", strSet);
             _videoCapture.setCrossbar(strSet);
             _videoCapture.runGraph();
-             */
         }
 
 

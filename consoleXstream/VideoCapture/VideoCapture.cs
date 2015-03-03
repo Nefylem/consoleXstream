@@ -1439,7 +1439,7 @@ namespace consoleXstream.VideoCapture
 
             int hr = 0;
 
-            IntPtr videoHandle = _frmMain.returnVideoHandle();
+            IntPtr videoHandle = _frmMain.ReturnVideoHandle();
 
             _boolVideoFail = false;
             try
@@ -1455,7 +1455,7 @@ namespace consoleXstream.VideoCapture
                 if (_videoWindow != null)
                 {
                     DebugVideo("-> setBounds");
-                    Point ptReturn = _frmMain.setVideoWindowBounds();
+                    Point ptReturn = _frmMain.SetVideoWindowBounds();
                     DebugVideo("-> setWindowPosition");
                     _videoWindow.SetWindowPosition(0, 0, ptReturn.X, ptReturn.Y);
                 }

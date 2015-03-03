@@ -4,60 +4,60 @@ using System.ComponentModel;
 
 namespace consoleXstream.Input
 {
-    public enum xbox : int
+    public enum Xbox
     {
         [Description("Home")]
-        home = 0,
+        Home = 0,
         [Description("Back")]
-        back = 1,
+        Back = 1,
         [Description("Start")]
-        start = 2,
+        Start = 2,
         [Description("Right Shoulder")]
-        rightShoulder = 3,
+        RightShoulder = 3,
         [Description("Right Trigger")]
-        rightTrigger = 4,
+        RightTrigger = 4,
         [Description("Right Stick")]
-        rightStick = 5,
+        RightStick = 5,
         [Description("Left Shoulder")]
-        leftShoulder = 6,
+        LeftShoulder = 6,
         [Description("Left Trigger")]
-        leftTrigger = 7,
+        LeftTrigger = 7,
         [Description("Left Stick")]
-        leftStick = 8,
+        LeftStick = 8,
         [Description("RightThumb X")]
-        rightX = 9,
+        RightX = 9,
         [Description("RightThumb Y")]
-        rightY = 10,
+        RightY = 10,
         [Description("LeftThumb X")]
-        leftX = 11,
+        LeftX = 11,
         [Description("LeftThumb Y")]
-        leftY = 12,
+        LeftY = 12,
         [Description("Up")]
-        up = 13,
+        Up = 13,
         [Description("Down")]
-        down = 14,
+        Down = 14,
         [Description("Left")]
-        left = 15,
+        Left = 15,
         [Description("Right")]
-        right = 16,
+        Right = 16,
         [Description("Y")]
-        y = 17,
+        Y = 17,
         [Description("B")]
-        b = 18,
+        B = 18,
         [Description("A")]
-        a = 19,
+        A = 19,
         [Description("X")]
-        x = 20,
-        accX = 21,      //rotate X. 90 = -25, 180 = 0, 270 = +25, 360 = 0 (ng)
-        accY = 22,      //shake vertically. +25 (top) to -25 (bottom) (ng)
-        accZ = 23,      //tilt up
-        gyroX = 24,     //no reading
-        gyroY = 25,     //no reading
-        gyroZ = 26,     //no reading
+        X = 20,
+        AccX = 21,      //rotate X. 90 = -25, 180 = 0, 270 = +25, 360 = 0 (ng)
+        AccY = 22,      //shake vertically. +25 (top) to -25 (bottom) (ng)
+        AccZ = 23,      //tilt up
+        GyroX = 24,     //no reading
+        GyroY = 25,     //no reading
+        GyroZ = 26,     //no reading
         [Description("Touchpad")]
-        touch = 27,             //touchpad, 100 = on    (works)
-        touchX = 28,            //-100 to 100   (left to right)
-        touchY = 29             //-100 to 100   (top to bottom)
+        Touch = 27,             //touchpad, 100 = on    (works)
+        TouchX = 28,            //-100 to 100   (left to right)
+        TouchY = 29             //-100 to 100   (top to bottom)
     }                               //Control codes for incoming gamepad 
 
     public enum BatteryTypes : byte
@@ -65,19 +65,19 @@ namespace consoleXstream.Input
         //
         // Flags for battery status level
         //
-        BATTERY_TYPE_DISCONNECTED = 0x00,    // This device is not connected
-        BATTERY_TYPE_WIRED = 0x01,    // Wired device, no battery
-        BATTERY_TYPE_ALKALINE = 0x02,    // Alkaline battery source
-        BATTERY_TYPE_NIMH = 0x03,    // Nickel Metal Hydride battery source
-        BATTERY_TYPE_UNKNOWN = 0xFF,    // Cannot determine the battery type
+        BatteryTypeDisconnected = 0x00,    // This device is not connected
+        BatteryTypeWired = 0x01,    // Wired device, no battery
+        BatteryTypeAlkaline = 0x02,    // Alkaline battery source
+        BatteryTypeNimh = 0x03,    // Nickel Metal Hydride battery source
+        BatteryTypeUnknown = 0xFF,    // Cannot determine the battery type
     };
 
     public enum BatteryLevel : byte
     {
-        BATTERY_LEVEL_EMPTY = 0x00,
-        BATTERY_LEVEL_LOW = 0x01,
-        BATTERY_LEVEL_MEDIUM = 0x02,
-        BATTERY_LEVEL_FULL = 0x03
+        BatteryLevelEmpty = 0x00,
+        BatteryLevelLow = 0x01,
+        BatteryLevelMedium = 0x02,
+        BatteryLevelFull = 0x03
     };
 
     [StructLayout(LayoutKind.Explicit)]

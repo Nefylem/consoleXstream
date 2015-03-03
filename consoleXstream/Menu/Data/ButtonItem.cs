@@ -6,39 +6,38 @@ namespace consoleXstream.Menu.Data
 {
     public class ButtonItem
     {
-        private Interaction _data;
+        private readonly Classes _class;
+
+        public ButtonItem(Classes inClass) { _class = inClass; }
 
         public string Command;
         public Rectangle Rect;
 
-        public void GetDataHandle(Interaction data) { _data = data; }
-
         public void Create(Rectangle rect, string strCommand)
         {
-            if (_data.Buttons.Any(t => String.Equals(t.Command, strCommand, StringComparison.CurrentCultureIgnoreCase)))
+            if (_class.Data.Buttons.Any(t => String.Equals(t.Command, strCommand, StringComparison.CurrentCultureIgnoreCase)))
                 return;
 
-            _data.Buttons.Add(new ButtonItem());
-            var intIndex = _data.Buttons.Count - 1;
+            _class.Data.Buttons.Add(new ButtonItem(_class));
+            var intIndex = _class.Data.Buttons.Count - 1;
 
-            _data.Buttons[intIndex].Command = strCommand;
-            _data.Buttons[intIndex].Rect = rect;
+            _class.Data.Buttons[intIndex].Command = strCommand;
+            _class.Data.Buttons[intIndex].Rect = rect;
         }
 
         public void Create(Rectangle rect, string strCommand, bool boolInactive)
         {
-            foreach (var t in _data.InactiveButtons)
+            foreach (var t in _class.Data.InactiveButtons)
             {
                 if (String.Equals(t.Command, strCommand, StringComparison.CurrentCultureIgnoreCase))
                     return;
             }
 
-            _data.InactiveButtons.Add(new ButtonItem());
-            var intIndex = _data.InactiveButtons.Count - 1;
+            _class.Data.InactiveButtons.Add(new ButtonItem(_class));
+            var intIndex = _class.Data.InactiveButtons.Count - 1;
 
-            _data.InactiveButtons[intIndex].Command = strCommand;
-            _data.InactiveButtons[intIndex].Rect = rect;
+            _class.Data.InactiveButtons[intIndex].Command = strCommand;
+            _class.Data.InactiveButtons[intIndex].Rect = rect;
         }
-
     }
 }
