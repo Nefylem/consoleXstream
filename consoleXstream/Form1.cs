@@ -57,7 +57,6 @@ namespace consoleXstream
         private bool _boolChangeFullscreen;
         //private int _intScreenWidth;
         //private int _intScreenHeight;
-        private Bitmap captureImage;
         #endregion
 
         public Form1()
@@ -67,7 +66,7 @@ namespace consoleXstream
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            captureImage = new Bitmap(Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height);
+            //captureImage = new Bitmap(Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height);
 
             _MouseScreenBounds = 25;
             DeleteLogs();
@@ -129,7 +128,7 @@ namespace consoleXstream
             _mouse.GetKeyboardInterfaceHandle(_keyboardInterface);
             _mouse.GetMenuHandle(formMenu);
 
-            _videoCapture.getSystemHandle(_system);
+            _videoCapture.GetSystemHandle(_system);
 
             formMenu.GetRemapHandle(_remap);
             formMenu.GetKeymapHandle(_keymap);
@@ -321,7 +320,7 @@ namespace consoleXstream
         //Sends the settings into the video capture class. User settings already sent to class
         private void configureVideoCapture()
         {
-            _videoCapture.initialzeCapture();            //List everything so the user settings can pass into it
+            _videoCapture.InitialzeCapture();            //List everything so the user settings can pass into it
             _videoCapture.runGraph();
         }
 
@@ -440,9 +439,9 @@ namespace consoleXstream
 
         public IntPtr ReturnVideoHandle()
         {
-            return captureImage.GetHbitmap();
+            //return captureImage.GetHbitmap();
             //return captureImage;
-            //return imgDisplay.Handle;
+            return imgDisplay.Handle;
         }
 
         public void ShowVideoWindow()
@@ -464,7 +463,7 @@ namespace consoleXstream
             if (_system.IsOverrideOnExit) return;
 
             Application.DoEvents();
-            _videoCapture.DebugVideo("[0] Reset after display change: " + Screen.PrimaryScreen.Bounds.Width + " / " + Screen.PrimaryScreen.Bounds.Height);
+            //_videoCapture.DebugVideo("[0] Reset after display change: " + Screen.PrimaryScreen.Bounds.Width + " / " + Screen.PrimaryScreen.Bounds.Height);
 
             BringToFront();
             Focus();
@@ -478,7 +477,7 @@ namespace consoleXstream
             imgDisplay.BringToFront();
             imgDisplay.Focus();
 
-            _videoCapture.ForceRebuildAfterResolution();
+            //_videoCapture.ForceRebuildAfterResolution();
         }
         #endregion
 

@@ -386,7 +386,7 @@ namespace consoleXstream.Config
                     if (strVideoPin.Length > 0) addUserData("crossbarVideoPin", strVideoPin);
                     if (strAudio.Length > 0) addUserData("crossbarAudioPin", strAudioPin);
                     
-                    videoCapture.setVideoCaptureDevice(strDevice);
+                    videoCapture.SetVideoCaptureDevice(strDevice);
                     //TODO: set Audio device
                     videoCapture.setCrossbar(strVideoPin);
                     videoCapture.setCrossbar(strAudioPin);
@@ -496,7 +496,7 @@ namespace consoleXstream.Config
         {
             var set = checkUserSetting("Crossbar").ToLower();
             addUserData("Crossbar", set == "true" ? "false" : "true");
-            videoCapture.loadUserSettings();
+            videoCapture.LoadUserSettings();
             videoCapture.runGraph();
         }
 
@@ -505,7 +505,7 @@ namespace consoleXstream.Config
             var set = checkUserSetting("AVIRender").ToLower();
             addUserData("AVIRender", set == "true" ? "false" : "true");
 
-            videoCapture.loadUserSettings();
+            videoCapture.LoadUserSettings();
             videoCapture.runGraph();
         }
 

@@ -135,7 +135,7 @@ namespace consoleXstream.Menu.SubMenuOptions
             _data.Checked.Clear();
             _data.Checked.Add(strFile);
 
-            _videoCapture.setVideoCaptureDevice(strDevice);
+            _videoCapture.SetVideoCaptureDevice(strDevice);
             //TODO: set Audio device
             _videoCapture.setCrossbar(strVideoPin);
             _videoCapture.setCrossbar(strAudioPin);

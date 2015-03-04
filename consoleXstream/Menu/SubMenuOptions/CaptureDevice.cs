@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using consoleXstream.Config;
 using consoleXstream.Menu.Data;
 
@@ -64,7 +61,7 @@ namespace consoleXstream.Menu.SubMenuOptions
                 return;
 
             _system.addUserData("VideoCaptureDevice", strSet);
-            _videoCapture.setVideoCaptureDevice(strSet);
+            _videoCapture.SetVideoCaptureDevice(strSet);
             _videoCapture.runGraph();
             _data.Checked.Clear();
             _data.Checked.Add(_videoCapture.strVideoCaptureDevice);

@@ -96,6 +96,14 @@
     <Compile Include="Remap\Remaping.cs" />
     <Compile Include="Config\Configuration.cs" />
     <Compile Include="Output\TitanOne.cs" />
+    <Compile Include="VideoCapture\Analyse\Audio.cs" />
+    <Compile Include="VideoCapture\Analyse\Capture.cs" />
+    <Compile Include="VideoCapture\Analyse\Resolution.cs" />
+    <Compile Include="VideoCapture\Classes.cs" />
+    <Compile Include="VideoCapture\Data\Graph.cs" />
+    <Compile Include="VideoCapture\Data\Variables.cs" />
+    <Compile Include="VideoCapture\Debug.cs" />
+    <Compile Include="VideoCapture\Sampling\SampleGrabberCallback.cs" />
     <Compile Include="VideoCapture\VideoCapture.cs" />
     <Compile Include="Config\VideoResolution.cs" />
     <Compile Include="Form1.cs">
