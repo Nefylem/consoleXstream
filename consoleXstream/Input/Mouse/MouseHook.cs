@@ -5,13 +5,16 @@ namespace consoleXstream.Input.Mouse
 {
     class Hook
     {
+
+        private Output.Gamepad _gamepad;
         private Form1 frmMain;
         private Menu.ShowMenu formMenu;
         private Config.Configuration system;
-        private Output.ControllerMax controllerMax;
-        private Output.TitanOne titanOne;
+        //private Output.ControllerMax controllerMax;
+        //private Output.TitanOne.Write titanOne;
         private Input.KeyboardInterface keyboard;
-        public Hook(Form1 mainForm) { frmMain = mainForm; }
+
+        public Hook(Form1 mainForm, Output.Gamepad game) { frmMain = mainForm; _gamepad = game; }
 
         public void enableMouseHook()
         {
@@ -26,8 +29,8 @@ namespace consoleXstream.Input.Mouse
         }
 
         public void GetSystemHandle(Config.Configuration inSystem) { system = inSystem; }
-        public void GetControllerMaxHandle(Output.ControllerMax inMax) { controllerMax = inMax; }
-        public void GetTitanOneHandle(Output.TitanOne inTo) { titanOne = inTo; }
+        //public void GetControllerMaxHandle(Output.ControllerMax inMax) { controllerMax = inMax; }
+        //public void GetTitanOneHandle(Output.TitanOne.Write inTo) { titanOne = inTo; }
         public void GetKeyboardInterfaceHandle(Input.KeyboardInterface inKey) { keyboard = inKey; }
         public void GetMenuHandle(Menu.ShowMenu inMenu) { formMenu = inMenu; }
             
@@ -38,16 +41,7 @@ namespace consoleXstream.Input.Mouse
                 if (system.boolEnableMouse)
                     keyboard.boolLeftMouse = true;
                 else
-                {
-                    if (system.useTitanOneAPI && system.boolControllerMax)
-                        titanOne.Ps4Touchpad = true;
-
-                    if (system.boolControllerMax && !system.useTitanOneAPI)
-                        controllerMax.boolPs4Touchpad = true;
-
-                    if (system.boolTitanOne)
-                        titanOne.Ps4Touchpad = true;
-                }
+                    _gamepad.Ps4Touchpad = true;
             }
             else
             {
@@ -69,17 +63,7 @@ namespace consoleXstream.Input.Mouse
                 if (system.boolEnableMouse)
                     keyboard.boolLeftMouse = false;
                 else
-                {
-                    if (system.boolControllerMax && !system.useTitanOneAPI)
-                        controllerMax.boolPs4Touchpad = false;
-
-                    if (system.boolControllerMax && system.useTitanOneAPI)
-                        titanOne.Ps4Touchpad = false;
-
-                    if (system.boolTitanOne)
-                        titanOne.Ps4Touchpad = false;
-                }
-                
+                    _gamepad.Ps4Touchpad = false;
             }
         }
 

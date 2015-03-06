@@ -10,6 +10,7 @@ using consoleXstream.Input;
 using consoleXstream.Input.Mouse;
 using consoleXstream.Menu;
 using consoleXstream.Output;
+using consoleXstream.Output.TitanOne;
 using consoleXstream.Remap;
 using consoleXstream.Scripting;
 
@@ -26,13 +27,15 @@ namespace consoleXstream
         private Configuration _system;
         private ExternalScript _external;
 
-        private GamepadXInput _gamepad;
+        //private GamepadXInput _gamepad;
+        private Output.Gamepad _gamepad;
+
         private Input.Mouse.Hook _mouse;
         private KeyboardHook _keyboard;
         private KeyboardInterface _keyboardInterface;
 
         private ControllerMax _controllerMax;
-        private TitanOne _titanOne;
+        private Output.TitanOne.Write _titanOne;
         private Gimx _gimx;
         private VideoCapture.VideoCapture _videoCapture;
         private VideoResolution _videoResolution;
@@ -93,21 +96,23 @@ namespace consoleXstream
             _system = new Configuration(this);
             _external = new ExternalScript(this);
 
-            _gamepad = new GamepadXInput(this);
+            //_gamepad = new GamepadXInput(this);
             _keyboard = new KeyboardHook(this);
 
             _keyboardInterface = new KeyboardInterface(this);
 
-            _mouse = new Hook(this);
 
             _controllerMax = new ControllerMax(this);
-            _titanOne = new TitanOne(this);
             _gimx = new Gimx(this);
 
             _videoCapture = new VideoCapture.VideoCapture(this);
             _videoResolution = new VideoResolution(this);
             _remap = new Remapping();
             _keymap = new Keymap();
+
+            _gamepad = new Output.Gamepad(this, _remap, _system, _keyboardInterface);
+            _titanOne = new Write(this, _system, _gamepad);
+            _mouse = new Hook(this, _gamepad);
 
             //Pass to subforms as needed
             _system.getVideoCaptureHandle(_videoCapture);
@@ -117,10 +122,6 @@ namespace consoleXstream
 
             _controllerMax.getSystemHandle(_system);
             _controllerMax.getKeyboardInterfaceHandle(_keyboardInterface);
-
-            _titanOne.getSystemHandle(_system);
-            _titanOne.getKeyboardInterfaceHandle(_keyboardInterface);
-            _titanOne.getRemapHandle(_remap);
 
             _keyboardInterface.getSystemHandle(_system);
 
@@ -261,6 +262,7 @@ namespace consoleXstream
 
             if (_system.boolControllerMax)
             {
+                /*
                 if (!_system.useTitanOneAPI)
                 {
                     _system.debug("[3] Configure ControllerMax API");
@@ -273,16 +275,10 @@ namespace consoleXstream
                     _titanOne.setTOInterface(Output.TitanOne.DevPID.ControllerMax);
                     _titanOne.initTitanOne();
                     configureTitanOne();
-                }
+                }*/
             }
 
-            if (_system.boolTitanOne)
-            {
-                _system.debug("[3] Configure TitanOne API");
-                _titanOne.setTOInterface(Output.TitanOne.DevPID.TitanOne);
-                _titanOne.initTitanOne();
-                configureTitanOne();
-            }
+            if (_system.boolTitanOne) InitializeTitanOne();
 
             if (_system.boolFPS)
             {
@@ -295,6 +291,14 @@ namespace consoleXstream
 
             tmrSystem.Enabled = true;
         }
+
+        private void InitializeTitanOne()
+        {
+            _system.debug("[3] Configure TitanOne API");
+            _titanOne.SetToInterface(Define.DevPid.TitanOne);
+            _titanOne.Initialize();
+        }
+
         //Loads a background - if present in the resource file
         private void loadBackground()
         {
@@ -322,19 +326,6 @@ namespace consoleXstream
         {
             _videoCapture.InitialzeCapture();            //List everything so the user settings can pass into it
             _videoCapture.runGraph();
-        }
-
-        private void configureControllerMax()
-        {
-            _mouse.GetControllerMaxHandle(_controllerMax);
-            _mouse.enableMouseHook();
-        }
-
-        private void configureTitanOne()
-        {
-            
-            _mouse.GetTitanOneHandle(_titanOne);
-            _mouse.enableMouseHook();
         }
 
         public int Clamp(int value, int min, int max)
@@ -416,17 +407,15 @@ namespace consoleXstream
 
         private void CheckControllerInput()
         {
-            if (_system.useTitanOneAPI)
-            {
-                _titanOne.checkControllerInput();
-            }
+            _gamepad.Check();
+            if (_system.useTitanOneAPI) _titanOne.Send();
             else
             {
                 if (_system.boolControllerMax)
                     _controllerMax.checkControllerInput();
 
                 if (_system.boolTitanOne)
-                    _titanOne.checkControllerInput();
+                    _titanOne.Send();
             }
         }
 

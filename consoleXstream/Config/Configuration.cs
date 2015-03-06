@@ -15,7 +15,7 @@ namespace consoleXstream.Config
         private Form1 frmMain;
         private VideoCapture.VideoCapture videoCapture;
         private Output.ControllerMax controllerMax;
-        private Output.TitanOne titanOne;
+        private Output.TitanOne.Write titanOne;
         private VideoResolution videoResolution;
         private VrMode _vrMode;
 
@@ -74,7 +74,7 @@ namespace consoleXstream.Config
         public Configuration(Form1 mainForm) { frmMain = mainForm; }
         public void getVideoCaptureHandle(VideoCapture.VideoCapture inVideo) { videoCapture = inVideo; }
         public void getControllerMaxHandle(Output.ControllerMax inMax) { controllerMax = inMax; }
-        public void getTitanOneHandle(Output.TitanOne inTO) { titanOne = inTO; }
+        public void getTitanOneHandle(Output.TitanOne.Write inTO) { titanOne = inTO; }
         public void getVideoResolutionHandle(Config.VideoResolution inVid) { videoResolution = inVid; }
 
         private async Task WriteTextAsync(string strWrite)
@@ -432,7 +432,7 @@ namespace consoleXstream.Config
 
         public void changeControllerMax_TOAPI()
         {
-            titanOne.closeTitanOneInterface();
+            titanOne.Close();
 
             boolControllerMax = !boolControllerMax;
             addUserData("ControllerMax", boolControllerMax.ToString());
@@ -445,8 +445,8 @@ namespace consoleXstream.Config
 
             if (boolControllerMax)
             {
-                titanOne.setTOInterface(Output.TitanOne.DevPID.ControllerMax);
-                titanOne.initTitanOne();
+                titanOne.SetToInterface(Output.TitanOne.Define.DevPid.ControllerMax);
+                titanOne.Initialize();
             }
         }
 
@@ -467,14 +467,14 @@ namespace consoleXstream.Config
             addUserData("TitanOne", boolTitanOne.ToString());
 
             if (boolTitanOne)
-                titanOne.initTitanOne();
+                titanOne.Initialize();
             else
-                titanOne.closeTitanOneInterface();
+                titanOne.Close();
         }
 
         public void changeTitanOne_TOAPI()
         {
-            titanOne.closeTitanOneInterface();
+            titanOne.Close();
 
             boolTitanOne = !boolTitanOne;
             addUserData("TitanOne", boolTitanOne.ToString());
@@ -487,8 +487,8 @@ namespace consoleXstream.Config
 
             if (boolTitanOne)
             {
-                titanOne.setTOInterface(Output.TitanOne.DevPID.TitanOne);
-                titanOne.initTitanOne();
+                titanOne.SetToInterface(Output.TitanOne.Define.DevPid.TitanOne);
+                titanOne.Initialize();
             }
         }
 

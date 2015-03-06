@@ -79,6 +79,12 @@
     <Compile Include="Menu\SubMenu\Menu.cs" />
     <Compile Include="Menu\SubMenu\Shutter.cs" />
     <Compile Include="Output\ControllerMax.cs" />
+    <Compile Include="Output\Gamepad.cs" />
+    <Compile Include="Output\Shortcut.cs" />
+    <Compile Include="Output\TitanOne\Classes.cs" />
+    <Compile Include="Output\TitanOne\Define.cs" />
+    <Compile Include="Output\TitanOne\Init.cs" />
+    <Compile Include="Output\TitanOne\Write.cs" />
     <Compile Include="Overlays\MouseInterface.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -95,7 +101,6 @@
     <Compile Include="Output\ListDevices.cs" />
     <Compile Include="Remap\Remaping.cs" />
     <Compile Include="Config\Configuration.cs" />
-    <Compile Include="Output\TitanOne.cs" />
     <Compile Include="VideoCapture\Analyse\Audio.cs" />
     <Compile Include="VideoCapture\Analyse\Capture.cs" />
     <Compile Include="VideoCapture\Analyse\Resolution.cs" />
@@ -217,6 +222,7 @@
   <ItemGroup>
     <Folder Include="Dialog\" />
     <Folder Include="Notify\" />
+    <Folder Include="Output\ControllerMax\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
