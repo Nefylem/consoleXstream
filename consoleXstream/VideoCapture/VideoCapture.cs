@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.IO;
 using DirectShowLib;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
 using System.Drawing;
 using consoleXstream.Config;
+using consoleXstream.VideoCapture.Data;
 using consoleXstream.VideoCapture.Sampling;
 
 namespace consoleXstream.VideoCapture
@@ -15,28 +14,15 @@ namespace consoleXstream.VideoCapture
     {
         private readonly Classes _class;
 
-        [DllImport("ole32.dll")]
-        public static extern int CreateBindCtx(int reserved, out IBindCtx ppbc);
- 
-        private readonly Form1 _frmMain;
-        //private Configuration _class.System;
 
-        public bool boolUseCrossbar { get; private set; }
-        public bool boolCreateSmartTee { get; private set; }
-        public bool boolCreateAVIRender { get; private set; }
         public bool boolActiveVideo { get; private set; }
         public bool boolCrossbar { get; private set; }
-        public bool boolSampleGrabber { get; private set; }
-        public string strVideoPin = "";
-        public string strAudioPin = "";
         public string strVideoCaptureDevice { get; private set; }
         public string strAudioPlaybackDevice { get; private set; }
 
-        public List<string> listCrossbarInput { get; private set; }
         public List<string> listVideoCapture { get; private set; }
 
         public List<string> listVideoCaptureName { get; set; } 
-        //public List<string> _class.Capture.Display { get; private set; }
 
         public IMediaEvent MediaEvent
         {
@@ -45,9 +31,6 @@ namespace consoleXstream.VideoCapture
         }
 
         public IAMCrossbar _xBar { get; set; }
-
-        //private List<AMMediaType> _listVideoRes;
-        //private List<string> _listVideoResolution;
 
         private List<string> _listPinIn;
         private List<string> _listPinOut;
@@ -64,22 +47,16 @@ namespace consoleXstream.VideoCapture
         private int _intSetResolution = 0;
 
         private bool _boolBuildingGraph;
-        private bool _boolRestartGraph;
         private bool _boolVideoFail;
         private bool _boolRerunGraph;
-        private bool _boolInitializeGraph;
-        private bool _boolShowPreviewWindow;
+        
         private bool _IsChangedDisplayResolution;
 
-        public VideoCapture(Form1 mainForm)
+        public VideoCapture(Form1 mainForm, Configuration System)
         {
-            _frmMain = mainForm;
-
-            _class = new Classes(this);
+            _class = new Classes(this, mainForm, System);
             _class.DeclareClasses();
         }
-
-        public void GetSystemHandle(Configuration inSystem) { _class.System = inSystem; }
 
         public void InitialzeCapture()
         {
@@ -90,98 +67,14 @@ namespace consoleXstream.VideoCapture
             _class.Capture.Find();
             _class.Audio.Find();
 
-            LoadUserSettings();
+            _class.User.LoadSettings();
             _class.Resolution.Find();
 
-            _boolInitializeGraph = true;
-            _boolRestartGraph = true;
+            _class.Var.IsInitializeGraph = true;
+            _class.Var.IsRestartGraph = true;
         }
 
-        //Loads all user settings for graph
-        public void LoadUserSettings()
-        {
-            //Load user settings
-            boolUseCrossbar = _class.System.checkUserSetting("Crossbar") == "true";
-            boolCreateSmartTee = _class.System.checkUserSetting("Preview") == "true";
-            boolCreateAVIRender = _class.System.checkUserSetting("AVIRender") == "true";
-            
-            //Check as user setting
-            boolSampleGrabber = true;
-
-            strVideoPin = _class.System.checkUserSetting("crossbarVideoPin");
-            strAudioPin = _class.System.checkUserSetting("crossbarAudioPin");
-
-            _class.Capture.Set(_class.System.checkUserSetting("VideoCaptureDevice"));
-
-            _class.Debug.Log(boolCreateSmartTee ? "Using smartTee" : "SmartTee disabled");
-
-            _class.Debug.Log(boolCreateAVIRender ? "Using AVI Renderer" : "AVI Rendered disabled");
-        }
-
-        #region Video Capture Information
-        public void setPreviewWindow(bool boolSet)
-        {
-            _boolShowPreviewWindow = boolSet;
-        }
-
-
-        //Caches currently connected video capture devices
-
-
-        public List<string> getVideoResolution()
-        {
-            return _class.Resolution.List;
-        }
-
-        public int getVideoResolutionCurrent()
-        {
-            return _intCurrentVideoResolution;
-        }
-
-        public void setVideoResolution(int setRes)
-        {
-            _intVideoResolution = setRes;
-            _intSetResolution = setRes;
-        }
-
-        //Return human readable text instead of GUID
-
-        //Lists available audio output. Default to WaveOut for simplicity
-
-        public string showCrossbarOutput(int intID, string strType)
-        {
-            string strReturn = "";
-            if (listCrossbarInput.Count == 0) { FindCrossbarOutput(false); }
-            if (listCrossbarInput.Count > 0)
-            {
-                int intConnector = 0;
-                for (int intCount = 0; intCount < listCrossbarInput.Count; intCount++)
-                {
-                    string strTemp = listCrossbarInput[intCount];
-                    if (strTemp.Length > "video_".Length)
-                    {
-                        if (strType.ToLower() == "video")
-                        {
-                            if (strTemp.Substring(0, "video_".Length).ToLower() == "video_")
-                            {
-                                if (intConnector == intID) { strReturn = strTemp; }
-                            }
-                        }
-                        if (strType.ToLower() == "audio")
-                        {
-                            if (strTemp.Substring(0, "audio".Length).ToLower() == "audio")
-                            {
-                                if (intConnector == intID) { strReturn = strTemp; }
-                            }
-                        }
-                        intConnector++;
-                    }
-                }
-            }
-            return strReturn;
-        }
-
-        #endregion
+        public void LoadUserSettings() { _class.User.LoadSettings(); }
 
         #region DirectShow Graph
         public void runGraph()
@@ -210,7 +103,7 @@ namespace consoleXstream.VideoCapture
 
                 if (buildGraph())
                 {
-                    if (!_boolShowPreviewWindow)
+                    if (!_class.Var.ShowPreviewWindow)
                         setupVideoWindow();
                     else
                         setupPreviewWindow();
@@ -230,10 +123,10 @@ namespace consoleXstream.VideoCapture
                 _boolBuildingGraph = false;
 
                 if (_class.Graph.XBar != null)
-                    if (listCrossbarInput.Count == 0)
-                        FindCrossbarOutput(false);
-                
-                if (_boolRestartGraph)
+                    if (_class.Var.CrossbarInput.Count == 0)
+                        _class.Crossbar.Output();
+
+                if (_class.Var.IsRestartGraph)
                     _intRestartGraph = 3;
             }
             else
@@ -321,7 +214,7 @@ namespace consoleXstream.VideoCapture
                 _class.Graph.IamAvd = pCaptureDevice as IAMAnalogVideoDecoder;
 
                 //Create user crossbar if needed
-                if (boolUseCrossbar == true)
+                if (_class.Var.UseCrossbar == true)
                     if (createCrossbar(ref strCrossAudioOut, ref strCrossVideoOut, strCaptureVideoIn, strCaptureAudioIn, strShortName, pCaptureDevice))
                         checkCrossbar();
 
@@ -341,13 +234,13 @@ namespace consoleXstream.VideoCapture
                 string strPinOut = strCaptureVideoOut;
                 string strDevice = strVideoDevice;
 
-                if (boolSampleGrabber)
+                if (_class.Var.UseSampleGrabber)
                     createSampleGrabber(ref strPreviewIn, ref strPreviewOut, ref strDevice, ref strPinOut, ref pRen);
 
-                if (boolCreateSmartTee)
+                if (_class.Var.CreateSmartTee)
                     createSmartTee(ref strPreviewIn, ref strPreviewOut, ref strDevice, ref strPinOut, ref pRen);
 
-                if (boolCreateAVIRender)
+                if (_class.Var.CreateAviRender)
                     createAVIRender(ref strAVIin, ref strAVIout, ref strDevice, ref strPinOut, ref pRen);
 
                 //Video renderer
@@ -605,7 +498,7 @@ namespace consoleXstream.VideoCapture
                         IBindCtx bindCtx = null;
                         try
                         {
-                            hr = CreateBindCtx(0, out bindCtx);
+                            hr = Variables.CreateBindCtx(0, out bindCtx);
                             DsError.ThrowExceptionForHR(hr);
                             Guid guid = typeof(IBaseFilter).GUID;
                             object obj;
@@ -789,7 +682,7 @@ namespace consoleXstream.VideoCapture
 
             string strTempOut = "";
 
-            listCrossbarInput = new List<string>();
+            _class.Var.CrossbarInput = new List<string>();
 
             _class.Debug.Log("");
             _class.Debug.Log("[1] Looking for crossbar " + _intDeviceID);
@@ -888,13 +781,13 @@ namespace consoleXstream.VideoCapture
             int intType = 0;
             int intPin = 0;
 
-            if (listCrossbarInput.Count == 0) FindCrossbarOutput(false); 
-            if (listCrossbarInput.Count > 0)
+            if (_class.Var.CrossbarInput.Count == 0) _class.Crossbar.Output();
+            if (_class.Var.CrossbarInput.Count > 0)
             {
-                for (int intCount = 0; intCount < listCrossbarInput.Count; intCount++)
+                for (int intCount = 0; intCount < _class.Var.CrossbarInput.Count; intCount++)
                 {
-                    if (strVideo.ToLower() == listCrossbarInput[intCount].ToLower()) { intType = 0; intPin = intCount; }
-                    if (strAudio.ToLower() == listCrossbarInput[intCount].ToLower()) { intType = 1; intPin = intCount; }
+                    if (strVideo.ToLower() == _class.Var.CrossbarInput[intCount].ToLower()) { intType = 0; intPin = intCount; }
+                    if (strAudio.ToLower() == _class.Var.CrossbarInput[intCount].ToLower()) { intType = 1; intPin = intCount; }
                 }
             }
 
@@ -932,33 +825,6 @@ namespace consoleXstream.VideoCapture
             else { _class.Debug.Log("xbar null " + strInput); }
         }
 
-        private void FindCrossbarOutput(bool boolReturn)
-        {
-            if (_class.Graph.XBar != null)
-            {
-                listCrossbarInput = new List<string>();
-
-                var inPin = 0;
-                var outPin = 0;
-
-                _class.Graph.XBar.get_PinCounts(out inPin, out outPin);
-
-                for (var intCount = 0; intCount < outPin; intCount++)
-                {
-                    int intRouted;
-                    int intPinId;
-                    PhysicalConnectorType pinType;
-
-                    _class.Graph.XBar.get_CrossbarPinInfo(true, intCount, out intPinId, out pinType);
-                    _class.Graph.XBar.get_IsRoutedTo(intCount, out intRouted);
-
-                    listCrossbarInput.Add(pinType.ToString());
-
-                    _class.Debug.Log(intCount + " / " + pinType);
-                }
-            }
-            else { _class.Debug.Log("No crossbar found"); }
-        }
 
         #endregion
 
@@ -1028,7 +894,7 @@ namespace consoleXstream.VideoCapture
             if (hr == 0)
             {
                 var cb = new SampleGrabberCallback();
-                cb.GetForm1Handle(_frmMain);
+                cb.GetForm1Handle(_class.FrmMain);
 
                 var sampleGrabber = (ISampleGrabber) pSampleGrabber;
                 sampleGrabber.SetCallback(cb, 1);
@@ -1133,7 +999,7 @@ namespace consoleXstream.VideoCapture
 
             int hr = 0;
 
-            IntPtr videoHandle = _frmMain.ReturnVideoHandle();
+            IntPtr videoHandle = _class.FrmMain.ReturnVideoHandle();
 
             _boolVideoFail = false;
             try
@@ -1149,7 +1015,7 @@ namespace consoleXstream.VideoCapture
                 if (_class.Graph.VideoWindow != null)
                 {
                     _class.Debug.Log("-> setBounds");
-                    Point ptReturn = _frmMain.SetVideoWindowBounds();
+                    Point ptReturn = _class.FrmMain.SetVideoWindowBounds();
                     _class.Debug.Log("-> setWindowPosition");
                     _class.Graph.VideoWindow.SetWindowPosition(0, 0, ptReturn.X, ptReturn.Y);
                 }
@@ -1168,9 +1034,9 @@ namespace consoleXstream.VideoCapture
         public void checkVideoOutput()
         {
             //Reruns the graph once, find this needs to happen after quick resolution changes (PS3)
-            if (_boolRestartGraph && !_boolVideoFail)           
+            if (_class.Var.IsRestartGraph && !_boolVideoFail)           
             {
-                _boolRestartGraph = false;
+                _class.Var.IsRestartGraph = false;
                 _class.Debug.Log("[3] Update graph");
                 runGraph();
             }
@@ -1178,14 +1044,14 @@ namespace consoleXstream.VideoCapture
             if (!_boolVideoFail && _class.System.boolAutoSetCaptureResolution)
                 _class.Resolution.Check();
 
-            if (_boolRestartGraph)
+            if (_class.Var.IsRestartGraph)
             {
                 if (_intRestartGraph > 0) 
                     _intRestartGraph--; 
                 else 
                 { 
-                    _class.Debug.Log("[3] Restart graph"); 
-                    _boolRestartGraph = false; 
+                    _class.Debug.Log("[3] Restart graph");
+                    _class.Var.IsRestartGraph = false; 
                     _boolVideoFail = false; 
                     runGraph(); 
                 }
@@ -1214,11 +1080,13 @@ namespace consoleXstream.VideoCapture
         }
         #endregion
 
-        public void SetVideoCaptureDevice(string device)
-        {
-            _class.Capture.Set(device);
-        }
-
+        public void SetVideoCaptureDevice(string device) { _class.Capture.Set(device); }
+        public void SetPreviewWindow(bool set) { _class.Var.ShowPreviewWindow = set; }
+        public List<string> GetVideoResolution() { return _class.Resolution.List; }
+        public int GetVideoResolutionCurrent() { return _intCurrentVideoResolution; }
+        public void SetVideoResolution(int setRes) { _intVideoResolution = setRes; _intSetResolution = setRes; }
+        public List<string> GetCrossbarList() { return _class.Var.CrossbarInput; }
+        public string GetCrossbarOutput(int id, string type) { return _class.Crossbar.List(id, type); }
         public void UpdateVideoCaptureList(List<string> data)
         {
             

@@ -105,7 +105,6 @@ namespace consoleXstream
             _controllerMax = new ControllerMax(this);
             _gimx = new Gimx(this);
 
-            _videoCapture = new VideoCapture.VideoCapture(this);
             _videoResolution = new VideoResolution(this);
             _remap = new Remapping();
             _keymap = new Keymap();
@@ -113,6 +112,7 @@ namespace consoleXstream
             _gamepad = new Output.Gamepad(this, _remap, _system, _keyboardInterface);
             _titanOne = new Write(this, _system, _gamepad);
             _mouse = new Hook(this, _gamepad);
+            _videoCapture = new VideoCapture.VideoCapture(this, _system);
 
             //Pass to subforms as needed
             _system.getVideoCaptureHandle(_videoCapture);
@@ -129,10 +129,11 @@ namespace consoleXstream
             _mouse.GetKeyboardInterfaceHandle(_keyboardInterface);
             _mouse.GetMenuHandle(formMenu);
 
-            _videoCapture.GetSystemHandle(_system);
+            //_videoCapture.GetSystemHandle(_system);
 
             formMenu.GetRemapHandle(_remap);
             formMenu.GetKeymapHandle(_keymap);
+
         }
 
         //Deletes the log files on startup so only shows latest information
@@ -324,7 +325,7 @@ namespace consoleXstream
         //Sends the settings into the video capture class. User settings already sent to class
         private void configureVideoCapture()
         {
-            _videoCapture.InitialzeCapture();            //List everything so the user settings can pass into it
+            _videoCapture.InitialzeCapture();            
             _videoCapture.runGraph();
         }
 

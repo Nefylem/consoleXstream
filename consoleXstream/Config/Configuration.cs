@@ -635,12 +635,12 @@ namespace consoleXstream.Config
             resolution = resolution.ToLower();
             if (resolution != "resolution")
             {
-                List<string> listRes = videoCapture.getVideoResolution();
+                List<string> listRes = videoCapture.GetVideoResolution();
                 for (int count = 0; count < listRes.Count; count++)
                 {
                     if (resolution == listRes[count].ToLower())
                     {
-                        videoCapture.setVideoResolution(count);
+                        videoCapture.SetVideoResolution(count);
                         break;
                     }
                 }

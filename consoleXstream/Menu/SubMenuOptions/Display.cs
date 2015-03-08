@@ -29,13 +29,13 @@ namespace consoleXstream.Menu.SubMenuOptions
             if (resolution == "resolution")
                 return;
 
-            var listRes = _videoCapture.getVideoResolution();
+            var listRes = _videoCapture.GetVideoResolution();
             for (var count = 0; count < listRes.Count; count++)
             {
                 if (resolution != listRes[count].ToLower())
                     continue;
 
-                _videoCapture.setVideoResolution(count);
+                _videoCapture.SetVideoResolution(count);
                 _videoCapture.runGraph();
 
                 _system.addUserData("CaptureResolution", resolution);

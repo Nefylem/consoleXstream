@@ -62,8 +62,8 @@ namespace consoleXstream.Menu.SubMenuOptions
                 int intPinAudio;
                 _videoCapture._xBar.get_IsRoutedTo(0, out intPinVideo);
                 _videoCapture._xBar.get_IsRoutedTo(1, out intPinAudio);
-                strCrossVideo = _videoCapture.showCrossbarOutput(intPinVideo, "Video");
-                strCrossAudio = _videoCapture.showCrossbarOutput(intPinAudio, "Audio");
+                strCrossVideo = _videoCapture.GetCrossbarOutput(intPinVideo, "Video");
+                strCrossAudio = _videoCapture.GetCrossbarOutput(intPinAudio, "Audio");
             }
 
             //Control method

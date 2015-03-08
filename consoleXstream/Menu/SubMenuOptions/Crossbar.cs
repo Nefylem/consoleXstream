@@ -26,7 +26,8 @@ namespace consoleXstream.Menu.SubMenuOptions
         {
             if (_system.boolInternalCapture)
             {
-                foreach (var t in _videoCapture.listCrossbarInput)
+                var crossbarList = _videoCapture.GetCrossbarList();
+                foreach (var t in crossbarList)
                 {
                     var strTitle = t;
                     if (strTitle.ToLower() == "video_serialdigital") { strTitle = "HDMI"; }
@@ -50,7 +51,9 @@ namespace consoleXstream.Menu.SubMenuOptions
 
         public void Change(string strSet)
         {
-            var intIndex = _videoCapture.listCrossbarInput.IndexOf(strSet);
+            var crossbarList = _videoCapture.GetCrossbarList();
+            var intIndex = crossbarList.IndexOf(strSet);
+
             if (intIndex <= -1)
                 return;
             if (strSet.Length <= "video_".Length) return;

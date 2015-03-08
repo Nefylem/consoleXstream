@@ -103,9 +103,11 @@
     <Compile Include="Config\Configuration.cs" />
     <Compile Include="VideoCapture\Analyse\Audio.cs" />
     <Compile Include="VideoCapture\Analyse\Capture.cs" />
+    <Compile Include="VideoCapture\Analyse\Crossbar.cs" />
     <Compile Include="VideoCapture\Analyse\Resolution.cs" />
     <Compile Include="VideoCapture\Classes.cs" />
     <Compile Include="VideoCapture\Data\Graph.cs" />
+    <Compile Include="VideoCapture\Data\User.cs" />
     <Compile Include="VideoCapture\Data\Variables.cs" />
     <Compile Include="VideoCapture\Debug.cs" />
     <Compile Include="VideoCapture\Sampling\SampleGrabberCallback.cs" />

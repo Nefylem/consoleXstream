@@ -81,8 +81,8 @@ namespace consoleXstream.Menu.SubMenuOptions
 
             var listAdded = new List<string>();
 
-            var listVideoRes = _videoCapture.getVideoResolution();
-            var currentResolution = _videoCapture.getVideoResolutionCurrent();
+            var listVideoRes = _videoCapture.GetVideoResolution();
+            var currentResolution = _videoCapture.GetVideoResolutionCurrent();
 
             for (var count = 0; count < listVideoRes.Count; count++)
             {
