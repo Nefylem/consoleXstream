@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using consoleXstream.Config;
 using consoleXstream.Input;
 
@@ -15,12 +16,21 @@ namespace consoleXstream.Output.TitanOne
         }
 
         public Define.DevPid DevId = Define.DevPid.Any;
+        public Define.ApiMethod ApiMethod = Define.ApiMethod.Single;
+
         private bool _isToDisconnected;
 
         public void SetToInterface(Define.DevPid devId)
         {
             DevId = devId;
             _class.System.debug("titanOne.log", "[0] using " + DevId);
+            _class.System.debug("titanOne.log", "");
+        }
+
+        public void SetApiMethod(Define.ApiMethod setType)
+        {
+            ApiMethod = setType;
+            _class.System.debug("titanOne.log", "[0] using " + setType + " API");
             _class.System.debug("titanOne.log", "");
         }
 
@@ -81,5 +91,8 @@ namespace consoleXstream.Output.TitanOne
                 _isToDisconnected = true;
             }
         }
+
+        public void ListDevices() { _class.MDevices.List(); }
+        public int CheckDevices() { return _class.MDevices.Check(); }
     }
 }

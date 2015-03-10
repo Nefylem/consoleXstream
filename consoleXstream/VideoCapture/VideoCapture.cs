@@ -20,9 +20,6 @@ namespace consoleXstream.VideoCapture
         public string strVideoCaptureDevice { get; private set; }
         public string strAudioPlaybackDevice { get; private set; }
 
-        public List<string> listVideoCapture { get; private set; }
-
-        public List<string> listVideoCaptureName { get; set; } 
 
         public IMediaEvent MediaEvent
         {
@@ -80,12 +77,12 @@ namespace consoleXstream.VideoCapture
         public void runGraph()
         {
             _class.Debug.Log("[0] Build capture graph");
-            if (_class.Capture.CurrentDevice > -1 && _class.Capture.CurrentDevice < _class.Capture.Display.Count)
+            if (_class.Capture.CurrentDevice > -1 && _class.Capture.CurrentDevice < _class.Var.VideoCaptureDevice.Count)
             {
                 int hr = 0;
 
                 _boolBuildingGraph = true;
-                _class.Debug.Log("Using : " + _class.Capture.Display[_class.Capture.CurrentDevice]);
+                _class.Debug.Log("Using : " + _class.Var.VideoCaptureDevice[_class.Capture.CurrentDevice]);
                 _class.Debug.Log("");
 
                 if (_class.Graph.MediaControl != null) _class.Graph.MediaControl.StopWhenReady();
@@ -137,9 +134,9 @@ namespace consoleXstream.VideoCapture
         {
             int hr = 0;
 
-            if (_class.Capture.CurrentDevice > -1 && _class.Capture.CurrentDevice < _class.Capture.Device.Count)
+            if (_class.Capture.CurrentDevice > -1 && _class.Capture.CurrentDevice < _class.Var.VideoCaptureDevice.Count)
             {
-                string strVideoDevice = _class.Capture.Display[_class.Capture.CurrentDevice];
+                string strVideoDevice = _class.Var.VideoCaptureDevice[_class.Capture.CurrentDevice];
                 string strShortName = findCaptureName(strVideoDevice);
 
                 if (_intVideoResolution > _class.Resolution.List.Count)
@@ -309,6 +306,7 @@ namespace consoleXstream.VideoCapture
 
             return true;
         }
+
 
         /*
          * Looks for a unique identifier (eg Avermedia U3 extremecap will return Avermedia)
@@ -1080,6 +1078,22 @@ namespace consoleXstream.VideoCapture
         }
         #endregion
 
+        public List<string> GetVideoCaptureDevices()
+        {
+            if (_class.Var.VideoCaptureDevice == null || _class.Var.VideoCaptureDevice.Count == 0)
+            {
+                //relist
+            }
+            return _class.Var.VideoCaptureDevice;
+        }
+
+        public List<string> GetVideoCaptureByName()
+        {
+            if (_class.Var.VideoCaptureDevice == null || _class.Var.VideoCaptureDevice.Count == 0)
+                _class.Capture.Find();
+
+            return _class.Var.VideoCaptureDevice;            
+        }
         public void SetVideoCaptureDevice(string device) { _class.Capture.Set(device); }
         public void SetPreviewWindow(bool set) { _class.Var.ShowPreviewWindow = set; }
         public List<string> GetVideoResolution() { return _class.Resolution.List; }
@@ -1087,10 +1101,6 @@ namespace consoleXstream.VideoCapture
         public void SetVideoResolution(int setRes) { _intVideoResolution = setRes; _intSetResolution = setRes; }
         public List<string> GetCrossbarList() { return _class.Var.CrossbarInput; }
         public string GetCrossbarOutput(int id, string type) { return _class.Crossbar.List(id, type); }
-        public void UpdateVideoCaptureList(List<string> data)
-        {
-            
-        }
     }
 
 }

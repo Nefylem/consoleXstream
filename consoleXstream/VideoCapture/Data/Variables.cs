@@ -25,5 +25,9 @@ namespace consoleXstream.VideoCapture.Data
 
         public List<string> CrossbarInput { get; set; }
 
+        public List<string> VideoCaptureDevice { get; set; }
+        public List<string> VideoCaptureName { get; set; } 
+
+
     }
 }

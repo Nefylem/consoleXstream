@@ -12,7 +12,7 @@ namespace consoleXstream.Menu.MainMenu
 
         public Action(Classes inClass) { _class = inClass; }
 
-        private readonly ListDevices _listTo = new ListDevices();
+        private readonly CountDevices _listTo = new CountDevices();
 
         public void MainMenu(string command)
         {
@@ -139,13 +139,7 @@ namespace consoleXstream.Menu.MainMenu
             SetMenu(command);
             ClearSub();
 
-            var capture = new CaptureDevice();
-
-            capture.GetDataHandle(_class.Data);
-            capture.GetShutterHandle(_class.Shutter);
-            capture.GetSubActionHandle(_class.SubAction);
-            capture.GetSystemHandle(_class.System);
-            capture.GetVideoCapture(_class.VideoCapture);
+            var capture = new CaptureDevice(_class);
 
             capture.Find();
             SelectSubItem();

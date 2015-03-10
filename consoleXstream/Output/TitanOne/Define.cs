@@ -111,5 +111,11 @@ namespace consoleXstream.Output.TitanOne
             TitanOne = 0x003
         };
 
+        public enum ApiMethod
+        {
+            Single = 0,
+            Multi = 1
+        };
+
     }
 }

@@ -4,35 +4,29 @@ using System.Drawing;
 using System.Windows.Forms;
 using consoleXstream.Config;
 using consoleXstream.Input;
-using consoleXstream.Menu.Data;
 using consoleXstream.Remap;
 
 namespace consoleXstream.Menu
 {
     public partial class ShowMenu : Form
     {
-        private readonly Classes _class;
-
-        private readonly List<PreviewItem> _previewVideo = new List<PreviewItem>();
-
-        private string _strRemapSelected;
-
-
-        public ShowMenu(Form1 form1)
+        public ShowMenu(Form1 form1, Configuration system, KeyboardHook keyHook, VideoCapture.VideoCapture inVideo, Remapping inMap, Keymap keymap)
         {
             _class = new Classes(this);
             _class.DeclareClasses();
 
             _class.Form1 = form1;
+            _class.System = system;
+            _class.KeyboardHook = keyHook;
+            _class.VideoCapture = inVideo;
+            _class.Remap = inMap;
+            _class.Keymap = keymap; 
 
             InitializeComponent();
         }
+        private readonly Classes _class;
 
-        public void GetSystemHandle(Configuration inSystem) { _class.System = inSystem; }
-        public void GetKeyboardHookHandle(KeyboardHook inKey) { _class.KeyboardHook = inKey; }
-        public void GetVideoCaptureHandle(VideoCapture.VideoCapture inVideo) { _class.VideoCapture = inVideo; }
-        public void GetRemapHandle(Remapping inMap) { _class.Remap = inMap; }
-        public void GetKeymapHandle(Keymap keymap) { _class.Keymap = keymap; }
+        private string _strRemapSelected;
 
         private void frmMenu_Load(object sender, EventArgs e)
         {
@@ -48,14 +42,6 @@ namespace consoleXstream.Menu
                 cp.ExStyle |= 0x80;  // Turn on WS_EX_TOOLWINDOW
                 return cp;
             }
-        }
-
-        public void ClosePanel()
-        {
-            tmrMenu.Enabled = false;
-            _class.DrawGui = null;
-            Hide();
-            _class.Form1.CloseMenuForm();
         }
 
         public void ShowPanel()
@@ -136,7 +122,7 @@ namespace consoleXstream.Menu
                 if (!_class.Var.IsMainMenu)
                 {
                     _class.SubMenu.Draw();
-                    if (_class.Var.ShowSubSelection) DrawSubSelectionMenu();
+                    if (_class.Var.ShowSubSelection) _class.SubSelectMenu.Draw();
                 }
                 //drawFooter();
             }
@@ -149,23 +135,28 @@ namespace consoleXstream.Menu
             imgDisplay.Image = _class.DrawGui.drawGraph();
         }
 
-        private void DrawSubSelectionMenu()
-        {
-            var subSelect = new Bitmap(Properties.Resources.imgSubSelect);
-
-            _class.DrawGui.drawImage(new Rectangle(15, 240, 570, 100), subSelect);
-        }
-
         private void CheckControls()
         {
             _class.Keyboard.CheckInput();
             _class.Gamepad.CheckInput();
         }
 
-
         private void imgDisplay_MouseMove(object sender, MouseEventArgs e) { _class.Mouse.MouseMove(e); }
         private void imgDisplay_MouseEnter(object sender, EventArgs e) { _class.Mouse.Set(true); }
         private void imgDisplay_MouseLeave(object sender, EventArgs e) { _class.Mouse.Set(false); }
         private void imgDisplay_Click(object sender, EventArgs e) { _class.Mouse.Click(e); }
+
+        public void PassToSubSelect(List<string> listData)
+        {
+            foreach (var t in listData)
+                _class.SubSelectVar.ListData.Add(t);
+        }
+
+        public void ClosePanel()
+        {
+            tmrMenu.Enabled = false;
+            Hide();
+            _class.Form1.CloseMenuForm();
+        }
     }
 }

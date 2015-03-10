@@ -11,6 +11,14 @@ namespace consoleXstream.Output.TitanOne
 
         public void Open()
         {
+            if (_class.Write.ApiMethod == Define.ApiMethod.Multi)
+                _class.MInit.Open();
+            else
+                OpenSingle();
+        }
+
+        private void OpenSingle()
+        {
             _class.System.debug("titanOne.log", "[0] Opening TitanOne api");
             var homeDir = Directory.GetCurrentDirectory() + @"\";
 
@@ -136,6 +144,14 @@ namespace consoleXstream.Output.TitanOne
         }
 
         public void Close()
+        {
+            if (_class.Write.ApiMethod == Define.ApiMethod.Multi)
+                _class.MInit.Close();
+            else
+                CloseSingle();
+        }
+
+        private void CloseSingle()
         {
             if (_class.Define.Unload != null) _class.Define.Unload();
 

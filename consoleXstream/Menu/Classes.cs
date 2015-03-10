@@ -38,8 +38,10 @@ namespace consoleXstream.Menu
         public SubMenuOptions.Remap SubRemap { get; set; }
         public Remapping Remap { get; set; }
         public CaptureDevice VideoDevice { get; set; }
-
         public DrawGraph DrawGui { get; set; }
+
+        public SubSelectMenu.Menu SubSelectMenu { get; set; }
+        public SubSelectMenu.Var SubSelectVar { get; set; }
 
 
         public void DeclareClasses()
@@ -54,15 +56,18 @@ namespace consoleXstream.Menu
             Shutter = new Shutter(this);
             SubAction = new SubMenu.Action(this);
             SubMenu = new SubMenu.Menu(this);
+            
+            SubSelectMenu = new SubSelectMenu.Menu(this);
+            SubSelectVar = new SubSelectMenu.Var();
 
             Var = new Variables();
             Data = new Interaction();
             Fps = new FrameCount();
-            Gamepad = new Gamepad();
+            Gamepad = new Gamepad(this);
             User = new User();  
             DrawGui = new DrawGraph();
-            Display = new Display();
-            VideoDevice = new CaptureDevice();
+            Display = new Display(this);
+            VideoDevice = new CaptureDevice(this);
         }
     }
 }

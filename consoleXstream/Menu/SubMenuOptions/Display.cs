@@ -6,6 +6,9 @@ namespace consoleXstream.Menu.SubMenuOptions
 {
     public class Display
     {
+        public Display(Classes classes) { _class = classes; }
+        private Classes _class;
+
         private Configuration _system;
         private Interaction _data;
         private User _user;
@@ -122,22 +125,22 @@ namespace consoleXstream.Menu.SubMenuOptions
 
         private void ChangeAutoRes()
         {
-            if (_data.Checked.IndexOf("Auto Set") > -1)
-                _data.Checked.RemoveAt(_data.Checked.IndexOf("Auto Set"));
+            if (_class.Data.Checked.IndexOf("Auto Set") > -1)
+                _class.Data.Checked.RemoveAt(_class.Data.Checked.IndexOf("Auto Set"));
             else
-                _data.Checked.Add("Auto Set");
+                _class.Data.Checked.Add("Auto Set");
 
-            _system.setAutoChangeDisplay();
+            _class.System.setAutoChangeDisplay();
         }
 
         private void ChangeStayOnTop()
         {
-            if (_data.Checked.IndexOf("Stay On Top") > -1)
-                _data.Checked.RemoveAt(_data.Checked.IndexOf("Stay On Top"));
+            if (_class.Data.Checked.IndexOf("Stay On Top") > -1)
+                _class.Data.Checked.RemoveAt(_class.Data.Checked.IndexOf("Stay On Top"));
             else
-                _data.Checked.Add("Stay On Top");
+                _class.Data.Checked.Add("Stay On Top");
 
-            _system.setStayOnTop();
+            _class.System.setStayOnTop();
         }
 
         public void ChangeVideoDisplay(string command)

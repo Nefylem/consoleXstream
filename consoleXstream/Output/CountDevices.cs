@@ -5,7 +5,7 @@ using System.Management;
 
 namespace consoleXstream.Output
 {
-    class ListDevices
+    class CountDevices
     {
         public int GetToCount(string title)
         {

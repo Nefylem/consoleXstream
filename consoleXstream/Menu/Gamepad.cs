@@ -9,19 +9,18 @@ namespace consoleXstream.Menu
 {
     public class Gamepad
     {
-        private Navigation _nav;
-
-        public void GetNavHandle(Navigation nav) { _nav = nav; }
+        public Gamepad(Classes classes) { _class = classes; }
+        private readonly Classes _class;
 
         public void CheckInput()
         {
             var controls = GamePad.GetState(PlayerIndex.One);
-            if (controls.DPad.Up) _nav.CheckCommand("up");
-            if (controls.DPad.Down) _nav.CheckCommand("down");
-            if (controls.DPad.Left) _nav.CheckCommand("left");
-            if (controls.DPad.Right) _nav.CheckCommand("right");
-            if (controls.Buttons.B || controls.Buttons.Back) _nav.CheckCommand("back");
-            if (controls.Buttons.A || controls.Buttons.Start) _nav.CheckCommand("ok");
+            if (controls.DPad.Up) _class.Nav.CheckCommand("up");
+            if (controls.DPad.Down) _class.Nav.CheckCommand("down");
+            if (controls.DPad.Left) _class.Nav.CheckCommand("left");
+            if (controls.DPad.Right) _class.Nav.CheckCommand("right");
+            if (controls.Buttons.B || controls.Buttons.Back) _class.Nav.CheckCommand("back");
+            if (controls.Buttons.A || controls.Buttons.Start) _class.Nav.CheckCommand("ok");
         }
     }
 }

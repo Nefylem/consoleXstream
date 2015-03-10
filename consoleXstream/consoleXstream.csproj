@@ -78,11 +78,17 @@
     <Compile Include="Menu\SubMenu\Action.cs" />
     <Compile Include="Menu\SubMenu\Menu.cs" />
     <Compile Include="Menu\SubMenu\Shutter.cs" />
+    <Compile Include="Menu\SubSelectMenu\Menu.cs" />
+    <Compile Include="Menu\SubSelectMenu\Var.cs" />
     <Compile Include="Output\ControllerMax.cs" />
     <Compile Include="Output\Gamepad.cs" />
     <Compile Include="Output\Shortcut.cs" />
     <Compile Include="Output\TitanOne\Classes.cs" />
     <Compile Include="Output\TitanOne\Define.cs" />
+    <Compile Include="Output\TitanOne\GCMAPI\Define.cs" />
+    <Compile Include="Output\TitanOne\GCMAPI\Devices.cs" />
+    <Compile Include="Output\TitanOne\GCMAPI\Init.cs" />
+    <Compile Include="Output\TitanOne\GCMAPI\Write.cs" />
     <Compile Include="Output\TitanOne\Init.cs" />
     <Compile Include="Output\TitanOne\Write.cs" />
     <Compile Include="Overlays\MouseInterface.cs">
@@ -98,7 +104,7 @@
     <Compile Include="DrawGui\DrawGui.cs" />
     <Compile Include="Input\KeyboardHook.cs" />
     <Compile Include="Input\KeyboardInterface.cs" />
-    <Compile Include="Output\ListDevices.cs" />
+    <Compile Include="Output\CountDevices.cs" />
     <Compile Include="Remap\Remaping.cs" />
     <Compile Include="Config\Configuration.cs" />
     <Compile Include="VideoCapture\Analyse\Audio.cs" />

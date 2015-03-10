@@ -43,6 +43,7 @@ namespace consoleXstream.Config
 
         public bool boolAutoSetResolution { get; private set; }
         public bool boolAutoSetCaptureResolution { get; private set; }
+        public bool EnableGcmapi { get; private set; }
         
         public bool boolMenu { get; set; }
         public bool BoolStayOnTop { get; set; }
@@ -68,7 +69,7 @@ namespace consoleXstream.Config
         private string _refreshRate;
         private string _displayResolution;
         private string _initialDisplay;
-        public Keymap.KeyboardKeys keyDef;
+        public Keymap.KeyboardKeys keyDef ;
         public Keymap.KeyboardKeys keyAltDef;
 
         public Configuration(Form1 mainForm) { frmMain = mainForm; }
@@ -174,6 +175,7 @@ namespace consoleXstream.Config
             useTitanOneAPI = true;
             BoolStayOnTop = true;
             boolAutoSetCaptureResolution = true;
+            EnableGcmapi = true;
         }
 
         public void loadSetupXML()

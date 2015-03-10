@@ -1,15 +1,17 @@
 ﻿using System.Linq;
+using System.Windows.Forms;
 using consoleXstream.Config;
 using consoleXstream.Menu.Data;
 using consoleXstream.Output;
+using DirectShowLib.BDA;
 
 namespace consoleXstream.Menu.SubMenu
 {
     public class Action
     {
-        private readonly Classes _class;
 
         public Action(Classes inClass) { _class = inClass; }
+        private readonly Classes _class;
 
         /*
         private Form1 _form1;
@@ -25,7 +27,7 @@ namespace consoleXstream.Menu.SubMenu
         private VideoCapture.VideoCapture _class.VideoCapture;
         private SubMenuOptions.Remap _remap;
         */
-        private readonly ListDevices _listTo = new ListDevices();
+        private readonly CountDevices _listTo = new CountDevices();
         /*
         public void GetMenuHandle(ShowMenu menu) { _menu = menu; }
         public void GetActionHandle(MainMenu.Action action) { _class.Action = action; }
@@ -163,15 +165,14 @@ namespace consoleXstream.Menu.SubMenu
         private void ChangeCrossbar(string command)
         {
             var crossbar = new SubMenuOptions.Crossbar();
+            crossbar.GetVideoCapture(_class.VideoCapture);
+            crossbar.GetSystemHandle(_class.System);
             crossbar.Change(command);
         }
 
         private void ChangeVideoDevice(string command)
         {
-            var videoDevice = new SubMenuOptions.CaptureDevice();
-            videoDevice.GetSystemHandle(_class.System);
-            videoDevice.GetVideoCapture(_class.VideoCapture);
-            videoDevice.GetDataHandle(_class.Data);
+            var videoDevice = new SubMenuOptions.CaptureDevice(_class);
 
             videoDevice.Change(command);
         }
@@ -204,16 +205,22 @@ namespace consoleXstream.Menu.SubMenu
 
         private void ChangeTitanOne()
         {
+            _class.System.changeTitanOne();
+            /*
             if (_listTo.GetToCount("TitanOne") > 1)
                 ListAllTitanOne();
             else
                 _class.System.changeTitanOne();
+             */
         }
 
         private void ListAllTitanOne()
         {
-            var toList = _listTo.FindDevices("TitanOne");
             _class.Var.ShowSubSelection = true;
+            _class.SubSelectVar.DisplayTitle = "Finding Devices";
+            _class.SubSelectVar.DisplayMessage = "Please wait";
+
+            _class.Form1.ListTitanOneDevices();
         }
 
         private void ChangeVideoDisplay(string command)
@@ -230,7 +237,7 @@ namespace consoleXstream.Menu.SubMenu
 
         private void ChangeResolution(string command)
         {
-            var display = new SubMenuOptions.Display();
+            var display = new SubMenuOptions.Display(_class);
             display.GetSystemHandle(_class.System);
             display.GetVideoCaptureHandle(_class.VideoCapture);
 
@@ -249,7 +256,7 @@ namespace consoleXstream.Menu.SubMenu
 
         private void ChangeRemapScreen(string command)
         {
-            _class.SubRemap.ChangeRemapScreen(command);
+            //_class.SubRemap.ChangeRemapScreen(command);
         }
 
         private void ListCaptureResolution()

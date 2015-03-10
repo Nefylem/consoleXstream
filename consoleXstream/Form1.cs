@@ -58,6 +58,12 @@ namespace consoleXstream
         private int _intMouseX;
         private int _intMouseY;
         private bool _boolChangeFullscreen;
+
+        private bool IsUpdatingTitanOneList;
+
+        public List<string> ListToDevices;
+ 
+
         //private int _intScreenWidth;
         //private int _intScreenHeight;
         #endregion
@@ -91,7 +97,6 @@ namespace consoleXstream
         //Definitions for calling from classes
         private void DeclareClasses()
         {
-            formMenu = new ShowMenu(this);
 
             _system = new Configuration(this);
             _external = new ExternalScript(this);
@@ -114,6 +119,8 @@ namespace consoleXstream
             _mouse = new Hook(this, _gamepad);
             _videoCapture = new VideoCapture.VideoCapture(this, _system);
 
+            formMenu = new ShowMenu(this, _system, _keyboard, _videoCapture, _remap, _keymap);
+
             //Pass to subforms as needed
             _system.getVideoCaptureHandle(_videoCapture);
             _system.getControllerMaxHandle(_controllerMax);
@@ -124,15 +131,14 @@ namespace consoleXstream
             _controllerMax.getKeyboardInterfaceHandle(_keyboardInterface);
 
             _keyboardInterface.getSystemHandle(_system);
+            _keyboardInterface.getRemapHangle(_remap);
+            _keyboardInterface.getKeymapHandle(_keymap);
 
             _mouse.GetSystemHandle(_system);
             _mouse.GetKeyboardInterfaceHandle(_keyboardInterface);
             _mouse.GetMenuHandle(formMenu);
 
-            //_videoCapture.GetSystemHandle(_system);
-
-            formMenu.GetRemapHandle(_remap);
-            formMenu.GetKeymapHandle(_keymap);
+            _keymap.InitializeKeyboardDefaults();
 
         }
 
@@ -181,6 +187,7 @@ namespace consoleXstream
 
         private void tmrSystem_Tick(object sender, EventArgs e)
         {
+
             RunMainLoop();
 
             if (!_system.boolFPS) return;
@@ -297,6 +304,7 @@ namespace consoleXstream
         {
             _system.debug("[3] Configure TitanOne API");
             _titanOne.SetToInterface(Define.DevPid.TitanOne);
+            _titanOne.SetApiMethod(Define.ApiMethod.Single);
             _titanOne.Initialize();
         }
 
@@ -379,6 +387,8 @@ namespace consoleXstream
         //Main control loop
         private void RunMainLoop()
         {
+            if (IsUpdatingTitanOneList) CheckTitanOneConnectionList();
+
             if (_intBlockMenu > 0)
                 _intBlockMenu--;
 
@@ -482,11 +492,6 @@ namespace consoleXstream
             if (_system.BoolStayOnTop)
                 TopMost = false;
 
-            //Pass in various handles it needs
-            formMenu.GetSystemHandle(_system);
-            formMenu.GetKeyboardHookHandle(_keyboard);
-            formMenu.GetVideoCaptureHandle(_videoCapture);
-
             formMenu.ShowPanel();
         }
 
@@ -529,5 +534,27 @@ namespace consoleXstream
             if (e.Alt && e.KeyCode.ToString().ToLower() == "return" && _boolChangeFullscreen)
                 _boolChangeFullscreen = false;
         }
+
+        public void ListTitanOneDevices()
+        {
+            ListToDevices = new List<string>();
+
+            IsUpdatingTitanOneList = true;
+            _titanOne.ListDevices(); 
+        }
+
+        private void CheckTitanOneConnectionList()
+        {
+            var result = _titanOne.CheckDevices();
+            if (result == 0) return;
+
+            if (result > 0)
+            {
+                IsUpdatingTitanOneList = false;
+                formMenu.PassToSubSelect(ListToDevices);
+            }
+        }
+
+
     }
 }

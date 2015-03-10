@@ -7,82 +7,73 @@ namespace consoleXstream.Menu.SubMenuOptions
 {
     public class CaptureDevice
     {
-        private Interaction _data;
-        private SubMenu.Shutter _shutter;
-        private SubMenu.Action _subAction;
-        private Configuration _system;
-        private User _user;
-        private VideoCapture.VideoCapture _videoCapture;
-
-        public void GetDataHandle(Interaction data) { _data = data; }
-        public void GetShutterHandle(SubMenu.Shutter shutter) { _shutter = shutter; }
-        public void GetSystemHandle(Configuration system) { _system = system; }
-        public void GetSubActionHandle(SubMenu.Action subAction) { _subAction = subAction; }
-        public void GetUserHandle(User user) { _user = user; }
-        public void GetVideoCapture(VideoCapture.VideoCapture videoCapture) { _videoCapture = videoCapture; }
+        public CaptureDevice(Classes classes) { _class = classes; }
+        private Classes _class;
 
         public void Find()
         {
-            if (_system.boolInternalCapture)
+            if (_class.System.boolInternalCapture)
             {
-                for (var intCount = 0; intCount < _videoCapture.listVideoCapture.Count; intCount++)
+                var videoList = _class.VideoCapture.GetVideoCaptureByName();
+                if (videoList != null && videoList.Count > 0)
                 {
-                    _subAction.AddSubItem(_videoCapture.listVideoCaptureName[intCount], _videoCapture.listVideoCaptureName[intCount]);
-                    //addNewVideoCapture(videoCapture.listVideoCaptureName[intCount]);
-                    //open up a preview window for this
-                    //videoCapture = new classVideoCapture(this);
-                }
+                    foreach (var device in videoList)
+                    {
+                        _class.SubAction.AddSubItem(device, device);
+                    }
 
-                if (_data.SubItems.Count == 0)
-                {
-                    _shutter.Error = "No capture devices found";
-                    _shutter.Explain = "";
+                    _class.Data.Checked.Clear();
+                    _class.Data.Checked.Add(_class.VideoCapture.strVideoCaptureDevice);
                 }
                 else
                 {
-                    _data.Checked.Clear();
-                    _data.Checked.Add(_videoCapture.strVideoCaptureDevice);
+                    _class.Shutter.Error = "No capture devices found";
+                    _class.Shutter.Explain = "";                    
                 }
             }
             else
             {
-                _shutter.Error = "No implied control for external capture";
-                _shutter.Explain = "Please use your applications device select options";
+                _class.Shutter.Error = "No implied control for external capture";
+                _class.Shutter.Explain = "Please use your applications device select options";
             }
         }
 
         public void Change(string strSet)
         {
-            if (!_system.boolInternalCapture)
-                return;
-            var intIndex = _videoCapture.listVideoCaptureName.IndexOf(strSet);
-
-            if (intIndex <= -1)
+            if (!_class.System.boolInternalCapture)
                 return;
 
-            _system.addUserData("VideoCaptureDevice", strSet);
-            _videoCapture.SetVideoCaptureDevice(strSet);
-            _videoCapture.runGraph();
-            _data.Checked.Clear();
-            _data.Checked.Add(_videoCapture.strVideoCaptureDevice);
+            var videoList = _class.VideoCapture.GetVideoCaptureByName();
+            
+            if (videoList == null)
+                return;
+
+            if (videoList.Count == 0 || videoList.IndexOf(strSet) == -1)
+                return;
+
+            _class.System.addUserData("VideoCaptureDevice", strSet);
+            _class.VideoCapture.SetVideoCaptureDevice(strSet);
+            _class.VideoCapture.runGraph();
+            _class.Data.Checked.Clear();
+            _class.Data.Checked.Add(_class.VideoCapture.strVideoCaptureDevice);
         }
 
         public void ListCaptureResolution()
         {
-            _data.ClearButtons();
+            _class.Data.ClearButtons();
 
-            _shutter.Scroll = 0;
+            _class.Shutter.Scroll = 0;
 
-            _data.SubItems.Clear();
-            _data.Checked.Clear();
-            _shutter.Error = "";
-            _shutter.Explain = "";
-            _user.Menu = "resolution";
+            _class.Data.SubItems.Clear();
+            _class.Data.Checked.Clear();
+            _class.Shutter.Error = "";
+            _class.Shutter.Explain = "";
+            _class.User.Menu = "resolution";
 
             var listAdded = new List<string>();
 
-            var listVideoRes = _videoCapture.GetVideoResolution();
-            var currentResolution = _videoCapture.GetVideoResolutionCurrent();
+            var listVideoRes = _class.VideoCapture.GetVideoResolution();
+            var currentResolution = _class.VideoCapture.GetVideoResolutionCurrent();
 
             for (var count = 0; count < listVideoRes.Count; count++)
             {
@@ -97,11 +88,11 @@ namespace consoleXstream.Menu.SubMenuOptions
 
                 if (count == currentResolution)
                 {
-                    _system.strCurrentResolution = listVideoRes[count];
-                    _subAction.AddSubItem(listVideoRes[count], "*" + listVideoRes[count], true);
+                    _class.System.strCurrentResolution = listVideoRes[count];
+                    _class.SubAction.AddSubItem(listVideoRes[count], "*" + listVideoRes[count], true);
                 }
                 else
-                    _subAction.AddSubItem(listVideoRes[count], listVideoRes[count]);
+                    _class.SubAction.AddSubItem(listVideoRes[count], listVideoRes[count]);
             }
 
             SelectSubItem();
@@ -115,14 +106,14 @@ namespace consoleXstream.Menu.SubMenuOptions
             if (resolution == "resolution")
                 return;
 
-            var listRes = _videoCapture.getVideoResolution();
+            var listRes = _class.VideoCapture.getVideoResolution();
             for (var count = 0; count < listRes.Count; count++)
             {
                 if (resolution != listRes[count].ToLower())
                     continue;
 
-                _videoCapture.setVideoResolution(count);
-                _videoCapture.runGraph();
+                _class.VideoCapture.setVideoResolution(count);
+                _class.VideoCapture.runGraph();
 
                 _system.addUserData("CaptureResolution", resolution);
 
@@ -133,9 +124,9 @@ namespace consoleXstream.Menu.SubMenuOptions
 
         private void SelectSubItem()
         {
-            if (_data.SubItems.Count > 0)
+            if (_class.Data.SubItems.Count > 0)
             {
-                _user.SubSelected = _data.SubItems[0].Command;
+                _class.User.SubSelected = _class.Data.SubItems[0].Command;
             }
         }
 
