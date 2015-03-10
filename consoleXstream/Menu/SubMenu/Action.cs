@@ -238,8 +238,6 @@ namespace consoleXstream.Menu.SubMenu
         private void ChangeResolution(string command)
         {
             var display = new SubMenuOptions.Display(_class);
-            display.GetSystemHandle(_class.System);
-            display.GetVideoCaptureHandle(_class.VideoCapture);
 
             display.ChangeResolution(command);
         }

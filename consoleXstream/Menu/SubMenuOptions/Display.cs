@@ -1,47 +1,27 @@
-﻿using System.Windows.Forms;
-using consoleXstream.Config;
-using consoleXstream.Menu.Data;
-
-namespace consoleXstream.Menu.SubMenuOptions
+﻿namespace consoleXstream.Menu.SubMenuOptions
 {
     public class Display
     {
         public Display(Classes classes) { _class = classes; }
-        private Classes _class;
-
-        private Configuration _system;
-        private Interaction _data;
-        private User _user;
-        private SubMenu.Action _subAction;
-        private SubMenu.Shutter _shutter;
-        private VideoCapture.VideoCapture _videoCapture;
-        private ShowMenu _menu;
-
-        public void GetSystemHandle(Configuration system) { _system = system; }
-        public void GetDataHandle(Interaction data) { _data = data; }
-        public void GetUserHandle(User user) { _user = user; }
-        public void GetSubActionHandle(SubMenu.Action subAction) { _subAction = subAction; }
-        public void GetShutterHandle(SubMenu.Shutter shutter) { _shutter = shutter; }
-        public void GetVideoCaptureHandle(VideoCapture.VideoCapture video) { _videoCapture = video; }
-        public void GetMenuHandle(ShowMenu menu) { _menu = menu; }
+        private readonly Classes _class;
 
         public void ChangeResolution(string resolution)
         {
-            _system.strCurrentResolution = resolution;
+            _class.System.strCurrentResolution = resolution;
             resolution = resolution.ToLower();
             if (resolution == "resolution")
                 return;
 
-            var listRes = _videoCapture.GetVideoResolution();
+            var listRes = _class.VideoCapture.GetVideoResolution();
             for (var count = 0; count < listRes.Count; count++)
             {
                 if (resolution != listRes[count].ToLower())
                     continue;
 
-                _videoCapture.SetVideoResolution(count);
-                _videoCapture.runGraph();
+                _class.VideoCapture.SetVideoResolution(count);
+                _class.VideoCapture.runGraph();
 
-                _system.addUserData("CaptureResolution", resolution);
+                _class.System.addUserData("CaptureResolution", resolution);
 
                 break;
             }
@@ -49,25 +29,25 @@ namespace consoleXstream.Menu.SubMenuOptions
 
         private void ListDisplayRefresh()
         {
-            _data.ClearButtons();
+            _class.Data.ClearButtons();
 
-            _shutter.Scroll = 0;
+            _class.Shutter.Scroll = 0;
 
-            _data.SubItems.Clear();
-            _data.Checked.Clear();
-            _shutter.Error = "";
-            _shutter.Explain = "";
-            _user.Menu = "videorefresh";
+            _class.Data.SubItems.Clear();
+            _class.Data.Checked.Clear();
+            _class.Shutter.Error = "";
+            _class.Shutter.Explain = "";
+            _class.User.Menu = "videorefresh";
 
-            var listDisplayRef = _system.getDisplayRefresh();
-            var currentRef = _system.getRefreshRate().ToLower();
+            var listDisplayRef = _class.System.getDisplayRefresh();
+            var currentRef = _class.System.getRefreshRate().ToLower();
 
             foreach (var title in listDisplayRef)
             {
                 if (title.ToLower() == currentRef)
-                    _subAction.AddSubItem(title, title, true);
+                    _class.SubAction.AddSubItem(title, title, true);
                 else
-                    _subAction.AddSubItem(title, title);
+                    _class.SubAction.AddSubItem(title, title);
             }
 
             SelectSubItem();
@@ -75,25 +55,25 @@ namespace consoleXstream.Menu.SubMenuOptions
 
         private void ListDisplayResolution()
         {
-            _data.ClearButtons();
+            _class.Data.ClearButtons();
 
-            _shutter.Scroll = 0;
+            _class.Shutter.Scroll = 0;
 
-            _data.SubItems.Clear();
-            _data.Checked.Clear();
-            _shutter.Error = "";
-            _shutter.Explain = "";
-            _user.Menu = "videoresolution";
+            _class.Data.SubItems.Clear();
+            _class.Data.Checked.Clear();
+            _class.Shutter.Error = "";
+            _class.Shutter.Explain = "";
+            _class.User.Menu = "videoresolution";
 
-            var listDisplayRes = _system.getDisplayResolutionList();
-            var currentRes = _system.getResolution().ToLower();
+            var listDisplayRes = _class.System.getDisplayResolutionList();
+            var currentRes = _class.System.getResolution().ToLower();
 
             foreach (var title in listDisplayRes)
             {
                 if (title.ToLower() == currentRes)
-                    _subAction.AddSubItem(title, title, true);
+                    _class.SubAction.AddSubItem(title, title, true);
                 else
-                    _subAction.AddSubItem(title, title);
+                    _class.SubAction.AddSubItem(title, title);
             }
 
             SelectSubItem();
@@ -104,23 +84,23 @@ namespace consoleXstream.Menu.SubMenuOptions
             if (command.ToLower() == "resolution")
                 return;
 
-            _system.setDisplayResolution(command);
-            _data.Checked.Clear();
-            _data.Checked.Add(command);
+            _class.System.setDisplayResolution(command);
+            _class.Data.Checked.Clear();
+            _class.Data.Checked.Add(command);
             
-            _menu.PositionMenu();
+            _class.DisplayMenu.PositionMenu();
         }
-
+    
         public void ChangeVideoRefresh(string command)
         {
             if (command.ToLower() == "refresh")
                 return;
 
-            _system.setDisplayRefresh(command);
-            _data.Checked.Clear();
-            _data.Checked.Add(command);
+            _class.System.setDisplayRefresh(command);
+            _class.Data.Checked.Clear();
+            _class.Data.Checked.Add(command);
 
-            _menu.PositionMenu();
+            _class.DisplayMenu.PositionMenu();
         }
 
         private void ChangeAutoRes()
@@ -154,9 +134,9 @@ namespace consoleXstream.Menu.SubMenuOptions
 
         private void SelectSubItem()
         {
-            if (_data.SubItems.Count > 0)
+            if (_class.Data.SubItems.Count > 0)
             {
-                _user.SubSelected = _data.SubItems[0].Command;
+                _class.User.SubSelected = _class.Data.SubItems[0].Command;
             }
         }
 
