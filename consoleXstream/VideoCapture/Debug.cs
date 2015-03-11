@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace consoleXstream.VideoCapture
 {
-    class Debug
+    public class Debug
     {
         public Debug(Classes inClass) { _class = inClass; }
         private readonly Classes _class;

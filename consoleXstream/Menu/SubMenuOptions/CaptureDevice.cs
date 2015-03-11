@@ -23,7 +23,7 @@ namespace consoleXstream.Menu.SubMenuOptions
                     }
 
                     _class.Data.Checked.Clear();
-                    _class.Data.Checked.Add(_class.VideoCapture.strVideoCaptureDevice);
+                    _class.Data.Checked.Add(_class.VideoCapture.GetVideoDevice());
                 }
                 else
                 {
@@ -55,7 +55,7 @@ namespace consoleXstream.Menu.SubMenuOptions
             _class.VideoCapture.SetVideoCaptureDevice(strSet);
             _class.VideoCapture.runGraph();
             _class.Data.Checked.Clear();
-            _class.Data.Checked.Add(_class.VideoCapture.strVideoCaptureDevice);
+            _class.Data.Checked.Add(_class.VideoCapture.GetVideoDevice());
         }
 
         public void ListCaptureResolution()

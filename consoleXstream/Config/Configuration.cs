@@ -17,7 +17,7 @@ namespace consoleXstream.Config
         private Output.ControllerMax controllerMax;
         private Output.TitanOne.Write titanOne;
         private VideoResolution videoResolution;
-        private VrMode _vrMode;
+        //private VrMode _vrMode;
 
         public bool boolFPS { get; private set; }
         public bool boolHideMouse { get; private set; }
@@ -158,7 +158,7 @@ namespace consoleXstream.Config
             _listUserTitle = new List<string>();
             _listUserData = new List<string>();
 
-            _vrMode = new VrMode(this);
+            //_vrMode = new VrMode(this);
         }
 
         public void loadDefaults()
@@ -176,6 +176,7 @@ namespace consoleXstream.Config
             BoolStayOnTop = true;
             boolAutoSetCaptureResolution = true;
             EnableGcmapi = true;
+            IsVr = true;
         }
 
         public void loadSetupXML()
@@ -390,8 +391,8 @@ namespace consoleXstream.Config
                     
                     videoCapture.SetVideoCaptureDevice(strDevice);
                     //TODO: set Audio device
-                    videoCapture.setCrossbar(strVideoPin);
-                    videoCapture.setCrossbar(strAudioPin);
+                    videoCapture.SetCrossbar(strVideoPin);
+                    videoCapture.SetCrossbar(strAudioPin);
                     videoCapture.runGraph();
                 }
             }
@@ -658,7 +659,7 @@ namespace consoleXstream.Config
 
         private void setupVR()
         {
-            _vrMode.InitializeVr();
+            //_vrMode.InitializeVr();
         }
 
         public void SetupMouse(int mouseType)

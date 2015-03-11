@@ -211,16 +211,13 @@ namespace consoleXstream
             _system.getInitialDisplay();
 
             _system.debug("[3] runStartup");
-            this.BackColor = Color.Black;
+            //this.BackColor = Color.Black;
 
             if (!boolIDE)
                 this.FormBorderStyle = FormBorderStyle.None;
 
             this.WindowState = FormWindowState.Maximized;
 
-
-            imgDisplay.Dock = DockStyle.Fill;
-            imgDisplay.BackColor = Color.Black;
 
             _intMouseX = Cursor.Position.X;
             _intMouseY = Cursor.Position.Y;
@@ -232,6 +229,30 @@ namespace consoleXstream
             _remap.setDefaultGamepad();
             _remap.loadGamepadRemap();
             //remap.saveGamepadRemap();
+
+            if (_system.IsVr)
+            {
+                imgDisplayVr.Visible = true;
+                imgDisplayVr.BackColor = Color.Red;
+
+                imgDisplay.Visible = true;
+                imgDisplay.BackColor = Color.Green;
+
+                imgDisplay.Left = 0;
+                imgDisplay.Top = 0;
+                imgDisplay.Width = Screen.PrimaryScreen.Bounds.Width / 2;
+                imgDisplay.Height = Screen.PrimaryScreen.Bounds.Height;
+
+                imgDisplayVr.Left = Screen.PrimaryScreen.Bounds.Width / 2;
+                imgDisplayVr.Top = 0;
+                imgDisplayVr.Height = Screen.PrimaryScreen.Bounds.Height;
+                imgDisplayVr.Width = Screen.PrimaryScreen.Bounds.Width / 2;
+            }
+            else
+            {
+                imgDisplay.Dock = DockStyle.Fill;
+                imgDisplay.BackColor = Color.Black;
+            }
 
             if (boolIDE)
                 _system.BoolStayOnTop = false;
@@ -439,9 +460,17 @@ namespace consoleXstream
 
         public IntPtr ReturnVideoHandle()
         {
-            //return captureImage.GetHbitmap();
-            //return captureImage;
             return imgDisplay.Handle;
+        }
+
+        public IntPtr ReturnVrHandle()
+        {
+            return imgDisplayVr.Handle;
+        }
+
+        public void ShowVrWindow()
+        {
+            imgDisplayVr.Visible = true;
         }
 
         public void ShowVideoWindow()
@@ -451,8 +480,29 @@ namespace consoleXstream
 
         public Point SetVideoWindowBounds()
         {
-            var ptReturn = new Point(ClientSize.Width, ClientSize.Height);
-            imgDisplay.SetBounds(0, 0, ClientSize.Width, ClientSize.Height);
+            var ptReturn = new Point(0, 0);
+            if (_system.IsVr)
+            {
+                ptReturn = new Point(ClientSize.Width / 2, ClientSize.Height);
+                imgDisplay.SetBounds(0, 0, ClientSize.Width / 2, ClientSize.Height);
+            }
+            else
+            {
+                ptReturn = new Point(ClientSize.Width, ClientSize.Height);
+                imgDisplay.SetBounds(0, 0, ClientSize.Width, ClientSize.Height);
+            }
+
+            return ptReturn;
+        }
+
+        public Point SetVideoWindowBoundsVr()
+        {
+            var ptReturn = new Point(0, 0);
+            if (_system.IsVr)
+            {
+                ptReturn = new Point(ClientSize.Width / 2, ClientSize.Height);
+                imgDisplayVr.SetBounds(ClientSize.Width / 2, 0, ClientSize.Width / 2, ClientSize.Height);
+            }
 
             return ptReturn;
         }
@@ -460,6 +510,7 @@ namespace consoleXstream
         //Resizes the display video after resolution change
         public void ChangeDisplayRes()
         {
+            /*
             if (_system.IsOverrideOnExit) return;
 
             Application.DoEvents();
@@ -478,6 +529,7 @@ namespace consoleXstream
             imgDisplay.Focus();
 
             //_videoCapture.ForceRebuildAfterResolution();
+             */
         }
         #endregion
 

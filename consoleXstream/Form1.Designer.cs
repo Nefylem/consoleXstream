@@ -36,7 +36,9 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
+            this.imgDisplayVr = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.imgDisplay)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.imgDisplayVr)).BeginInit();
             this.SuspendLayout();
             // 
             // imgDisplay
@@ -107,11 +109,21 @@
             this.label5.Text = "label5";
             this.label5.Visible = false;
             // 
+            // imgDisplayVr
+            // 
+            this.imgDisplayVr.Location = new System.Drawing.Point(283, 233);
+            this.imgDisplayVr.Name = "imgDisplayVr";
+            this.imgDisplayVr.Size = new System.Drawing.Size(100, 50);
+            this.imgDisplayVr.TabIndex = 6;
+            this.imgDisplayVr.TabStop = false;
+            this.imgDisplayVr.Visible = false;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(667, 517);
+            this.Controls.Add(this.imgDisplayVr);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
@@ -125,6 +137,7 @@
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
             this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyUp);
             ((System.ComponentModel.ISupportInitialize)(this.imgDisplay)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.imgDisplayVr)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -132,13 +145,14 @@
 
         #endregion
 
-        private System.Windows.Forms.PictureBox imgDisplay;
+        public System.Windows.Forms.PictureBox imgDisplay;
         private System.Windows.Forms.Timer tmrSystem;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
+        public System.Windows.Forms.PictureBox imgDisplayVr;
     }
 }
 

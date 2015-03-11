@@ -116,6 +116,16 @@
     <Compile Include="VideoCapture\Data\User.cs" />
     <Compile Include="VideoCapture\Data\Variables.cs" />
     <Compile Include="VideoCapture\Debug.cs" />
+    <Compile Include="VideoCapture\GraphBuilder\AviRender.cs" />
+    <Compile Include="VideoCapture\GraphBuilder\Close.cs" />
+    <Compile Include="VideoCapture\GraphBuilder\Crossbar.cs" />
+    <Compile Include="VideoCapture\GraphBuilder\Display.cs" />
+    <Compile Include="VideoCapture\GraphBuilder\Filter.cs" />
+    <Compile Include="VideoCapture\GraphBuilder\Graph.cs" />
+    <Compile Include="VideoCapture\GraphBuilder\Pin.cs" />
+    <Compile Include="VideoCapture\GraphBuilder\GraphResolution.cs" />
+    <Compile Include="VideoCapture\GraphBuilder\SampleGrabber.cs" />
+    <Compile Include="VideoCapture\GraphBuilder\SmartTee.cs" />
     <Compile Include="VideoCapture\Sampling\SampleGrabberCallback.cs" />
     <Compile Include="VideoCapture\VideoCapture.cs" />
     <Compile Include="Config\VideoResolution.cs" />

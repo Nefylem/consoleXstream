@@ -3,7 +3,7 @@ using DirectShowLib;
 
 namespace consoleXstream.VideoCapture.Analyse
 {
-    class Audio
+    public class Audio
     {
         public Audio(Classes inClass) { _class = inClass; }
         private readonly Classes _class;

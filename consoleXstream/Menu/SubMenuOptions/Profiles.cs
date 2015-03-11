@@ -51,8 +51,8 @@ namespace consoleXstream.Menu.SubMenuOptions
             if (Directory.Exists("Profiles") == false) { Directory.CreateDirectory("Profiles"); }
             if (File.Exists(@"Profiles\" + strCommand + ".connectProfile")) { File.Delete(@"Profiles\" + strCommand + ".connectProfile"); }
 
-            var strDev = _videoCapture.strVideoCaptureDevice;
-            var strAud = _videoCapture.strAudioPlaybackDevice;
+            var strDev = _videoCapture.GetVideoDevice();
+            var strAud = _videoCapture.GetAudioDevice();
             var strCrossVideo = "";
             var strCrossAudio = "";
 
@@ -137,8 +137,8 @@ namespace consoleXstream.Menu.SubMenuOptions
 
             _videoCapture.SetVideoCaptureDevice(strDevice);
             //TODO: set Audio device
-            _videoCapture.setCrossbar(strVideoPin);
-            _videoCapture.setCrossbar(strAudioPin);
+            _videoCapture.SetCrossbar(strVideoPin);
+            _videoCapture.SetCrossbar(strAudioPin);
             _videoCapture.runGraph();
         }
 

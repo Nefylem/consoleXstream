@@ -5,7 +5,7 @@ using DirectShowLib;
 
 namespace consoleXstream.VideoCapture.Analyse
 {
-    class Capture
+    public class Capture
     {
         public Capture(Classes inClass) { _class = inClass; }
         private readonly Classes _class;

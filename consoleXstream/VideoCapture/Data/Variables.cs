@@ -4,7 +4,7 @@ using System.Runtime.InteropServices.ComTypes;
 
 namespace consoleXstream.VideoCapture.Data
 {
-    class Variables
+    public class Variables
     {
         public Variables(Classes inClass) { _class = inClass; }
         private readonly Classes _class;
@@ -19,14 +19,29 @@ namespace consoleXstream.VideoCapture.Data
         public bool UseSampleGrabber { get; set; }
         public bool IsInitializeGraph { get; set; }
         public bool IsRestartGraph { get; set; }
+        public bool IsCrossbar { get; set; }
 
         public string SetVideoPin { get; set; }
         public string SetAudioPin { get; set; }
+        public string CrossbarVideo { get; set; }
+        public string CrossbarAudio { get; set; }
+        public string VideoDevice { get; set; }
+        public string AudioDevice { get; set; }
+        public string CurrentResByName { get; set; }
+
+
+        public int DeviceId { get; set; }
+        public int VideoResolutionIndex { get; set; }
+        public int SetResolution { get; set; }
+        public int CurrentResolution { get; set; }
+
 
         public List<string> CrossbarInput { get; set; }
-
         public List<string> VideoCaptureDevice { get; set; }
-        public List<string> VideoCaptureName { get; set; } 
+        public List<string> VideoCaptureName { get; set; }
+        public List<string> PinIn { get; set; }
+        public List<string> PinOut { get; set; }
+
 
 
     }

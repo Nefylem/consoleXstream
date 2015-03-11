@@ -61,17 +61,17 @@ namespace consoleXstream.Menu.SubMenuOptions
                 if (strSet.ToLower() == "video_serialdigital")
                 {
                     _system.addUserData("crossbarAudioPin", "audio_spdifdigital");
-                    _videoCapture.setCrossbar("audio_spdifdigital");
+                    _videoCapture.SetCrossbar("audio_spdifdigital");
                 }
 
-                _videoCapture.setCrossbar(strSet);
+                _videoCapture.SetCrossbar(strSet);
                 _videoCapture.runGraph();
             }
 
             if (strSet.Substring(0, "audio_".Length).ToLower() != "audio_")
                 return;
             _system.addUserData("crossbarAudioPin", strSet);
-            _videoCapture.setCrossbar(strSet);
+            _videoCapture.SetCrossbar(strSet);
             _videoCapture.runGraph();
         }
 

@@ -5,7 +5,7 @@ using DirectShowLib;
 
 namespace consoleXstream.VideoCapture.Analyse
 {
-    class Resolution
+    public class Resolution
     {
         public Resolution(Classes inClass) { _class = inClass; }
         private readonly Classes _class;

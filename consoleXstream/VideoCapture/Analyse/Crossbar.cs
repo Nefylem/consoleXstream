@@ -4,7 +4,7 @@ using DirectShowLib;
 
 namespace consoleXstream.VideoCapture.Analyse
 {
-    class Crossbar
+    public class Crossbar
     {
         public Crossbar(Classes classes) { _class = classes; }
         private readonly Classes _class;

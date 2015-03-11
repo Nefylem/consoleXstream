@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace consoleXstream.VideoCapture.Data
 {
-    class User
+    public class User
     {
         public User(Classes getclass) { _class = getclass; }
         private readonly Classes _class;
