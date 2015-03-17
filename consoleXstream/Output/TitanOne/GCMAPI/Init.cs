@@ -64,7 +64,7 @@ namespace consoleXstream.Output.TitanOne.GCMAPI
             var ptrWrite = LoadExternalFunction(ptrDll, "gcmapi_Write");
             if (ptrWrite == IntPtr.Zero) { _class.System.Debug("titanOne.log", "[0] [FAIL] gcmapi_Write"); return; }
 
-            _class.MDefine.GcmapiWrite = (Define.GCMAPI_WRITE)Marshal.GetDelegateForFunctionPointer(ptrSerial, typeof(Define.GCMAPI_WRITE));
+            _class.MDefine.GcmapiWrite = (Define.GCMAPI_WRITE)Marshal.GetDelegateForFunctionPointer(ptrWrite, typeof(Define.GCMAPI_WRITE));
         }
 
         private IntPtr LoadExternalFunction(IntPtr ptrDll, string strFunction)

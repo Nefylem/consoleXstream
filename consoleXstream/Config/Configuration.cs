@@ -31,6 +31,7 @@ namespace consoleXstream.Config
         public bool boolAutoSetResolution { get; private set; }
         public bool boolAutoSetCaptureResolution { get; private set; }
         public bool EnableGcmapi { get; private set; }
+        public bool DisableTitanOneRetry { get; set; }
         
         public bool boolMenu { get; set; }
         public bool BoolStayOnTop { get; set; }
@@ -390,6 +391,7 @@ namespace consoleXstream.Config
         public void SetTitanOneDevice(string serial)
         {
             _class.Set.Add("UseTitanOne", serial);
+            _class.Set.Add("TitanOne", "True");
         }
 
         public void changeCaptureAutoRes()

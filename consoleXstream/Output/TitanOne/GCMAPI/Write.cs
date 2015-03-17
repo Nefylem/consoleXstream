@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace consoleXstream.Output.TitanOne.GCMAPI
 {
@@ -11,8 +12,9 @@ namespace consoleXstream.Output.TitanOne.GCMAPI
         public Write(Classes classes) { _class = classes; }
         private readonly Classes _class;
 
+        private readonly List<string> _listDevices = new List<string>();
+        private string _serialToSet;
         private int _activeDevice;
-        private readonly List<string> _listDevices = new List<string>(); 
 
         public void SetDevice(string device)
         {
@@ -21,6 +23,19 @@ namespace consoleXstream.Output.TitanOne.GCMAPI
             {
                 _activeDevice = index;
                 _class.System.SetTitanOneDevice(device);
+                _class.System.Debug("titanone.log", "Set #" + _activeDevice + " device " + device);
+            }
+            else
+            {
+                if (!_class.System.DisableTitanOneRetry)
+                {
+                    _serialToSet = device;
+                    _class.MDevices.List();
+                    _class.FrmMain.RetrySetTitanOne = device;
+                    _class.FrmMain.RetryTimeOut = 5000;                    
+                }
+                _class.System.DisableTitanOneRetry = false;
+
             }
         }
 
@@ -40,9 +55,9 @@ namespace consoleXstream.Output.TitanOne.GCMAPI
             if (_class.MDefine.GcmapiConnect != null)
                 _class.MDefine.GcmapiConnect((ushort)_class.Write.DevId);
 
-            if (_class.MDefine.GcmapiIsConnected(0) == 1)
+            if (_class.MDefine.GcmapiIsConnected(_activeDevice) == 1)
             {
-                _class.MDefine.GcmapiWrite(0, _class.Gamepad.Output);
+                _class.MDefine.GcmapiWrite(_activeDevice, _class.Gamepad.Output);
             }
         }
     }

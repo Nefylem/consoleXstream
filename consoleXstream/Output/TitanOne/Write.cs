@@ -39,6 +39,12 @@ namespace consoleXstream.Output.TitanOne
 
         public void Send()
         {
+            if (ApiMethod == Define.ApiMethod.Multi)
+            {
+                _class.MWrite.Send();
+                return;
+            }
+
             if (_class.Define.Write == null) return;
 
             var boolOverride = _class.FrmMain.boolIDE;

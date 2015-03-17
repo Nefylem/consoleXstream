@@ -203,6 +203,7 @@ namespace consoleXstream.Menu.SubMenu
             _class.SubSelectVar.DisplayMessage = "Please wait";
             _class.SubSelectVar.TitanSerial = _class.Form1.GetTitanOne();
             _class.SubSelectVar.ListData.Clear();
+            _class.SubSelectVar.TitanSerial = _class.System.TitanOneDevice;
 
             _class.Form1.ListTitanOneDevices();
         }

@@ -61,6 +61,9 @@ namespace consoleXstream
 
         private bool IsUpdatingTitanOneList;
 
+        public string RetrySetTitanOne;
+        public int RetryTimeOut;
+
         public List<string> ListToDevices;
  
 
@@ -185,6 +188,23 @@ namespace consoleXstream
 
         private void tmrSystem_Tick(object sender, EventArgs e)
         {
+            if (RetrySetTitanOne.Length > 0)
+            {
+                RetryTimeOut--;
+                if (RetryTimeOut <= 0)
+                {
+                    RetrySetTitanOne = "";
+                }
+
+                int result = _titanOne.CheckDevices();
+                if (result > 0)
+                {
+                    string serial = RetrySetTitanOne;
+                    RetrySetTitanOne = "";
+                    _system.DisableTitanOneRetry = true;
+                    _titanOne.SetTitanOneDevice(serial);
+                }
+            }
 
             RunMainLoop();
 
@@ -209,12 +229,12 @@ namespace consoleXstream
             _system.getInitialDisplay();
 
             _system.Debug("[3] runStartup");
-            this.BackColor = Color.Green;
+            BackColor = Color.Green;
 
             if (!boolIDE)
-                this.FormBorderStyle = FormBorderStyle.None;
+                FormBorderStyle = FormBorderStyle.None;
 
-            this.WindowState = FormWindowState.Maximized;
+            WindowState = FormWindowState.Maximized;
 
 
             _intMouseX = Cursor.Position.X;
@@ -256,7 +276,7 @@ namespace consoleXstream
                 _system.BoolStayOnTop = false;
 
             if (_system.BoolStayOnTop)
-                this.TopMost = true;
+                TopMost = true;
 
             if (_system.boolEnableKeyboard)
             {
@@ -318,9 +338,15 @@ namespace consoleXstream
 
         private void InitializeTitanOne()
         {
+            ListToDevices = new List<string>();
+
             _system.Debug("[3] Configure TitanOne API");
             _titanOne.SetToInterface(Define.DevPid.TitanOne);
-            _titanOne.SetApiMethod(Define.ApiMethod.Multi);
+            if (_system.TitanOneDevice.Length > 0)
+            {
+                _titanOne.SetApiMethod(Define.ApiMethod.Multi);
+                _titanOne.SetTitanOneDevice(_system.TitanOneDevice);
+            }
             _titanOne.Initialize();
         }
 
