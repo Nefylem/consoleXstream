@@ -51,7 +51,7 @@ namespace consoleXstream.Menu.SubMenuOptions
             if (videoList.Count == 0 || videoList.IndexOf(strSet) == -1)
                 return;
 
-            _class.System.addUserData("VideoCaptureDevice", strSet);
+            _class.System.AddData("VideoCaptureDevice", strSet);
             _class.VideoCapture.SetVideoCaptureDevice(strSet);
             _class.VideoCapture.runGraph();
             _class.Data.Checked.Clear();

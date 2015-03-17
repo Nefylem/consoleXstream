@@ -43,7 +43,7 @@ namespace consoleXstream.Menu.SubMenuOptions
             _data.Checked.Add(strCommand);
 
             _user.ConnectProfile = strCommand;
-            _system.addUserData("CurrentProfile", strCommand);
+            _system.AddData("CurrentProfile", strCommand);
 
             var strTitle = strCommand;
             strCommand = strCommand.Replace(" ", String.Empty);
@@ -126,11 +126,11 @@ namespace consoleXstream.Menu.SubMenuOptions
             reader.Close();
 
             _user.ConnectProfile = strFile;
-            _system.addUserData("CurrentProfile", strFile);
-            _system.addUserData("VideoCaptureDevice", strDevice);
-            _system.addUserData("AudioPlaybackDevice", strAudio);
-            if (strVideoPin.Length > 0) _system.addUserData("crossbarVideoPin", strVideoPin);
-            if (strAudio.Length > 0) _system.addUserData("crossbarAudioPin", strAudioPin);
+            _system.AddData("CurrentProfile", strFile);
+            _system.AddData("VideoCaptureDevice", strDevice);
+            _system.AddData("AudioPlaybackDevice", strAudio);
+            if (strVideoPin.Length > 0) _system.AddData("crossbarVideoPin", strVideoPin);
+            if (strAudio.Length > 0) _system.AddData("crossbarAudioPin", strAudioPin);
 
             _data.Checked.Clear();
             _data.Checked.Add(strFile);

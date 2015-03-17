@@ -26,7 +26,7 @@ namespace consoleXstream.VideoCapture
         {
             if (_class.System == null) return;
             var intLevel = _intLastDebugLevel;
-            var intSysLevel = _class.System.intDebugLevel;
+            var intSysLevel = _class.System.GetDebugLevel();
 
             if (strWrite.IndexOf(']') == 2)
             {

@@ -33,7 +33,7 @@ namespace consoleXstream.Menu.MainMenu
             AddMenuItem(intIndex, "Console Select", "Connect To");
             AddMenuItem(intIndex, "Save Profile", "Save Profile");
             AddMenuItem(intIndex, "Power On", "Power On");
-            AddMenuItem(intIndex, "Graph", "Graph");
+            AddMenuItem(intIndex, "VR", "VR");
 
             //Video
             intIndex = NewMenu();

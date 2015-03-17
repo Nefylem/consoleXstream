@@ -49,7 +49,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Config\Classes.cs" />
+    <Compile Include="Config\Debug.cs" />
+    <Compile Include="Config\Profile.cs" />
+    <Compile Include="Config\Set.cs" />
+    <Compile Include="Config\Var.cs" />
     <Compile Include="Config\VRMode.cs" />
+    <Compile Include="Config\XmlData.cs" />
     <Compile Include="Input\Mouse\MouseHook.cs" />
     <Compile Include="Input\Mouse\MouseCircularMovement.cs" />
     <Compile Include="Input\Mouse\MouseEvents.cs" />

@@ -122,10 +122,7 @@ namespace consoleXstream
             formMenu = new ShowMenu(this, _system, _keyboard, _videoCapture, _remap, _keymap);
 
             //Pass to subforms as needed
-            _system.getVideoCaptureHandle(_videoCapture);
-            _system.getControllerMaxHandle(_controllerMax);
-            _system.getTitanOneHandle(_titanOne);
-            _system.getVideoResolutionHandle(_videoResolution);
+            _system.GetClassHandles(_videoCapture, _controllerMax, _titanOne, _videoResolution);
 
             _controllerMax.getSystemHandle(_system);
             _controllerMax.getKeyboardInterfaceHandle(_keyboardInterface);
@@ -149,6 +146,7 @@ namespace consoleXstream
             if (File.Exists("video.log")) File.Delete("video.log"); 
             if (File.Exists("menu.log")) File.Delete("menu.log"); 
             if (File.Exists("titanOne.log")) File.Delete("titanOne.log"); 
+            if (File.Exists("controllerMax.log")) File.Delete("controllerMax.log");
         }
         //Copies files to test environment 
         private void CheckDevelopment()
@@ -210,8 +208,8 @@ namespace consoleXstream
         {
             _system.getInitialDisplay();
 
-            _system.debug("[3] runStartup");
-            //this.BackColor = Color.Black;
+            _system.Debug("[3] runStartup");
+            this.BackColor = Color.Green;
 
             if (!boolIDE)
                 this.FormBorderStyle = FormBorderStyle.None;
@@ -233,10 +231,10 @@ namespace consoleXstream
             if (_system.IsVr)
             {
                 imgDisplayVr.Visible = true;
-                imgDisplayVr.BackColor = Color.Red;
+                imgDisplayVr.BackColor = Color.Black;
 
                 imgDisplay.Visible = true;
-                imgDisplay.BackColor = Color.Green;
+                imgDisplay.BackColor = Color.Black;
 
                 imgDisplay.Left = 0;
                 imgDisplay.Top = 0;
@@ -262,28 +260,28 @@ namespace consoleXstream
 
             if (_system.boolEnableKeyboard)
             {
-                _system.debug("[3] Init keyboard hook");
+                _system.Debug("[3] Init keyboard hook");
                 _keyboardInterface.getKeyboardHandle(_keyboard);
                 _keyboard.enableKeyboardHook();
             }
 
             if (_system.boolEnableMouse)
             {
-                _system.debug("[3] Init mouse event hook");
+                _system.Debug("[3] Init mouse event hook");
                 _mouse.enableMouseHook();
             }
 
             if (_system.boolInternalCapture)
             {
-                _system.debug("[3] Init video capture variables");
+                _system.Debug("[3] Init video capture variables");
                 configureVideoCapture();
 
                 if (_system.strSetResolution != null)
                 {
-                    _system.debug("[3] set user res ");
+                    _system.Debug("[3] set user res ");
                     if (_system.strSetResolution.Length > 0)
                     {
-                        _system.debug("[3] set user res [" + _system.strSetResolution + "]");
+                        _system.Debug("[3] set user res [" + _system.strSetResolution + "]");
                         _system.changeCaptureResolution(_system.strSetResolution);
                     }
                 }
@@ -291,20 +289,17 @@ namespace consoleXstream
 
             if (_system.boolControllerMax)
             {
-                /*
                 if (!_system.useTitanOneAPI)
                 {
-                    _system.debug("[3] Configure ControllerMax API");
+                    _system.Debug("[3] Configure ControllerMax API");
                     _controllerMax.initControllerMax();
-                    configureControllerMax();
                 }
                 else
                 {
-                    _system.debug("[3] Configure ControllerMax using TitanOne API");
-                    _titanOne.setTOInterface(Output.TitanOne.DevPID.ControllerMax);
-                    _titanOne.initTitanOne();
-                    configureTitanOne();
-                }*/
+                    //_system.Debug("[3] Configure ControllerMax using TitanOne API");
+                    //_titanOne.setTOInterface(Output.TitanOne.DevPID.ControllerMax);
+                    //_titanOne.initTitanOne();
+                }
             }
 
             if (_system.boolTitanOne) InitializeTitanOne();
@@ -323,9 +318,9 @@ namespace consoleXstream
 
         private void InitializeTitanOne()
         {
-            _system.debug("[3] Configure TitanOne API");
+            _system.Debug("[3] Configure TitanOne API");
             _titanOne.SetToInterface(Define.DevPid.TitanOne);
-            _titanOne.SetApiMethod(Define.ApiMethod.Single);
+            _titanOne.SetApiMethod(Define.ApiMethod.Multi);
             _titanOne.Initialize();
         }
 
@@ -341,13 +336,12 @@ namespace consoleXstream
 
         private void loadUserConfig()
         {
-            _system.initializeUserData();
             _system.loadDefaults();
             
             _keymap.InitializeKeyboardDefaults();
             _keymap.LoadKeyboardInputs();
 
-            _system.loadSetupXML();
+            _system.LoadSetup();
             _system.checkUserSettings();
         }
 
@@ -607,6 +601,36 @@ namespace consoleXstream
             }
         }
 
+        public void ChangeVr()
+        {
+            if (_system.IsVr)
+            {
+                imgDisplay.Dock = DockStyle.None;
+                
+                imgDisplayVr.Visible = true;
+                imgDisplayVr.BackColor = Color.Black;
 
+                imgDisplay.Visible = true;
+                imgDisplay.BackColor = Color.Black;
+
+                imgDisplay.Left = 0;
+                imgDisplay.Top = 50;
+                imgDisplay.Width = Screen.PrimaryScreen.Bounds.Width / 2;
+                imgDisplay.Height = Screen.PrimaryScreen.Bounds.Height - 100;
+
+                imgDisplayVr.Left = Screen.PrimaryScreen.Bounds.Width / 2;
+                imgDisplayVr.Top = 50;
+                imgDisplayVr.Height = Screen.PrimaryScreen.Bounds.Height - 100;
+                imgDisplayVr.Width = Screen.PrimaryScreen.Bounds.Width / 2;
+            }
+            else
+            {
+                imgDisplayVr.Visible = false;
+                imgDisplay.Dock = DockStyle.Fill;
+            }
+        }
+
+        public void SetTitanOne(string serial) { _titanOne.SetTitanOneDevice(serial); }
+        public string GetTitanOne() { return _titanOne.GetTitanOneDevice(); }
     }
 }

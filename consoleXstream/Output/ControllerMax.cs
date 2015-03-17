@@ -133,39 +133,39 @@ namespace consoleXstream.Output
             string strRef = "CMDI";
             string strAPI = "controllerMax_gcdapi.dll";
 
-            system.debug("[0] Opening " + strDevice + " api");
+            system.Debug("ControllerMax.log", "[0] Opening " + strDevice + " api");
             string strDir = Directory.GetCurrentDirectory() + @"\";
             _strCMDevice = strDevice;
 
             if (File.Exists(strDir + strAPI) == false)
             {
-                system.debug("[0] [FAIL] Unable to find " + strDevice + " API");
+                system.Debug("ControllerMax.log", "[0] [FAIL] Unable to find " + strDevice + " API");
                 return;
             }
 
-            system.debug("[TRY] Attempting to open " + strDevice + " Device Interface (" + strRef + ")");
+            system.Debug("ControllerMax.log", "[TRY] Attempting to open " + strDevice + " Device Interface (" + strRef + ")");
 
             IntPtr ptrDll = LoadLibrary(strDir + strAPI);
             if (ptrDll == IntPtr.Zero)
             {
-                system.debug("[0] [FAIL] Unable to allocate Device API");
+                system.Debug("ControllerMax.log", "[0] [FAIL] Unable to allocate Device API");
                 return;
             }
 
             IntPtr ptrLoad = loadExternalFunction(ptrDll, "gcdapi_Load");
-            if (ptrLoad == IntPtr.Zero) { system.debug("[0] [FAIL] gcapi_Load"); return; }
+            if (ptrLoad == IntPtr.Zero) { system.Debug("ControllerMax.log", "[0] [FAIL] gcapi_Load"); return; }
 
             IntPtr ptrIsConnected = loadExternalFunction(ptrDll, "gcapi_IsConnected");
-            if (ptrIsConnected == IntPtr.Zero) { system.debug("[0] [FAIL] gcapi_IsConnected"); return; }
+            if (ptrIsConnected == IntPtr.Zero) { system.Debug("ControllerMax.log", "[0] [FAIL] gcapi_IsConnected"); return; }
 
             IntPtr ptrUnload = loadExternalFunction(ptrDll, "gcdapi_Unload");
-            if (ptrUnload == IntPtr.Zero) { system.debug("[0] [FAIL] gcapi_Unload"); return; }
+            if (ptrUnload == IntPtr.Zero) { system.Debug("ControllerMax.log", "[0] [FAIL] gcapi_Unload"); return; }
 
             IntPtr ptrGetTimeVal = loadExternalFunction(ptrDll, "gcapi_GetTimeVal");
-            if (ptrGetTimeVal == IntPtr.Zero) { system.debug("[0] [FAIL] gcapi_GetTimeVal"); return; }
+            if (ptrGetTimeVal == IntPtr.Zero) { system.Debug("ControllerMax.log", "[0] [FAIL] gcapi_GetTimeVal"); return; }
             
             IntPtr ptrGetFwVer = loadExternalFunction(ptrDll, "gcapi_GetFWVer");
-            if (ptrGetFwVer == IntPtr.Zero) { system.debug("[0] [FAIL] gcapi_GetFWVer"); return; }
+            if (ptrGetFwVer == IntPtr.Zero) { system.Debug("ControllerMax.log", "[0] [FAIL] gcapi_GetFWVer"); return; }
 
             IntPtr ptrWrite = loadExternalFunction(ptrDll, "gcapi_Write");
             if (ptrWrite == IntPtr.Zero) return;
@@ -177,7 +177,7 @@ namespace consoleXstream.Output
             IntPtr ptrReadEx = IntPtr.Zero;
             
             IntPtr ptrCalcPressTime = loadExternalFunction(ptrDll, "gcapi_CalcPressTime");
-            if (ptrCalcPressTime == IntPtr.Zero) { system.debug("[0] [FAIL] gcapi_CalcPressTime"); return; }
+            if (ptrCalcPressTime == IntPtr.Zero) { system.Debug("ControllerMax.log", "[0] [FAIL] gcapi_CalcPressTime"); return; }
 
             try
             {
@@ -192,11 +192,11 @@ namespace consoleXstream.Output
             }
             catch (Exception ex)
             {
-                system.debug("[0] Fail -> " + ex.ToString());
+                system.Debug("ControllerMax.log", "[0] Fail -> " + ex.ToString());
             }
 
             _gcapi_Load();
-            system.debug("[0] Initialize ControllerMax GCAPI ok");
+            system.Debug("ControllerMax.log", "[0] Initialize ControllerMax GCAPI ok");
             
             loadShortcutKeys();
             _boolGCAPILoaded = true;
@@ -209,11 +209,11 @@ namespace consoleXstream.Output
             ptrFunction = GetProcAddress(ptrDll, strFunction);
             if (ptrFunction == IntPtr.Zero)
             {
-                system.debug("[0] [NG] " + strFunction + " alloc fail");
+                system.Debug("ControllerMax.log", "[0] [NG] " + strFunction + " alloc fail");
             }
             else
             {
-                system.debug("[5] [OK] " + strFunction);
+                system.Debug("ControllerMax.log", "[5] [OK] " + strFunction);
             }
             return ptrFunction;
         }
@@ -239,7 +239,7 @@ namespace consoleXstream.Output
 
             _boolGCAPILoaded = false;
 
-            system.debug("[OK] Closed " + strDevice + " (" + strRef + ")");
+            system.Debug("ControllerMax.log", "[OK] Closed " + strDevice + " (" + strRef + ")");
         }
 
         public void checkControllerInput()
@@ -392,7 +392,7 @@ namespace consoleXstream.Output
                 //If device just disconnected open up notice to tell user
                 if (_boolNoticeCMDisconnected == false)
                 {
-                    system.debug("[NOTE] " + _strCMDevice + " is disconnected");
+                    system.Debug("ControllerMax.log", "[NOTE] " + _strCMDevice + " is disconnected");
                     _boolNoticeCMDisconnected = true;
                 }
 

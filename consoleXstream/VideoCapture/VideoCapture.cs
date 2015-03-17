@@ -135,6 +135,7 @@ namespace consoleXstream.VideoCapture
 
         private void setupPreviewWindow()
         {
+            /*
             _class.Debug.Log("[3]***   Attaching running graph to preview window");
 
             int hr = 0;
@@ -168,6 +169,7 @@ namespace consoleXstream.VideoCapture
                 _boolPreviewFail = true;
                 return;
             }
+             */
         }
 
         public void checkVideoOutput()

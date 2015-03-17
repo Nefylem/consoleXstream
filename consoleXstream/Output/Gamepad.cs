@@ -91,7 +91,7 @@ namespace consoleXstream.Output
             double dblRX = _controls.ThumbSticks.Right.X * 100;
             double dblRY = _controls.ThumbSticks.Right.Y * 100;
 
-            if (_system.boolNormalizeControls == true)
+            if (_system.boolNormalizeControls)
             {
                 NormalGamepad(ref dblLX, ref dblLY);
                 NormalGamepad(ref dblRX, ref dblRY);
@@ -165,6 +165,7 @@ namespace consoleXstream.Output
                         Output[intCount] = _keyboard.output[intCount];
                 }
             }
+            
         }
 
         private void NormalGamepad(ref double dblLx, ref double dblLy)

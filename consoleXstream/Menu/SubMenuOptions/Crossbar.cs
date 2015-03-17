@@ -55,12 +55,12 @@ namespace consoleXstream.Menu.SubMenuOptions
 
             if (strSet.Substring(0, "video_".Length).ToLower() == "video_")
             {
-                _system.addUserData("crossbarVideoPin", strSet);
+                _system.AddData("crossbarVideoPin", strSet);
 
                 //Set the audio pin if selecting HDMI
                 if (strSet.ToLower() == "video_serialdigital")
                 {
-                    _system.addUserData("crossbarAudioPin", "audio_spdifdigital");
+                    _system.AddData("crossbarAudioPin", "audio_spdifdigital");
                     _videoCapture.SetCrossbar("audio_spdifdigital");
                 }
 
@@ -70,7 +70,7 @@ namespace consoleXstream.Menu.SubMenuOptions
 
             if (strSet.Substring(0, "audio_".Length).ToLower() != "audio_")
                 return;
-            _system.addUserData("crossbarAudioPin", strSet);
+            _system.AddData("crossbarAudioPin", strSet);
             _videoCapture.SetCrossbar(strSet);
             _videoCapture.runGraph();
         }

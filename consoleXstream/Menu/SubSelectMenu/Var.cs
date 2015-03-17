@@ -12,5 +12,8 @@ namespace consoleXstream.Menu.SubSelectMenu
         public string DisplayMessage;
 
         public List<string> ListData = new List<string>();
+
+        public int Selected { get; set; }
+        public string TitanSerial { get; set; }
     }
 }

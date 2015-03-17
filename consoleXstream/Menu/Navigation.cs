@@ -9,17 +9,6 @@ namespace consoleXstream.Menu
 
         public Navigation(Classes inClass) { _class = inClass; }
 
-        /*
-        private MainMenu.Action _act;
-        private SubMenu.Action _subAct;
-        private Variables _class.Var;
-        private ShowMenu _menu;
-        private Interaction _class.Data;
-        private User _class.User;
-        private FrameCount _class.Fps;
-        private Mouse _class.Mouse;
-        private SubMenu.Shutter _class.Shutter;
-        */
         public List<string> ListHistory;
 
         private int _moveUpWait;
@@ -28,26 +17,20 @@ namespace consoleXstream.Menu
         private int _moveRightWait;
         private int _moveOkWait;
         private int _menuBackWait;
-        /*
-        public void GetActionVariable(MainMenu.Action action) { _act = action; }
-        public void GetSubActionVariable(SubMenu.Action action) { _subAct = action; }
-        public void GetVariableHandle(Variables inVar) { _class.Var = inVar; }
-        public void GetMenuHandle(ShowMenu inMenu) { _menu = inMenu; }
-        public void GetDataHandle(Interaction data) { _class.Data = data; }
-        public void GetUserHandle(User user) { _class.User = user; }
-        public void GetFpsHandle(FrameCount fps) { _class.Fps = fps; }
-        public void GetMouseHandle(Mouse mouse) { _class.Mouse = mouse; }
-        public void GetShutterHandle(SubMenu.Shutter shutter) { _class.Shutter = shutter; }
-        */
+
         public void CheckCommand(string command)
         {
             command = command.ToLower();
+
+            if (command == "back") { if (_menuBackWait == 0) MenuBack(); else _menuBackWait = 5; }
+
+            if (_class.Var.ShowSubSelection) { _class.SubSelectMenu.GetCommand(command); return; }
+
             if (command == "up" && _moveUpWait == 0) MenuUp();
             if (command == "down" && _moveDownWait == 0) MenuDown();
             if (command == "left" && _moveLeftWait == 0) MenuLeft();
             if (command == "right" && _moveRightWait == 0) MenuRight();
             if (command == "ok") { if (_moveOkWait == 0) MenuOk(); else _moveOkWait = 5; }
-            if (command == "back") { if (_menuBackWait == 0) MenuBack(); else _menuBackWait = 5; }
         }
 
         public void MenuUp()
@@ -161,7 +144,7 @@ namespace consoleXstream.Menu
 
         public void MenuOk()
         {
-            _moveOkWait = 5;
+            _moveOkWait = 2;
             if (_class.Var.IsMainMenu)
                 _class.Action.MainMenu(_class.User.Selected);
             else

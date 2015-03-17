@@ -39,7 +39,7 @@ namespace consoleXstream.Menu
         public Remapping Remap { get; set; }
         public CaptureDevice VideoDevice { get; set; }
         public DrawGraph DrawGui { get; set; }
-
+        
         public SubSelectMenu.Menu SubSelectMenu { get; set; }
         public SubSelectMenu.Var SubSelectVar { get; set; }
 
@@ -68,6 +68,7 @@ namespace consoleXstream.Menu
             DrawGui = new DrawGraph();
             Display = new Display(this);
             VideoDevice = new CaptureDevice(this);
+
         }
     }
 }

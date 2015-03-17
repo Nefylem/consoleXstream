@@ -42,6 +42,7 @@ namespace consoleXstream.Menu.MainMenu
             {
                 case "console select": ConsoleSelect(command, currentRow); break;
                 case "save profile": SaveProfile(command, currentRow); break;
+                case "vr": SetVrMode(command, currentRow); break;
                 case "video input": VideoInput(command, currentRow); break;
                 case "video device": VideoDevice(command, currentRow); break;
                 case "video settings": VideoSettings(command, currentRow); break;
@@ -115,6 +116,17 @@ namespace consoleXstream.Menu.MainMenu
 
             SelectSubItem();
             _class.Shutter.SetActive(currentRow + 1);
+        }
+
+        private void SetVrMode(string command, int currentRow)
+        {
+            SetMenu(command);
+            ClearSub();
+
+            _class.SubAction.AddSubItem("VrVideo", "VR Mode\nVideo", _class.System.IsVr);
+
+            SelectSubItem();
+            _class.Shutter.SetActive(currentRow + 1);            
         }
 
         private void VideoInput(string command, int currentRow)
@@ -254,7 +266,7 @@ namespace consoleXstream.Menu.MainMenu
 
         private bool CheckSystemSetting(string strCommand)
         {
-            return _class.System.checkUserSetting(strCommand.ToLower()).ToLower() == "true";
+            return _class.System.CheckData(strCommand.ToLower()).ToLower() == "true";
         }
 
         private void RegisterWatcher(string title)
@@ -301,6 +313,9 @@ namespace consoleXstream.Menu.MainMenu
 
                 if (t.Command.ToLower() == "checkcaptureres")
                     if (CheckSystemSetting("CheckCaptureRes")) _class.Data.Checked.Add("Check Capture");
+
+                if (t.Command.ToLower() == "vrvideo")
+                    if (CheckSystemSetting("VR_Video")) _class.Data.Checked.Add("VR Mode\nVideo");
             }
         }
 

@@ -5,16 +5,14 @@ namespace consoleXstream.Input.Mouse
 {
     class Hook
     {
+        public Hook(Form1 mainForm, Output.Gamepad game) { frmMain = mainForm; _gamepad = game; }
 
         private Output.Gamepad _gamepad;
         private Form1 frmMain;
         private Menu.ShowMenu formMenu;
         private Config.Configuration system;
-        //private Output.ControllerMax controllerMax;
-        //private Output.TitanOne.Write titanOne;
         private Input.KeyboardInterface keyboard;
 
-        public Hook(Form1 mainForm, Output.Gamepad game) { frmMain = mainForm; _gamepad = game; }
 
         public void enableMouseHook()
         {
@@ -29,8 +27,6 @@ namespace consoleXstream.Input.Mouse
         }
 
         public void GetSystemHandle(Config.Configuration inSystem) { system = inSystem; }
-        //public void GetControllerMaxHandle(Output.ControllerMax inMax) { controllerMax = inMax; }
-        //public void GetTitanOneHandle(Output.TitanOne.Write inTo) { titanOne = inTo; }
         public void GetKeyboardInterfaceHandle(Input.KeyboardInterface inKey) { keyboard = inKey; }
         public void GetMenuHandle(Menu.ShowMenu inMenu) { formMenu = inMenu; }
             
@@ -38,21 +34,15 @@ namespace consoleXstream.Input.Mouse
         {
             if (!system.boolMenu)
             {
-                if (system.boolEnableMouse)
-                    keyboard.boolLeftMouse = true;
-                else
+                if (!system.boolEnableMouse || system.IsVr)
                     _gamepad.Ps4Touchpad = true;
+                else
+                    keyboard.boolLeftMouse = true;
             }
             else
             {
                 formMenu.BringToFront();
-                formMenu.Focus();
-                /*
-                if (formMenu.IsShutterOpen())
-                    formMenu.CloseShutter();
-                else
-                    formMenu.ClosePanel();
-                 */
+                formMenu.Focus();                
             }
         }
 
@@ -60,7 +50,7 @@ namespace consoleXstream.Input.Mouse
         {
             if (!system.boolMenu)
             {
-                if (system.boolEnableMouse)
+                if (system.boolEnableMouse && !system.IsVr)
                     keyboard.boolLeftMouse = false;
                 else
                     _gamepad.Ps4Touchpad = false;

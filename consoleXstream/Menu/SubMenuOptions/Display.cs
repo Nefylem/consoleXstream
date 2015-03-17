@@ -21,7 +21,7 @@
                 _class.VideoCapture.SetVideoResolution(count);
                 _class.VideoCapture.runGraph();
 
-                _class.System.addUserData("CaptureResolution", resolution);
+                _class.System.AddData("CaptureResolution", resolution);
 
                 break;
             }

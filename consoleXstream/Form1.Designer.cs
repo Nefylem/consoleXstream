@@ -43,7 +43,7 @@
             // 
             // imgDisplay
             // 
-            this.imgDisplay.Location = new System.Drawing.Point(270, 96);
+            this.imgDisplay.Location = new System.Drawing.Point(12, 167);
             this.imgDisplay.Name = "imgDisplay";
             this.imgDisplay.Size = new System.Drawing.Size(100, 50);
             this.imgDisplay.TabIndex = 0;
@@ -111,7 +111,7 @@
             // 
             // imgDisplayVr
             // 
-            this.imgDisplayVr.Location = new System.Drawing.Point(283, 233);
+            this.imgDisplayVr.Location = new System.Drawing.Point(12, 111);
             this.imgDisplayVr.Name = "imgDisplayVr";
             this.imgDisplayVr.Size = new System.Drawing.Size(100, 50);
             this.imgDisplayVr.TabIndex = 6;

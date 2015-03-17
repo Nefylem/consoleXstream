@@ -21,6 +21,8 @@ namespace consoleXstream.Output.TitanOne.GCMAPI
             if (_class.MDefine.GcmapiConnect == null)
                 _class.MInit.Open();
 
+            _class.MDefine.GcmapiLoad();
+
             if (_class.MDefine.GcmapiConnect != null)
                 _deviceCount = _class.MDefine.GcmapiConnect((ushort)_class.Write.DevId);
         }
@@ -59,6 +61,7 @@ namespace consoleXstream.Output.TitanOne.GCMAPI
                 }
 
                 //Load config on each of these devices
+                _class.MWrite.AddDevice(disp);
                 _class.FrmMain.ListToDevices.Add(disp);
             }
         }

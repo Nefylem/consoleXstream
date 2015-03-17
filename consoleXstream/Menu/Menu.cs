@@ -81,12 +81,24 @@ namespace consoleXstream.Menu
 
         public void PositionMenu()
         {
-            Left = (Screen.PrimaryScreen.Bounds.Width / 2) - (Properties.Resources.imgMainMenu.Width / 2);
-            Top = (Screen.PrimaryScreen.Bounds.Height / 2) - (Properties.Resources.imgMainMenu.Height / 2);
+            if (!_class.System.IsVr)
+            {
+                Left = (Screen.PrimaryScreen.Bounds.Width / 2) - (Properties.Resources.imgMainMenu.Width / 2);
+                Top = (Screen.PrimaryScreen.Bounds.Height / 2) - (Properties.Resources.imgMainMenu.Height / 2);
 
-            //Enlarge once in the right spot
-            Width = Properties.Resources.imgMainMenu.Width;
-            Height = Properties.Resources.imgMainMenu.Height;            
+                //Enlarge once in the right spot
+                Width = Properties.Resources.imgMainMenu.Width;
+                Height = Properties.Resources.imgMainMenu.Height;                            
+            }
+            else
+            {
+                Left = 0;
+                Top = (Screen.PrimaryScreen.Bounds.Height / 2) - (Properties.Resources.imgMainMenu.Height / 2);
+
+                Width = Screen.PrimaryScreen.Bounds.Width;
+                Height = Properties.Resources.imgMainMenu.Height;                            
+            }
+
         }
 
         private void tmrMenu_Tick(object sender, EventArgs e)
@@ -132,7 +144,23 @@ namespace consoleXstream.Menu
             if (_class.System.boolFPS)
                 _class.DrawGui.drawText(5, 500, "FPS: " + _class.Fps.Frames);
 
-            imgDisplay.Image = _class.DrawGui.drawGraph();
+            if (_class.System.IsVr)
+            {
+                Image menu = _class.DrawGui.drawGraph();
+                Image showMenu = new Bitmap(imgDisplay.Width, menu.Height);
+                using (var g = Graphics.FromImage(showMenu))
+                {
+                    int centerPoint = Screen.PrimaryScreen.Bounds.Width/2;
+                    int quaterPoint = centerPoint/2;
+                    g.DrawImage(menu, new Rectangle(quaterPoint - 300, 0, 600, 500));
+                    g.DrawImage(menu, new Rectangle(centerPoint + quaterPoint - 300, 0, 600, 500));
+                }
+                imgDisplay.Image = showMenu;
+            }
+            else
+            {
+                imgDisplay.Image = _class.DrawGui.drawGraph();
+            }
         }
 
         private void CheckControls()

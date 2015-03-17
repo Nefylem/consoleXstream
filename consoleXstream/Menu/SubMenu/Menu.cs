@@ -1,7 +1,4 @@
 ﻿using System.Drawing;
-using consoleXstream.Config;
-using consoleXstream.DrawGui;
-using consoleXstream.Menu.Data;
 
 namespace consoleXstream.Menu.SubMenu
 {
@@ -24,7 +21,7 @@ namespace consoleXstream.Menu.SubMenu
                     _class.VideoCapture._xBar.get_IsRoutedTo(1, out intPinAudio);
                 }
 
-                var bmpShutter = new Bitmap(_class.DisplayMenu.Width - 20, _class.Shutter.Height);
+                var bmpShutter = new Bitmap(Properties.Resources.imgSubMenu.Width, _class.Shutter.Height);
 
                 _class.DrawGui.drawImage(bmpShutter, 0, 0, Properties.Resources.imgSubMenu);
 
@@ -34,7 +31,7 @@ namespace consoleXstream.Menu.SubMenu
                     if (_class.Data.SubItems.Count < 4)
                     {
                         var intSetWidth = _class.Data.SubItems.Count * (_class.Var.CellWidth + 5);
-                        intX = ((_class.DisplayMenu.Width - 20) / 2) - (intSetWidth / 2);
+                        intX = ((Properties.Resources.imgSubMenu.Width - 20) / 2) - (intSetWidth / 2);
                     }
                     for (var intCount = _class.Shutter.Scroll; intCount < _class.Data.SubItems.Count; intCount++)
                     {
@@ -42,7 +39,8 @@ namespace consoleXstream.Menu.SubMenu
                         var displayRectText = new Rectangle(intX, 2, _class.Var.CellWidth, _class.Var.CellHeight - 24);             //Text
                         var buttonRect = new Rectangle(8 + intX, _class.Shutter.Start, _class.Var.CellWidth, _class.Var.CellHeight);    //Mouse over location
 
-                        _class.Button.Create(buttonRect, _class.Data.SubItems[intCount].Command);
+                        if (!_class.Var.ShowSubSelection)
+                            _class.Button.Create(buttonRect, _class.Data.SubItems[intCount].Command);
 
                         if (_class.User.SubSelected == _class.Data.SubItems[intCount].Command)
                             _class.DrawGui.drawImage(bmpShutter, displayRect, Properties.Resources.imgSubGlow);
@@ -92,12 +90,12 @@ namespace consoleXstream.Menu.SubMenu
                 {
                     _class.DrawGui.setCenter();
                     _class.DrawGui.setFontSize(24f);
-                    _class.DrawGui.centerText(bmpShutter, new Rectangle(0, 0, _class.DisplayMenu.Width - 20, _class.Shutter.Height), _class.Shutter.Error);
+                    _class.DrawGui.centerText(bmpShutter, new Rectangle(0, 0, Properties.Resources.imgSubMenu.Width - 20, _class.Shutter.Height), _class.Shutter.Error);
                     if (_class.Shutter.Explain.Length > 0)
                     {
                         _class.DrawGui.setFontSize(14f);
                         _class.DrawGui.setCenterBottom(true);
-                        _class.DrawGui.centerText(bmpShutter, new Rectangle(0, 0, _class.DisplayMenu.Width - 20, _class.Shutter.Height - 20), _class.Shutter.Explain);
+                        _class.DrawGui.centerText(bmpShutter, new Rectangle(0, 0, Properties.Resources.imgSubMenu.Width - 20, _class.Shutter.Height - 20), _class.Shutter.Explain);
                     }
                 }
 

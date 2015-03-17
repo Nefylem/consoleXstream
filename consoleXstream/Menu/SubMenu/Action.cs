@@ -13,39 +13,15 @@ namespace consoleXstream.Menu.SubMenu
         public Action(Classes inClass) { _class = inClass; }
         private readonly Classes _class;
 
-        /*
-        private Form1 _form1;
-        private ShowMenu _menu;
-        private Configuration _class.System;
-        private Interaction _class.Data;
-        private Navigation _nav;
-        private User _class.User;
-        private Variables _class.Var;
-        private MainMenu.Action _class.Action;
-        private SubMenuOptions.Display _display;
-        private Shutter _class.Shutter;
-        private VideoCapture.VideoCapture _class.VideoCapture;
-        private SubMenuOptions.Remap _remap;
-        */
         private readonly CountDevices _listTo = new CountDevices();
-        /*
-        public void GetMenuHandle(ShowMenu menu) { _menu = menu; }
-        public void GetActionHandle(MainMenu.Action action) { _class.Action = action; }
-        public void GetForm1Handle(Form1 form1) { _form1 = form1; }
-        public void GetSystemHandle(Configuration system) { _class.System = system; }
-        public void GetDataHandle(Interaction data) { _class.Data = data; }
-        public void GetNavigationHandle(Navigation nav) { _nav = nav; }
-        public void GetUserHandle(User user) { _class.User = user; }
-        public void GetVariableHandle(Variables var) { _class.Var = var; }
-        public void GetShutterHandle(Shutter shutter) { _class.Shutter = shutter; }
-        public void GetVideoCaptureHandle(VideoCapture.VideoCapture videoCapture) { _class.VideoCapture = videoCapture; }
-        */
+
         public void ProcessSubMenu(string command)
         {
             switch (_class.User.Menu)
             {
                 case "console select": LoadProfile(command); break;
                 case "save profile": SaveProfile(command); break;
+                case "vr": SetVrMode(command); break;
                 case "video input": ChangeCrossbar(command); break;
                 case "video device": ChangeVideoDevice(command); break;
                 case "controller output": ChangeSetting(command); break;
@@ -162,6 +138,13 @@ namespace consoleXstream.Menu.SubMenu
             profile.Load(command);
         }
 
+        private void SetVrMode(string command)
+        {
+            if (command == "VrVideo") _class.System.ChangeVrVideo();
+            _class.Action.CheckDisplaySettings();
+            _class.DisplayMenu.PositionMenu();
+        }
+
         private void ChangeCrossbar(string command)
         {
             var crossbar = new SubMenuOptions.Crossbar();
@@ -205,13 +188,12 @@ namespace consoleXstream.Menu.SubMenu
 
         private void ChangeTitanOne()
         {
-            _class.System.changeTitanOne();
-            /*
+            _class.Data.ClearButtons();
+
             if (_listTo.GetToCount("TitanOne") > 1)
                 ListAllTitanOne();
             else
-                _class.System.changeTitanOne();
-             */
+                _class.System.ChangeTitanOne();
         }
 
         private void ListAllTitanOne()
@@ -219,6 +201,8 @@ namespace consoleXstream.Menu.SubMenu
             _class.Var.ShowSubSelection = true;
             _class.SubSelectVar.DisplayTitle = "Finding Devices";
             _class.SubSelectVar.DisplayMessage = "Please wait";
+            _class.SubSelectVar.TitanSerial = _class.Form1.GetTitanOne();
+            _class.SubSelectVar.ListData.Clear();
 
             _class.Form1.ListTitanOneDevices();
         }
