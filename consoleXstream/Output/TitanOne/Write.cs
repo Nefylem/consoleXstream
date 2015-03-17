@@ -98,6 +98,7 @@ namespace consoleXstream.Output.TitanOne
             }
         }
 
+        public void ReloadGcmapi() { _class.MInit.Close(); }
         public void ListDevices() { _class.MDevices.List(); }
         public int CheckDevices() { return _class.MDevices.Check(); }
         public void SetTitanOneDevice(string serial) { _class.MWrite.SetDevice(serial); }

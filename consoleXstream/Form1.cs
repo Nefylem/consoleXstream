@@ -65,7 +65,8 @@ namespace consoleXstream
         public int RetryTimeOut;
 
         public List<string> ListToDevices;
- 
+        private int TitanOneListRefresh;
+        private bool TitanOneListRefreshFail;
 
         //private int _intScreenWidth;
         //private int _intScreenHeight;
@@ -100,25 +101,23 @@ namespace consoleXstream
         //Definitions for calling from classes
         private void DeclareClasses()
         {
-
+            _remap = new Remapping();
+            _keyboardInterface = new KeyboardInterface(this);
             _system = new Configuration(this);
+            _gamepad = new Output.Gamepad(this, _remap, _system, _keyboardInterface);
+            _titanOne = new Write(this, _system, _gamepad);
+
             _external = new ExternalScript(this);
 
             //_gamepad = new GamepadXInput(this);
             _keyboard = new KeyboardHook(this);
 
-            _keyboardInterface = new KeyboardInterface(this);
-
-
             _controllerMax = new ControllerMax(this);
             _gimx = new Gimx(this);
 
             _videoResolution = new VideoResolution(this);
-            _remap = new Remapping();
             _keymap = new Keymap();
 
-            _gamepad = new Output.Gamepad(this, _remap, _system, _keyboardInterface);
-            _titanOne = new Write(this, _system, _gamepad);
             _mouse = new Hook(this, _gamepad);
             _videoCapture = new VideoCapture.VideoCapture(this, _system);
 
@@ -188,21 +187,24 @@ namespace consoleXstream
 
         private void tmrSystem_Tick(object sender, EventArgs e)
         {
-            if (RetrySetTitanOne.Length > 0)
+            if (RetrySetTitanOne != null)
             {
-                RetryTimeOut--;
-                if (RetryTimeOut <= 0)
+                if (RetrySetTitanOne.Length > 0)
                 {
-                    RetrySetTitanOne = "";
-                }
+                    RetryTimeOut--;
+                    if (RetryTimeOut <= 0)
+                    {
+                        RetrySetTitanOne = "";
+                    }
 
-                int result = _titanOne.CheckDevices();
-                if (result > 0)
-                {
-                    string serial = RetrySetTitanOne;
-                    RetrySetTitanOne = "";
-                    _system.DisableTitanOneRetry = true;
-                    _titanOne.SetTitanOneDevice(serial);
+                    int result = _titanOne.CheckDevices();
+                    if (result > 0)
+                    {
+                        string serial = RetrySetTitanOne;
+                        RetrySetTitanOne = "";
+                        _system.DisableTitanOneRetry = true;
+                        _titanOne.SetTitanOneDevice(serial);
+                    }
                 }
             }
 
@@ -611,14 +613,42 @@ namespace consoleXstream
         {
             ListToDevices = new List<string>();
 
+            if (_controllerMax._gcapi_Unload != null)
+                _controllerMax.closeControllerMaxInterface();
+
             IsUpdatingTitanOneList = true;
+            TitanOneListRefresh = 100;
+            TitanOneListRefreshFail = false;
             _titanOne.ListDevices(); 
         }
 
         private void CheckTitanOneConnectionList()
         {
             var result = _titanOne.CheckDevices();
-            if (result == 0) return;
+            if (result == 0)
+            {
+                if (TitanOneListRefresh > 0)
+                {
+                    TitanOneListRefresh--;
+                }
+                else
+                {
+                    if (!TitanOneListRefreshFail)
+                    {
+                        TitanOneListRefreshFail = true;
+                        TitanOneListRefresh = 10;
+                        _titanOne.ListDevices();                        
+                    }
+                    else
+                    {
+                        IsUpdatingTitanOneList = false;
+                        TitanOneListRefresh = 0;
+                        TitanOneListRefreshFail = false;
+                        _system.Debug("TitanOne.log", "Cant find TitanOnes, giving up");
+                    }
+                }
+                return;
+            }
 
             if (result > 0)
             {
@@ -656,7 +686,17 @@ namespace consoleXstream
             }
         }
 
-        public void SetTitanOne(string serial) { _titanOne.SetTitanOneDevice(serial); }
+        public void SetTitanOne(string serial) { _titanOne.SetTitanOneDevice(serial); _system.AddData("ControllerMax", "False"); }
         public string GetTitanOne() { return _titanOne.GetTitanOneDevice(); }
+
+        public void SetTitanOneMode(string type)
+        {
+            _titanOne.SetApiMethod(type.ToLower() == "single" ? Define.ApiMethod.Single : Define.ApiMethod.Multi);
+        }
+
+        public void InitControllerMax()
+        {
+            _controllerMax.initControllerMax();
+        }
     }
 }

@@ -71,7 +71,7 @@ namespace consoleXstream.Output
         }
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        private delegate byte GCAPI_LOAD();
+        public delegate byte GCAPI_LOAD();
 
         [UnmanagedFunctionPointer(CallingConvention.StdCall)]
         private delegate byte GCAPI_ISCONNECTED();
@@ -95,12 +95,12 @@ namespace consoleXstream.Output
         private delegate int GCAPI_CALCPRESSTIME(byte time);
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        private delegate void GCAPI_UNLOAD();
+        public delegate void GCAPI_UNLOAD();
 
         [UnmanagedFunctionPointer(CallingConvention.StdCall)]
         private delegate IntPtr GCAPI_READ_CM([In, Out] ref GCAPI_REPORT_CONTROLLERMAX gcapi_report);
 
-        private GCAPI_LOAD _gcapi_Load = null;
+        public GCAPI_LOAD _gcapi_Load = null;
         private GCAPI_ISCONNECTED _gcapi_IsConnected = null;
         private GCAPI_GETTIMEVAL _gcapi_GetTimeVal = null;
         private GCAPI_GETFWVER _gcapi_GetFwVer = null;
@@ -109,7 +109,7 @@ namespace consoleXstream.Output
         private GCAPI_WRITEREF _gcapi_WriteRef = null;
         private GCAPI_READ_CM _gcapi_Read_CM = null;
         private GCAPI_CALCPRESSTIME _gcapi_CalcPressTime = null;
-        private GCAPI_UNLOAD _gcapi_Unload = null;
+        public GCAPI_UNLOAD _gcapi_Unload = null;
         #endregion
 
         public ControllerMax(Form1 mainForm) { frmMain = mainForm; }

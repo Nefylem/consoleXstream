@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using consoleXstream.Output.TitanOne;
 using consoleXstream.Remap;
 
 namespace consoleXstream.Config
@@ -17,8 +18,8 @@ namespace consoleXstream.Config
         public bool boolPS4ControllerMode { get; private set; }
         public bool boolNormalizeControls { get; private set; }
 
-        public bool boolControllerMax { get; private set; }
-        public bool boolTitanOne { get; private set; }
+        public bool boolControllerMax { get; set; }
+        public bool boolTitanOne { get; set; }
         public bool boolGIMX { get; private set; }
         public bool boolRemoteGIMX { get; private set; }
         public bool boolMcShield { get; private set; }
@@ -152,10 +153,11 @@ namespace consoleXstream.Config
         {
             if (useTitanOneAPI)
             {
+                Debug("TitanOne.Log", "Connecting ControllerMax using TO API");
                 changeControllerMax_TOAPI();
                 return;
             }
-
+            Debug("ControllerMax.Log", "Using CM API");
             if (boolControllerMax && boolTitanOne)      //Stop infinite loops
                 boolTitanOne = false;
 
@@ -208,7 +210,10 @@ namespace consoleXstream.Config
             _class.Set.Add("TitanOne", boolTitanOne.ToString());
 
             if (boolTitanOne)
+            {
                 _class.TitanOne.Initialize();
+                            
+            }
             else
                 _class.TitanOne.Close();
         }

@@ -78,12 +78,12 @@ namespace consoleXstream.Menu.MainMenu
             SetMenu(command);
             ClearSub();
 
-            var profiles = new Profiles();
-            profiles.GetDataHandle(_class.Data);
-            profiles.GetSubActionHandle(_class.SubAction);
-            profiles.GetShutterHandle(_class.Shutter);
+            //var profiles = new Profiles();
+            //profiles.GetDataHandle(_class.Data);
+            //profiles.GetSubActionHandle(_class.SubAction);
+            //profiles.GetShutterHandle(_class.Shutter);
 
-            var listData = profiles.List();
+            var listData = _class.Profiles.List();
 
             _class.Data.SubItems.Clear();            
             foreach (var profile in listData)

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using System.Collections.Generic;
 
 namespace consoleXstream.Output.TitanOne.GCMAPI
 {
@@ -13,8 +8,8 @@ namespace consoleXstream.Output.TitanOne.GCMAPI
         private readonly Classes _class;
 
         private readonly List<string> _listDevices = new List<string>();
-        private string _serialToSet;
         private int _activeDevice;
+        private bool _isConnected;
 
         public void SetDevice(string device)
         {
@@ -29,7 +24,6 @@ namespace consoleXstream.Output.TitanOne.GCMAPI
             {
                 if (!_class.System.DisableTitanOneRetry)
                 {
-                    _serialToSet = device;
                     _class.MDevices.List();
                     _class.FrmMain.RetrySetTitanOne = device;
                     _class.FrmMain.RetryTimeOut = 5000;                    
@@ -52,8 +46,12 @@ namespace consoleXstream.Output.TitanOne.GCMAPI
 
         public void Send()
         {
-            if (_class.MDefine.GcmapiConnect != null)
-                _class.MDefine.GcmapiConnect((ushort)_class.Write.DevId);
+            if (!_isConnected)
+            {
+                if (_class.MDefine.GcmapiConnect != null)
+                    _class.MDefine.GcmapiConnect((ushort) _class.Write.DevId);
+                _isConnected = true;
+            }
 
             if (_class.MDefine.GcmapiIsConnected(_activeDevice) == 1)
             {

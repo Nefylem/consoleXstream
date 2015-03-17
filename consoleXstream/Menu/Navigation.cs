@@ -21,11 +21,9 @@ namespace consoleXstream.Menu
         public void CheckCommand(string command)
         {
             command = command.ToLower();
-
-            if (command == "back") { if (_menuBackWait == 0) MenuBack(); else _menuBackWait = 5; }
-
             if (_class.Var.ShowSubSelection) { _class.SubSelectMenu.GetCommand(command); return; }
-
+            
+            if (command == "back") { if (_menuBackWait == 0) MenuBack(); else _menuBackWait = 5; }
             if (command == "up" && _moveUpWait == 0) MenuUp();
             if (command == "down" && _moveDownWait == 0) MenuDown();
             if (command == "left" && _moveLeftWait == 0) MenuLeft();

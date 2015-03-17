@@ -44,9 +44,13 @@ namespace consoleXstream.Menu.SubSelectMenu
                 _class.DrawGui.centerText(bmpMenu, displayRectText, "Unnamed");
                 _class.DrawGui.centerText(bmpMenu, displayRectTextOption, "TitanOne");
 
-                if (_class.SubSelectVar.Selected < _class.SubSelectVar.ListData.Count)
-                    if (_class.SubSelectVar.ListData[count] == _class.SubSelectVar.TitanSerial)
-                        _class.DrawGui.drawImage(bmpMenu, intX + _class.Var.CellWidth - 40, 17, 25, 25, Properties.Resources.imgTick);
+                if (_class.Data.Checked.IndexOf("TitanOne") > -1)
+                {
+                    if (_class.SubSelectVar.Selected < _class.SubSelectVar.ListData.Count)
+                        if (_class.SubSelectVar.ListData[count] == _class.SubSelectVar.TitanSerial)
+                            _class.DrawGui.drawImage(bmpMenu, intX + _class.Var.CellWidth - 40, 17, 25, 25,
+                                Properties.Resources.imgTick);
+                }
 
                 intX += _class.Var.CellWidth + 5;
             }
@@ -63,6 +67,7 @@ namespace consoleXstream.Menu.SubSelectMenu
             if (command == "left" && _moveRightWait == 0) MenuLeft();
             if (command == "right" && _moveRightWait == 0) MenuRight();
             if (command == "ok" && _menuOkWait == 0) MenuOk();
+            if (command == "back") _class.Var.ShowSubSelection = false;
         }
 
         public void MenuLeft()
@@ -86,8 +91,20 @@ namespace consoleXstream.Menu.SubSelectMenu
             if (_class.SubSelectVar.Selected < _class.SubSelectVar.ListData.Count)
             {
                 _class.SubSelectVar.TitanSerial = _class.SubSelectVar.ListData[_class.SubSelectVar.Selected];
+                
                 _class.Form1.SetTitanOne(_class.SubSelectVar.ListData[_class.SubSelectVar.Selected]);
+                _class.System.TitanOneDevice = _class.SubSelectVar.ListData[_class.SubSelectVar.Selected];
+                _class.System.boolControllerMax = false;
+                _class.System.boolTitanOne = true;
+
+                ChangeMenuSelections();
             }
+        }
+
+        private void ChangeMenuSelections()
+        {
+            _class.Data.Checked.Clear();
+            _class.Data.Checked.Add("TitanOne");
         }
 
         public int SetMoveWait()

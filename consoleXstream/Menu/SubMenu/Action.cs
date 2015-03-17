@@ -1,9 +1,6 @@
 ﻿using System.Linq;
-using System.Windows.Forms;
-using consoleXstream.Config;
 using consoleXstream.Menu.Data;
 using consoleXstream.Output;
-using DirectShowLib.BDA;
 
 namespace consoleXstream.Menu.SubMenu
 {
@@ -130,12 +127,15 @@ namespace consoleXstream.Menu.SubMenu
 
         private void LoadProfile(string command)
         {
+            /*
             var profile = new SubMenuOptions.Profiles();
             profile.GetUserHandle(_class.User);
             profile.GetDataHandle(_class.Data);
             profile.GetVideoCaptureHandle(_class.VideoCapture);
             profile.GetSystemHandle(_class.System);
             profile.Load(command);
+             */
+            _class.Profiles.Load(command);
         }
 
         private void SetVrMode(string command)
@@ -162,12 +162,15 @@ namespace consoleXstream.Menu.SubMenu
 
         private void SaveProfile(string command)
         {
+            /*
             var profile = new SubMenuOptions.Profiles();
             profile.GetDataHandle(_class.Data);
             profile.GetUserHandle(_class.User);
             profile.GetSystemHandle(_class.System);
             profile.GetVideoCaptureHandle(_class.VideoCapture);
             profile.Save(command);
+             */
+            _class.Profiles.Save(command);
             _class.Shutter.Close();
         }
 
@@ -193,19 +196,33 @@ namespace consoleXstream.Menu.SubMenu
             if (_listTo.GetToCount("TitanOne") > 1)
                 ListAllTitanOne();
             else
+            {
+                _class.Form1.SetTitanOneMode("Single");
                 _class.System.ChangeTitanOne();
+            }
         }
 
         private void ListAllTitanOne()
         {
-            _class.Var.ShowSubSelection = true;
-            _class.SubSelectVar.DisplayTitle = "Finding Devices";
-            _class.SubSelectVar.DisplayMessage = "Please wait";
-            _class.SubSelectVar.TitanSerial = _class.Form1.GetTitanOne();
-            _class.SubSelectVar.ListData.Clear();
-            _class.SubSelectVar.TitanSerial = _class.System.TitanOneDevice;
+            if (_class.Form1.ListToDevices.Count > 0)
+            {
+                _class.Var.ShowSubSelection = true;
+                _class.SubSelectVar.TitanSerial = _class.System.TitanOneDevice;
+                _class.SubSelectVar.ListData = _class.Form1.ListToDevices;
+                _class.Form1.SetTitanOneMode("Multi");
+            }
+            else
+            {
+                _class.Var.ShowSubSelection = true;
+                _class.SubSelectVar.DisplayTitle = "Finding Devices";
+                _class.SubSelectVar.DisplayMessage = "Please wait";
 
-            _class.Form1.ListTitanOneDevices();
+                _class.SubSelectVar.ListData.Clear();
+                _class.SubSelectVar.TitanSerial = _class.System.TitanOneDevice;
+
+                _class.Form1.SetTitanOneMode("Multi");
+                _class.Form1.ListTitanOneDevices();                
+            }
         }
 
         private void ChangeVideoDisplay(string command)

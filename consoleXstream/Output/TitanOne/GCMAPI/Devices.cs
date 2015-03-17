@@ -18,10 +18,17 @@ namespace consoleXstream.Output.TitanOne.GCMAPI
 
         public void List()
         {
+            _class.System.Debug("TitanOne.log", "listing devices");
+            _class.System.ChangeTitanOne();
+
+            _class.Write.SetApiMethod(TitanOne.Define.ApiMethod.Multi);
+            _class.Write.SetToInterface(TitanOne.Define.DevPid.TitanOne);
+
             if (_class.MDefine.GcmapiConnect == null)
                 _class.MInit.Open();
 
-            _class.MDefine.GcmapiLoad();
+            _class.System.Debug("TitanOne.Log", "Load: " + _class.MDefine.GcmapiLoad().ToString());
+            _class.System.Debug("TitanOne.Log", "Device: " + _class.Write.DevId.ToString());
 
             if (_class.MDefine.GcmapiConnect != null)
                 _deviceCount = _class.MDefine.GcmapiConnect((ushort)_class.Write.DevId);
