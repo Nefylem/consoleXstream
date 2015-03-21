@@ -71,15 +71,20 @@ namespace consoleXstream.VideoCapture.Analyse
         public void Check()
         {
             if (_class.System.IsAutoSetCaptureResolution)
-                checkVideoResolution();
+                CheckCaptureResolution();
+
+            if (_class.System.IsAutoSetDisplayResolution)
+                CheckDisplayResolution();
         }
 
-        private void checkVideoResolution()
+        private void CheckDisplayResolution()
         {
-            /*
-            int intVideoWidth = 0;
-            int intVideoHeight = 0;
-            int intLineCount = 0;
+            var intLineCount = 0;
+
+            if (_class.Graph.IamAvd != null)
+                _class.Graph.IamAvd.get_NumberOfLines(out intLineCount);
+
+            if (intLineCount == 0) return;
 
             if (_class.Var.CurrentResByName != _checkCaptureRes)
             {
@@ -93,67 +98,10 @@ namespace consoleXstream.VideoCapture.Analyse
                 }
             }
 
-            if (_class.Graph.IamAvd != null)
-                _class.Graph.IamAvd.get_NumberOfLines(out intLineCount);
-
-
-            if (intLineCount == 0) return;
-            /*
-            if (_IsChangedDisplayResolution)
-            {
-                _IsChangedDisplayResolution = false;
-                runGraph();
-            }
-            *//*
-            if (intLineCount > 0)
-            {
-                _class.FrmMain.intLineSample = intLineCount;
-                //_class.FrmMain.Text = intLineCount.ToString();
-
-                if (_class.Var.IsBuildingGraph == false)
-                {
-                    if (!_boolRerunGraph)
-                    {
-                        if (_class.Var.IsInitializeGraph == true)           //Do another swap if running on PS3. Counters freezing display
-                        {
-                            _class.Var.IsInitializeGraph = false;
-                            if (intLineCount == 720)
-                            {
-                                _intVideoResolution = 0;
-                                debugVideo("[1] Change res 720");
-                                runGraph();
-                            }
-                        }
-
-                        //Compares video output to display output
-                        if (intLineCount != intVideoHeight)
-                        {
-                            _boolBuildingGraph = true;
-                            if (intLineCount == 720) { _boolRerunGraph = true; debugVideo("[0] &FindMe& Rerun graph * 720p"); }
-                            _intVideoResolution = 0;
-                            if (_boolVideoFail == false)
-                            {
-                                debugVideo("[1] Change Res : " + intLineCount.ToString());
-
-                                system.autoChangeRes(intLineCount);
-
-                                runGraph();
-                            }
-                        }
-                    }
-                    else
-                    {
-                        //Forces a second display change if moving to 720 (mainly PS3 needs this)
-                        if (intLineCount == 720)
-                        {
-                            debugVideo("[1] Rerun Graph : 720");
-                            _boolRerunGraph = false;
-                            runGraph();
-                        }
-                    }
-                }
-            }
-               */
+            if (_checkCaptureHeight == intLineCount.ToString() && _rerunGraphCount == 0) return;
+            
+            _class.System.AutoChangeRes(intLineCount);
+            //system.autoChangeRes(intLineCount);
         }
 
         private void CheckCaptureResolution()
@@ -208,8 +156,8 @@ namespace consoleXstream.VideoCapture.Analyse
             if (intLineCount == 720)
             {
                 _class.System.Debug("VideoResolution.log", "Setting 720p refresh mode");
-                _rerunWait = 50;
-                _rerunGraphCount = 1;
+                _rerunWait = 25;
+                _rerunGraphCount = 2;
             }
             else
             {
@@ -217,8 +165,7 @@ namespace consoleXstream.VideoCapture.Analyse
                 _rerunGraphCount = 0;                
             }
             _class.System.Debug("VideoResolution.log", "Running graph");
-            //donttryagain = true;
-            //_class.VideoCapture.ChangeResolution();
+
             _class.Graph.MediaControl.Stop();
             _class.Graph.ClearGraph();
             _class.VideoCapture.RunGraph();

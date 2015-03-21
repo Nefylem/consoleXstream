@@ -177,12 +177,12 @@ namespace consoleXstream.Menu.MainMenu
             SetMenu(command);
             ClearSub();
 
-            _class.SubAction.AddSubItem("AutoSet", "Auto Set", _class.System.boolAutoSetResolution);
+            _class.SubAction.AddSubItem("AutoSet", "Auto Set", _class.System.IsAutoSetDisplayResolution);
             _class.SubAction.AddSubItemFolder("Device", "Graphics Device", "Graphics Card");
             _class.SubAction.AddSubItemFolder("Resolution", "Resolution", "Display Resolution");
             _class.SubAction.AddSubItemFolder("Refresh", "Refresh Rate", "Screen Refresh");
             _class.SubAction.AddSubItemFolder("Volume", "Volume", "Volume");
-            _class.SubAction.AddSubItem("StayOnTop", "Stay On Top", _class.System.boolAutoSetResolution);
+            _class.SubAction.AddSubItem("StayOnTop", "Stay On Top", _class.System.IsAutoSetDisplayResolution);
 
             SelectSubItem();
             _class.Shutter.SetActive(currentRow + 1);

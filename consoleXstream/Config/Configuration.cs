@@ -31,7 +31,7 @@ namespace consoleXstream.Config
         public bool boolBlockMenuButton { get; private set; }
         public bool boolUseRumble { get; private set; }
 
-        public bool boolAutoSetResolution { get; private set; }
+        public bool IsAutoSetDisplayResolution { get; private set; }
         public bool IsAutoSetCaptureResolution { get; private set; }
         public bool EnableGcmapi { get; private set; }
         public bool DisableTitanOneRetry { get; set; }
@@ -114,7 +114,7 @@ namespace consoleXstream.Config
             if (_class.Set.Check("showfps").ToLower() == "true") boolFPS = true;
             if (_class.Set.Check("stayontop").ToLower() == "true") BoolStayOnTop = true;
             if (_class.Set.Check("checkcaptureres").ToLower() == "true") IsAutoSetCaptureResolution = true;
-            if (_class.Set.Check("AutoResolution").ToLower() == "true") boolAutoSetResolution = true;
+            if (_class.Set.Check("AutoResolution").ToLower() == "true") IsAutoSetDisplayResolution = true;
             if (_class.Set.Check("VR_Video").ToLower() == "true") IsVr = true;
             if (_class.Set.Check("UseTitanOne").Length > 0)
             {
@@ -125,7 +125,7 @@ namespace consoleXstream.Config
             _refreshRate = _class.Set.Check("RefreshRate");
             _displayResolution = _class.Set.Check("Resolution");
 
-            if (!boolAutoSetResolution && (_refreshRate.Length > 0 || _displayResolution.Length > 0))
+            if (!IsAutoSetDisplayResolution && (_refreshRate.Length > 0 || _displayResolution.Length > 0))
             {
                 if (_displayResolution.Length == 0)
                     setDisplayRefresh(_refreshRate);
@@ -358,51 +358,48 @@ namespace consoleXstream.Config
 
         public void AutoChangeRes(int height)
         {
-            /*
             var res = getResolution();
             if (res.IndexOf('x') > -1)
             {
                 var check = res.Substring(res.IndexOf("x ", StringComparison.Ordinal) + 1).Trim();
-                _class.System.Debug("VideoResolution.log", "Check: [" + check + "]" + " equals setRes: [" + height + "]");
+                _class.System.Debug("VideoSetResolution.log", "Check: [" + check + "]" + " equals setRes: [" + height + "]");
                 
                 if (check == height.ToString())
                 {
-                    _class.System.Debug("VideoResolution.log", "resolution already set");
+                    _class.System.Debug("VideoSetResolution.log", "resolution already set");
                     return;
                 }
             }
-            MessageBox.Show("Setting Resolution: " + height);
 
-            _class.System.Debug("VideoResolution.log", "AutoSetResolution: " + boolAutoSetResolution);
+            _class.System.Debug("VideoSetResolution.log", "AutoSetResolution: " + IsAutoSetDisplayResolution);
             
-            if (!boolAutoSetResolution) return;
+            if (!IsAutoSetDisplayResolution) return;
             List<string> listRes = _class.VideoResolution.ListDisplayResolutions(_graphicsCardID);
 
             var set = "";
 
-            _class.System.Debug("VideoResolution.log", "listDisplayResolution: " + listRes);
+            _class.System.Debug("VideoSetResolution.log", "listDisplayResolution: " + listRes);
             for (int count = 0; count < listRes.Count; count++)
             {
                 string title = listRes[count];
                 
                 if (title.IndexOf("x ", StringComparison.Ordinal) <= -1) continue;
-                _class.System.Debug("VideoResolution.log", "res: " + title);
+                _class.System.Debug("VideoSetResolution.log", "res: " + title);
                 title = title.Substring(title.IndexOf("x ", StringComparison.Ordinal) + 1).Trim();
-                _class.System.Debug("VideoResolution.log", "height: " + height + " equals vcheight: " + height);
+                _class.System.Debug("VideoSetResolution.log", "height: " + height + " equals vcheight: " + height);
                 
                 if (title != height.ToString()) continue;
                 set = listRes[count];
-                _class.System.Debug("VideoResolution.log", "set: " + set + " [] " + count);
+                _class.System.Debug("VideoSetResolution.log", "set: " + set + " [] " + count);
                 break;
             }
 
 
             if (String.Equals(set, getResolution(), StringComparison.CurrentCultureIgnoreCase)) return;
-            
-            _class.System.Debug("VideoResolution.log", "getResolution: " + getResolution());                    
+
+            _class.System.Debug("VideoSetResolution.log", "getResolution: " + getResolution());                    
             
             setDisplayResolution(set);
-             */
         }
 
         public void getInitialDisplay() { _initialDisplay = getResolution(); }
@@ -410,9 +407,9 @@ namespace consoleXstream.Config
 
         public void setAutoChangeDisplay()
         {
-            boolAutoSetResolution = !boolAutoSetResolution;
+            IsAutoSetDisplayResolution = !IsAutoSetDisplayResolution;
 
-            _class.Set.Add("AutoResolution", boolAutoSetResolution.ToString());
+            _class.Set.Add("AutoResolution", IsAutoSetDisplayResolution.ToString());
         }
 
         public void setStayOnTop()
