@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Windows.Forms;
 using consoleXstream.Output.TitanOne;
 using consoleXstream.Remap;
 
@@ -30,7 +32,7 @@ namespace consoleXstream.Config
         public bool boolUseRumble { get; private set; }
 
         public bool boolAutoSetResolution { get; private set; }
-        public bool boolAutoSetCaptureResolution { get; private set; }
+        public bool IsAutoSetCaptureResolution { get; private set; }
         public bool EnableGcmapi { get; private set; }
         public bool DisableTitanOneRetry { get; set; }
         
@@ -87,15 +89,14 @@ namespace consoleXstream.Config
             _class.Set.Add("Keyboard", "true");
             _class.Set.Add("HideMouse", "true");
             boolEnableMouse = true;
-            //useTitanOneAPI = true;
             BoolStayOnTop = true;
-            boolAutoSetCaptureResolution = true;
+            IsAutoSetCaptureResolution = true;
             EnableGcmapi = true;
             VrVerticalOffset = 150;
             _class.Var.IsReadData = false;
         }
 
-        public void checkUserSettings()
+        public void CheckUserSettings()
         {
 
             if (_class.Set.Check("keyboard").ToLower() == "true") boolEnableKeyboard = true;
@@ -112,12 +113,15 @@ namespace consoleXstream.Config
             if (_class.Set.Check("titanone").ToLower() == "true") boolTitanOne = true;
             if (_class.Set.Check("showfps").ToLower() == "true") boolFPS = true;
             if (_class.Set.Check("stayontop").ToLower() == "true") BoolStayOnTop = true;
-            if (_class.Set.Check("checkcaptureres").ToLower() == "true") boolAutoSetCaptureResolution = true;
+            if (_class.Set.Check("checkcaptureres").ToLower() == "true") IsAutoSetCaptureResolution = true;
             if (_class.Set.Check("AutoResolution").ToLower() == "true") boolAutoSetResolution = true;
             if (_class.Set.Check("VR_Video").ToLower() == "true") IsVr = true;
-            if (_class.Set.Check("UseTitanOne").Length > 0) 
+            if (_class.Set.Check("UseTitanOne").Length > 0)
+            {
                 TitanOneDevice = _class.Set.Check("UseTitanOne");
-          
+                _class.Main.SetTitanOne(_class.Set.Check("UseTitanOne"));
+            }
+
             _refreshRate = _class.Set.Check("RefreshRate");
             _displayResolution = _class.Set.Check("Resolution");
 
@@ -218,6 +222,31 @@ namespace consoleXstream.Config
                 _class.TitanOne.Close();
         }
 
+        public void ChangeTitanOne(bool set)
+        {
+            if (useTitanOneAPI)
+            {
+                changeTitanOne_TOAPI();
+                return;
+            }
+
+            if (boolControllerMax && boolTitanOne)      //Stop infinite loops
+                boolControllerMax = false;
+
+            if (boolControllerMax) changeControllerMax();       //Disable if running
+
+            boolTitanOne = set;
+            _class.Set.Add("TitanOne", boolTitanOne.ToString());
+
+            if (boolTitanOne)
+            {
+                _class.TitanOne.Initialize();
+
+            }
+            else
+                _class.TitanOne.Close();
+        }
+
         public void changeTitanOne_TOAPI()
         {
             _class.TitanOne.Close();
@@ -243,7 +272,7 @@ namespace consoleXstream.Config
             var set = _class.Set.Check("Crossbar").ToLower();
             _class.Set.Add("Crossbar", set == "true" ? "false" : "true");
             _class.VideoCapture.LoadUserSettings();
-            _class.VideoCapture.runGraph();
+            _class.VideoCapture.RunGraph();
         }
 
         public void ChangeAviRender()
@@ -252,7 +281,7 @@ namespace consoleXstream.Config
             _class.Set.Add("AVIRender", set == "true" ? "false" : "true");
 
             _class.VideoCapture.LoadUserSettings();
-            _class.VideoCapture.runGraph();
+            _class.VideoCapture.RunGraph();
         }
 
         public string getGraphicsCard()
@@ -327,31 +356,53 @@ namespace consoleXstream.Config
             _refreshRate = refresh;
         }
 
-        public void autoChangeRes(int height)
+        public void AutoChangeRes(int height)
         {
-            if (boolAutoSetResolution)
+            /*
+            var res = getResolution();
+            if (res.IndexOf('x') > -1)
             {
-                List<string> listRes = _class.VideoResolution.ListDisplayResolutions(_graphicsCardID);
-
-                var set = "";
-
-                for (int count = 0; count < listRes.Count; count++)
+                var check = res.Substring(res.IndexOf("x ", StringComparison.Ordinal) + 1).Trim();
+                _class.System.Debug("VideoResolution.log", "Check: [" + check + "]" + " equals setRes: [" + height + "]");
+                
+                if (check == height.ToString())
                 {
-                    string title = listRes[count];
-                    if (title.IndexOf("x ") > -1)
-                    {
-                        title = title.Substring(title.IndexOf("x ") + 1).Trim();
-                        if (title == height.ToString())
-                        {
-                            set = listRes[count];
-                            break;
-                        }
-                    }
+                    _class.System.Debug("VideoResolution.log", "resolution already set");
+                    return;
                 }
-
-                if (set.ToLower() != getResolution().ToLower())                
-                    setDisplayResolution(set);
             }
+            MessageBox.Show("Setting Resolution: " + height);
+
+            _class.System.Debug("VideoResolution.log", "AutoSetResolution: " + boolAutoSetResolution);
+            
+            if (!boolAutoSetResolution) return;
+            List<string> listRes = _class.VideoResolution.ListDisplayResolutions(_graphicsCardID);
+
+            var set = "";
+
+            _class.System.Debug("VideoResolution.log", "listDisplayResolution: " + listRes);
+            for (int count = 0; count < listRes.Count; count++)
+            {
+                string title = listRes[count];
+                
+                if (title.IndexOf("x ", StringComparison.Ordinal) <= -1) continue;
+                _class.System.Debug("VideoResolution.log", "res: " + title);
+                title = title.Substring(title.IndexOf("x ", StringComparison.Ordinal) + 1).Trim();
+                _class.System.Debug("VideoResolution.log", "height: " + height + " equals vcheight: " + height);
+                
+                if (title != height.ToString()) continue;
+                set = listRes[count];
+                _class.System.Debug("VideoResolution.log", "set: " + set + " [] " + count);
+                break;
+            }
+
+
+            if (String.Equals(set, getResolution(), StringComparison.CurrentCultureIgnoreCase)) return;
+            
+            _class.System.Debug("VideoResolution.log", "getResolution: " + getResolution());                    
+            
+            setDisplayResolution(set);
+             */
         }
 
         public void getInitialDisplay() { _initialDisplay = getResolution(); }
@@ -399,11 +450,11 @@ namespace consoleXstream.Config
             _class.Set.Add("TitanOne", "True");
         }
 
-        public void changeCaptureAutoRes()
+        public void ChangeCaptureAutoRes()
         {
-            boolAutoSetCaptureResolution = !boolAutoSetCaptureResolution;
+            IsAutoSetCaptureResolution = !IsAutoSetCaptureResolution;
 
-            _class.Set.Add("CheckCaptureRes", boolAutoSetCaptureResolution.ToString());
+            _class.Set.Add("CheckCaptureRes", IsAutoSetCaptureResolution.ToString());
         }
 
         private void setupVR()
@@ -420,7 +471,7 @@ namespace consoleXstream.Config
         {
             IsVr = !IsVr;
             _class.Main.ChangeVr();
-            _class.VideoCapture.runGraph();            
+            _class.VideoCapture.RunGraph();            
             _class.Set.Add("VR_Video", IsVr.ToString());
         }
 

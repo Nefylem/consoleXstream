@@ -7,11 +7,12 @@ namespace consoleXstream.VideoCapture.GraphBuilder
         public GraphResolution(Classes classes) { _class = classes; }
         private readonly Classes _class;
 
-        public void Set(IBaseFilter pCaptureDevice, string strCaptureVideoOut)
+        public int Set(IBaseFilter pCaptureDevice, string strCaptureVideoOut)
         {
             if (_class.Var.VideoResolutionIndex < _class.Resolution.List.Count)
             {
                 _class.Debug.Log("[3] set resolution " + _class.Resolution.List[_class.Var.VideoResolutionIndex]);
+                _class.Graph.Resolution = _class.Resolution.Type[_class.Var.VideoResolutionIndex];
                 var hr = ((IAMStreamConfig)_class.GraphPin.GetPin(pCaptureDevice, strCaptureVideoOut)).SetFormat(_class.Resolution.Type[_class.Var.VideoResolutionIndex]);
                 if (hr == 0)
                 {
@@ -27,9 +28,12 @@ namespace consoleXstream.VideoCapture.GraphBuilder
                     _class.Debug.Log("[NG] Can't set resolution " + _class.Resolution.List[_class.Var.VideoResolutionIndex]);
                     _class.Debug.Log("-> " + DsError.GetErrorText(hr));
                 }
+                return hr;
             }
             else
-                _class.Debug.Log("[0] [ERR] cant find resolution " + _class.Var.VideoResolutionIndex.ToString());
+                _class.Debug.Log("[0] [ERR] cant find resolution " + _class.Var.VideoResolutionIndex);
+
+            return -99999;
         }
 
         public void Get()
@@ -42,7 +46,7 @@ namespace consoleXstream.VideoCapture.GraphBuilder
                 if (intLineCount > 0)
                 {
                     string strLineCount = intLineCount.ToString();
-                    _class.System.autoChangeRes(intLineCount);
+                    _class.System.AutoChangeRes(intLineCount);
 
                     for (int intCount = 0; intCount < _class.Resolution.List.Count; intCount++)
                     {

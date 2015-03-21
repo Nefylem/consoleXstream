@@ -20,6 +20,9 @@ namespace consoleXstream.VideoCapture.Data
         public bool IsInitializeGraph { get; set; }
         public bool IsRestartGraph { get; set; }
         public bool IsCrossbar { get; set; }
+        public bool IsChangedDisplayResolution { get; set; }
+        public bool IsBuildingGraph { get; set; }
+        public bool IsVideoFail { get; set; }
 
         public string SetVideoPin { get; set; }
         public string SetAudioPin { get; set; }
@@ -28,7 +31,6 @@ namespace consoleXstream.VideoCapture.Data
         public string VideoDevice { get; set; }
         public string AudioDevice { get; set; }
         public string CurrentResByName { get; set; }
-
 
         public int DeviceId { get; set; }
         public int VideoResolutionIndex { get; set; }

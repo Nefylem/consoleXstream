@@ -65,14 +65,14 @@ namespace consoleXstream.Menu.SubMenuOptions
                 }
 
                 _videoCapture.SetCrossbar(strSet);
-                _videoCapture.runGraph();
+                _videoCapture.RunGraph();
             }
 
             if (strSet.Substring(0, "audio_".Length).ToLower() != "audio_")
                 return;
             _system.AddData("crossbarAudioPin", strSet);
             _videoCapture.SetCrossbar(strSet);
-            _videoCapture.runGraph();
+            _videoCapture.RunGraph();
         }
 
 

@@ -59,6 +59,35 @@ namespace consoleXstream.VideoCapture.Analyse
             else { _class.Debug.Log("No crossbar found"); }
         }
 
+        public string GetActive(string type)
+        {
+            var video = "";
+            var audio = "";
+            if (_class.Graph.XBar != null)
+            {
+                int intPinVideo;
+                int intPinAudio;
+                _class.Graph.XBar.get_IsRoutedTo(0, out intPinVideo);
+                _class.Graph.XBar.get_IsRoutedTo(1, out intPinAudio);
+                video = _class.VideoCapture.GetCrossbarOutput(intPinVideo, "Video");
+                audio = _class.VideoCapture.GetCrossbarOutput(intPinAudio, "Audio");
+            }
+
+            return type.ToLower() == "video" ? video : audio;
+        }
+
+        public int GetActiveId(string type)
+        {
+            int intPinVideo = 0;
+            int intPinAudio = 0;
+            if (_class.Graph.XBar != null)
+            {
+                _class.Graph.XBar.get_IsRoutedTo(0, out intPinVideo);
+                _class.Graph.XBar.get_IsRoutedTo(1, out intPinAudio);
+
+            }                
+            return type.ToLower() == "video" ? intPinVideo : intPinAudio;
+        }
 
     }
 }

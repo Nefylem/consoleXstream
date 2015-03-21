@@ -21,7 +21,7 @@ namespace consoleXstream.Menu
         public void CheckCommand(string command)
         {
             command = command.ToLower();
-            if (_class.Var.ShowSubSelection) { _class.SubSelectMenu.GetCommand(command); return; }
+            if (_class.Var.ShowSubSelection) { _class.SubNav.GetCommand(command); return; }
             
             if (command == "back") { if (_menuBackWait == 0) MenuBack(); else _menuBackWait = 5; }
             if (command == "up" && _moveUpWait == 0) MenuUp();
@@ -31,7 +31,7 @@ namespace consoleXstream.Menu
             if (command == "ok") { if (_moveOkWait == 0) MenuOk(); else _moveOkWait = 5; }
         }
 
-        public void MenuUp()
+        private void MenuUp()
         {
             foreach (var t in _class.Data.Buttons)
             {
@@ -158,7 +158,7 @@ namespace consoleXstream.Menu
             {
                 if (intY < t.Rect.Top || intY > t.Rect.Bottom) continue;
                 if (intX < t.Rect.Left || intX > t.Rect.Right) continue;
-                if (_class.Mouse.Hover == t.Command) return true;
+                //if (_class.Mouse.Hover == t.Command) return true;
                 if (_class.Var.IsMainMenu)
                     _class.User.Selected = t.Command;
                 else

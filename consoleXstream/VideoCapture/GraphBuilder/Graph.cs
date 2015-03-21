@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
-using System.Runtime.InteropServices.ComTypes;
 using DirectShowLib;
 
 namespace consoleXstream.VideoCapture.GraphBuilder
@@ -72,6 +70,8 @@ namespace consoleXstream.VideoCapture.GraphBuilder
                     return false;
                 }
 
+                _class.Graph.CaptureDevice = pCaptureDevice;
+
                 //Video capture in/output
                 _class.GraphPin.ListPin(pCaptureDevice);
                 strCaptureVideoOut = _class.GraphPin.AssumePinOut("Capture", "Video");
@@ -101,7 +101,8 @@ namespace consoleXstream.VideoCapture.GraphBuilder
 
                 //Set resolution
                 _class.Debug.Log("[0] Checking capture resolution");
-                if (_class.Var.VideoResolutionIndex == 0)
+
+                if (_class.Var.VideoResolutionIndex == 0 || _class.System.IsAutoSetCaptureResolution)
                     _class.GraphResolution.Get();
 
                 if (_class.Var.VideoResolutionIndex > 0)
@@ -117,7 +118,12 @@ namespace consoleXstream.VideoCapture.GraphBuilder
                 //    _class.SampleGrabber.createSampleGrabber(ref strPreviewIn, ref strPreviewOut, ref strDevice, ref strPinOut, ref pRen);
 
                 if (_class.Var.CreateSmartTee)
+                {
                     _class.SmartTee.createSmartTee(ref strPreviewIn, ref strPreviewOut, ref strDevice, ref strPinOut, ref pRen);
+
+                    _class.Graph.CaptureFeed = pRen;
+                    _class.Graph.CaptureFeedIn = strPreviewIn;                    
+                }
 
                 IBaseFilter smartTeeBase = null;
                 if (_class.System.IsVr)

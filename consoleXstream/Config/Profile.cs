@@ -55,7 +55,7 @@ namespace consoleXstream.Config
                     //TODO: set Audio device
                     _class.VideoCapture.SetCrossbar(strVideoPin);
                     _class.VideoCapture.SetCrossbar(strAudioPin);
-                    _class.VideoCapture.runGraph();
+                    _class.VideoCapture.RunGraph();
                 }
             }
         }

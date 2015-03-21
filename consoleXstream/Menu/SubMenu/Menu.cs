@@ -15,10 +15,10 @@ namespace consoleXstream.Menu.SubMenu
                 var intPinAudio = -1;
                 var intPinVideo = -1;
 
-                if (_class.System.boolInternalCapture && _class.VideoCapture._xBar != null && _class.User.Menu == "video input")
+                if (_class.User.Menu == "video input")
                 {
-                    _class.VideoCapture._xBar.get_IsRoutedTo(0, out intPinVideo);
-                    _class.VideoCapture._xBar.get_IsRoutedTo(1, out intPinAudio);
+                    intPinAudio = _class.VideoCapture.GetCrossbarId("Audio");
+                    intPinVideo = _class.VideoCapture.GetCrossbarId("Video");
                 }
 
                 var bmpShutter = new Bitmap(Properties.Resources.imgSubMenu.Width, _class.Shutter.Height);
@@ -47,7 +47,7 @@ namespace consoleXstream.Menu.SubMenu
 
                         var boolDrawCheck = false;
 
-                        if (_class.System.boolInternalCapture && _class.VideoCapture._xBar != null && _class.User.Menu == "video input")
+                        if (_class.User.Menu == "video input")
                             if (intCount == intPinVideo || intCount == intPinAudio)
                                 boolDrawCheck = true;
 

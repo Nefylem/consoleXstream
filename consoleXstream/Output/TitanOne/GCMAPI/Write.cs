@@ -14,11 +14,11 @@ namespace consoleXstream.Output.TitanOne.GCMAPI
         public void SetDevice(string device)
         {
             int index = _listDevices.IndexOf(device);
+
             if (index > -1)
             {
                 _activeDevice = index;
                 _class.System.SetTitanOneDevice(device);
-                _class.System.Debug("titanone.log", "Set #" + _activeDevice + " device " + device);
             }
             else
             {
@@ -28,8 +28,7 @@ namespace consoleXstream.Output.TitanOne.GCMAPI
                     _class.FrmMain.RetrySetTitanOne = device;
                     _class.FrmMain.RetryTimeOut = 5000;                    
                 }
-                _class.System.DisableTitanOneRetry = false;
-
+                _class.System.DisableTitanOneRetry = true;
             }
         }
 
@@ -46,6 +45,7 @@ namespace consoleXstream.Output.TitanOne.GCMAPI
 
         public void Send()
         {
+            //_class.System.Debug("TOCheck.log", _activeDevice + " / " + _listDevices[_activeDevice]);
             if (!_isConnected)
             {
                 if (_class.MDefine.GcmapiConnect != null)

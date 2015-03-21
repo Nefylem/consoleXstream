@@ -36,6 +36,7 @@ namespace consoleXstream.Menu
         public VideoCapture.VideoCapture VideoCapture { get; set; }
         public Display Display { get; set; }
         public SubMenuOptions.Remap SubRemap { get; set; }
+        public SubSelectMenu.Navigation SubNav { get; set; }
         public Remapping Remap { get; set; }
         public CaptureDevice VideoDevice { get; set; }
         public DrawGraph DrawGui { get; set; }
@@ -60,6 +61,7 @@ namespace consoleXstream.Menu
             
             SubSelectMenu = new SubSelectMenu.Menu(this);
             SubSelectVar = new SubSelectMenu.Var();
+            SubNav = new SubSelectMenu.Navigation(this);
 
             Var = new Variables();
             Data = new Interaction();

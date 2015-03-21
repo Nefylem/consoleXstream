@@ -14,5 +14,23 @@ namespace consoleXstream.VideoCapture.Data
 
         public IVideoWindow VideoWindow { get; set; }
         public IVideoWindow VideoWindowVr { get; set; }
+
+        public IBaseFilter CaptureDevice { get; set; }
+        public IBaseFilter CaptureFeed { get; set; }
+        public string CaptureFeedIn { get; set; }
+        public AMMediaType Resolution { get; set; }
+
+        public void ClearGraph()
+        {
+            CaptureGraph = null;
+            MediaControl = null;
+            MediaEvent = null;
+            IamAvd = null;
+            VideoDef = null;
+            VideoPreview = null;
+            XBar = null;
+            VideoWindow = null;
+            VideoWindowVr = null;
+        }
     }
 }

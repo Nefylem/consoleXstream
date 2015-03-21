@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using consoleXstream.Menu.Data;
 using consoleXstream.Output;
 
@@ -184,7 +185,7 @@ namespace consoleXstream.Menu.SubMenu
             if (command == "resolution") ListCaptureResolution();
             if (command == "crossbar") _class.System.ChangeCrossbar();
             if (command == "avirender") _class.System.ChangeAviRender();
-            if (command == "checkcaptureres") _class.System.changeCaptureAutoRes();
+            if (command == "checkcaptureres") _class.System.ChangeCaptureAutoRes();
 
             _class.Action.CheckDisplaySettings();
         }
@@ -204,16 +205,23 @@ namespace consoleXstream.Menu.SubMenu
 
         private void ListAllTitanOne()
         {
+            var a = _class.Form1.ListToDevices.Count;
+            var b = _class.System.TitanOneDevice;
+
+            if (_class.Form1.ListToDevices == null)
+                _class.Form1.ListToDevices = new List<string>();
+
             if (_class.Form1.ListToDevices.Count > 0)
             {
-                _class.Var.ShowSubSelection = true;
                 _class.SubSelectVar.TitanSerial = _class.System.TitanOneDevice;
                 _class.SubSelectVar.ListData = _class.Form1.ListToDevices;
                 _class.Form1.SetTitanOneMode("Multi");
+
+                _class.SubNav.SetMenuOkWait();
+                _class.Var.ShowSubSelection = true;
             }
             else
             {
-                _class.Var.ShowSubSelection = true;
                 _class.SubSelectVar.DisplayTitle = "Finding Devices";
                 _class.SubSelectVar.DisplayMessage = "Please wait";
 
@@ -221,7 +229,13 @@ namespace consoleXstream.Menu.SubMenu
                 _class.SubSelectVar.TitanSerial = _class.System.TitanOneDevice;
 
                 _class.Form1.SetTitanOneMode("Multi");
-                _class.Form1.ListTitanOneDevices();                
+                _class.Form1.ListTitanOneDevices();  
+                
+                if (_class.Form1.GetTitanOne().Length > 0)
+                    _class.Data.Checked.Add("TitanOne");
+
+                _class.SubNav.SetMenuOkWait();
+                _class.Var.ShowSubSelection = true;
             }
         }
 

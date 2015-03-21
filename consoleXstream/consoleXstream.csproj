@@ -85,6 +85,7 @@
     <Compile Include="Menu\SubMenu\Menu.cs" />
     <Compile Include="Menu\SubMenu\Shutter.cs" />
     <Compile Include="Menu\SubSelectMenu\Menu.cs" />
+    <Compile Include="Menu\SubSelectMenu\Navigation.cs" />
     <Compile Include="Menu\SubSelectMenu\Var.cs" />
     <Compile Include="Output\ControllerMax.cs" />
     <Compile Include="Output\Gamepad.cs" />

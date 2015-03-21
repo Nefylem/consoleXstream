@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace consoleXstream.Output.TitanOne.GCMAPI
 {
@@ -15,11 +11,12 @@ namespace consoleXstream.Output.TitanOne.GCMAPI
 
         private int _timeOut = 5000;
         private int _deviceCount;
+        private int _deviceLoaded;
 
         public void List()
         {
-            _class.System.Debug("TitanOne.log", "listing devices");
-            _class.System.ChangeTitanOne();
+            _class.System.Debug("listAll.log", "MWrite.listing devices");
+            _class.System.ChangeTitanOne(true);
 
             _class.Write.SetApiMethod(TitanOne.Define.ApiMethod.Multi);
             _class.Write.SetToInterface(TitanOne.Define.DevPid.TitanOne);
@@ -27,11 +24,21 @@ namespace consoleXstream.Output.TitanOne.GCMAPI
             if (_class.MDefine.GcmapiConnect == null)
                 _class.MInit.Open();
 
-            _class.System.Debug("TitanOne.Log", "Load: " + _class.MDefine.GcmapiLoad().ToString());
-            _class.System.Debug("TitanOne.Log", "Device: " + _class.Write.DevId.ToString());
+            if (_deviceLoaded == 0)
+                _deviceLoaded = _class.MDefine.GcmapiLoad();
+
+            _class.System.Debug("listAll.log", "Load: " + _class.MDefine.GcmapiLoad());
+            _class.System.Debug("listAll.log", "Device: " + _class.Write.DevId);
 
             if (_class.MDefine.GcmapiConnect != null)
-                _deviceCount = _class.MDefine.GcmapiConnect((ushort)_class.Write.DevId);
+            {
+                _class.System.Debug("listAll.log", "GcmapiConnect " + _class.Write.DevId);
+                _deviceCount = _class.MDefine.GcmapiConnect((ushort) _class.Write.DevId);
+            }
+            else
+            {
+                _class.System.Debug("listAll.log", "gcmapiconnect == null");
+            }
         }
 
         public int Check()
@@ -48,7 +55,10 @@ namespace consoleXstream.Output.TitanOne.GCMAPI
                 return -1;
 
             if (result != 0)
+            {
+                _class.System.Debug("listAll.log", "result : " + result + " now reading serials");
                 ReadSerials();
+            }
 
             return result;
         }
@@ -69,8 +79,17 @@ namespace consoleXstream.Output.TitanOne.GCMAPI
 
                 //Load config on each of these devices
                 _class.MWrite.AddDevice(disp);
+                
+                if (_class.FrmMain.ListToDevices == null)
+                    _class.FrmMain.ListToDevices = new List<string>();
+
                 _class.FrmMain.ListToDevices.Add(disp);
             }
+
+            if (_class.FrmMain.RetrySetTitanOne == null) return;
+            if (_class.FrmMain.RetrySetTitanOne.Length <= 0) return;
+            _class.MWrite.SetDevice(_class.FrmMain.RetrySetTitanOne);
+            _class.FrmMain.RetrySetTitanOne = "";
         }
     }
 }

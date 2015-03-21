@@ -23,14 +23,15 @@ namespace consoleXstream.Output.TitanOne
         public void SetToInterface(Define.DevPid devId)
         {
             DevId = devId;
-            _class.System.Debug("titanOne.log", "[0] using " + DevId);
+            _class.System.Debug("titanOne.log", "[0] using DevID: " + DevId);
             _class.System.Debug("titanOne.log", "");
         }
 
         public void SetApiMethod(Define.ApiMethod setType)
         {
+            setType = Define.ApiMethod.Multi; 
             ApiMethod = setType;
-            _class.System.Debug("titanOne.log", "[0] using " + setType + " API");
+            _class.System.Debug("titanOne.log", "[0] using API: " + setType);
             _class.System.Debug("titanOne.log", "");
         }
 
@@ -101,6 +102,7 @@ namespace consoleXstream.Output.TitanOne
         public void ReloadGcmapi() { _class.MInit.Close(); }
         public void ListDevices() { _class.MDevices.List(); }
         public int CheckDevices() { return _class.MDevices.Check(); }
+
         public void SetTitanOneDevice(string serial) { _class.MWrite.SetDevice(serial); }
         public string GetTitanOneDevice() { return _class.MWrite.ReturnActiveDevice();  }
     }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Windows.Forms;
 
 namespace consoleXstream.Output.TitanOne
 {
@@ -11,10 +12,25 @@ namespace consoleXstream.Output.TitanOne
 
         public void Open()
         {
+            _class.Write.ApiMethod = Define.ApiMethod.Multi;
+            _class.MInit.Open();
+            _class.MDefine.GcmapiLoad();
+            /*
             if (_class.Write.ApiMethod == Define.ApiMethod.Multi)
+            {
+                _class.System.Debug("listAll.log", "[0] Opening TitanOne api multi");
+                //if (_class.MDefine.GcmapiLoad != null) return;
                 _class.MInit.Open();
+                if (_class.MDefine.GcmapiLoad != null) _class.MDefine.GcmapiLoad();
+            }
             else
+            {
+                _class.System.Debug("listAll.log", "[0] Opening TitanOne api single");
+                //if (_class.Define.Load != null) return;
                 OpenSingle();
+                if (_class.Define.Load != null) _class.Define.Load();
+            }
+             */
         }
 
         private void OpenSingle()

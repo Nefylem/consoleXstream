@@ -19,7 +19,7 @@
                     continue;
 
                 _class.VideoCapture.SetVideoResolution(count);
-                _class.VideoCapture.runGraph();
+                _class.VideoCapture.RunGraph();
 
                 _class.System.AddData("CaptureResolution", resolution);
 

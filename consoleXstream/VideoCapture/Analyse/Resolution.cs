@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using System.Runtime.Remoting.Messaging;
 using DirectShowLib;
 
 namespace consoleXstream.VideoCapture.Analyse
@@ -10,6 +11,11 @@ namespace consoleXstream.VideoCapture.Analyse
         public Resolution(Classes inClass) { _class = inClass; }
         private readonly Classes _class;
 
+        private string _checkCaptureRes = "";
+        private string _checkCaptureHeight;
+        private int _rerunGraphCount;
+        private int _rerunWait;
+        private bool donttryagain;
         public List<string> List;
         public List<AMMediaType> Type;
         public int Current;
@@ -25,11 +31,13 @@ namespace consoleXstream.VideoCapture.Analyse
                 Type = new List<AMMediaType> {null};
 
                 var dev = DsDevice.GetDevicesOfCat(FilterCategory.VideoInputDevice)[_class.Capture.CurrentDevice];
+                // ReSharper disable once SuspiciousTypeConversion.Global
                 var filterGraph = (IFilterGraph2) new FilterGraph();
                 IBaseFilter baseDev;
 
                 filterGraph.AddSourceFilterForMoniker(dev.Mon, null, dev.Name, out baseDev);
                 var pin = DsFindPin.ByCategory(baseDev, PinCategory.Capture, 0);
+                // ReSharper disable once SuspiciousTypeConversion.Global
                 var streamConfig = (IAMStreamConfig) pin;
                 int iC, iS;
                 streamConfig.GetNumberOfCapabilities(out iC, out iS);
@@ -62,50 +70,57 @@ namespace consoleXstream.VideoCapture.Analyse
 
         public void Check()
         {
+            if (_class.System.IsAutoSetCaptureResolution)
+                checkVideoResolution();
+        }
+
+        private void checkVideoResolution()
+        {
             /*
             int intVideoWidth = 0;
             int intVideoHeight = 0;
             int intLineCount = 0;
 
-            if (_class.Graph.VideoDef != null)
-                _class.Graph.VideoDef.GetVideoSize(out intVideoWidth, out intVideoHeight);
+            if (_class.Var.CurrentResByName != _checkCaptureRes)
+            {
+                _class.System.Debug("VideoResolution.Log", "Comparing: " + _class.Var.CurrentResByName + " to " + intLineCount);
+                _checkCaptureRes = _class.Var.CurrentResByName;
+                if (_checkCaptureRes.IndexOf('x') > -1)
+                {
+                    _checkCaptureHeight = _checkCaptureRes.Substring(_checkCaptureRes.IndexOf('x') + 1).Trim();
+                    if (_checkCaptureHeight.IndexOf(" ", StringComparison.Ordinal) > -1)
+                        _checkCaptureHeight = _checkCaptureHeight.Substring(0, _checkCaptureHeight.IndexOf(" ", StringComparison.Ordinal));
+                }
+            }
 
             if (_class.Graph.IamAvd != null)
                 _class.Graph.IamAvd.get_NumberOfLines(out intLineCount);
 
-            int intGetHeight = 0;
-            int intGetWidth = 0;
 
-
-            //May need to point directly to imgDisplay
-            if (_class.Graph.IVideoWindow != null)
-            {
-                _class.Graph.IVideoWindow.get_Height(out intGetHeight);
-                _class.Graph.IVideoWindow.get_Width(out intGetWidth);
-            }
-
+            if (intLineCount == 0) return;
+            /*
             if (_IsChangedDisplayResolution)
             {
                 _IsChangedDisplayResolution = false;
                 runGraph();
             }
-
+            *//*
             if (intLineCount > 0)
             {
-                _frmMain.intLineSample = intLineCount;
-                //frmMain.Text = intLineCount.ToString();
+                _class.FrmMain.intLineSample = intLineCount;
+                //_class.FrmMain.Text = intLineCount.ToString();
 
-                if (_boolBuildingGraph == false)
+                if (_class.Var.IsBuildingGraph == false)
                 {
                     if (!_boolRerunGraph)
                     {
-                        if (_boolInitializeGraph == true)           //Do another swap if running on PS3. Counters freezing display
+                        if (_class.Var.IsInitializeGraph == true)           //Do another swap if running on PS3. Counters freezing display
                         {
-                            _boolInitializeGraph = false;
+                            _class.Var.IsInitializeGraph = false;
                             if (intLineCount == 720)
                             {
                                 _intVideoResolution = 0;
-                                _class.Debug.Log("[1] Change res 720");
+                                debugVideo("[1] Change res 720");
                                 runGraph();
                             }
                         }
@@ -114,13 +129,13 @@ namespace consoleXstream.VideoCapture.Analyse
                         if (intLineCount != intVideoHeight)
                         {
                             _boolBuildingGraph = true;
-                            if (intLineCount == 720) { _boolRerunGraph = true; _class.Debug.Log("[0] &FindMe& Rerun graph * 720p"); }
+                            if (intLineCount == 720) { _boolRerunGraph = true; debugVideo("[0] &FindMe& Rerun graph * 720p"); }
                             _intVideoResolution = 0;
                             if (_boolVideoFail == false)
                             {
-                                _class.Debug.Log("[1] Change Res : " + intLineCount.ToString());
+                                debugVideo("[1] Change Res : " + intLineCount.ToString());
 
-                                _class.System.autoChangeRes(intLineCount);
+                                system.autoChangeRes(intLineCount);
 
                                 runGraph();
                             }
@@ -131,14 +146,82 @@ namespace consoleXstream.VideoCapture.Analyse
                         //Forces a second display change if moving to 720 (mainly PS3 needs this)
                         if (intLineCount == 720)
                         {
-                            _class.Debug.Log("[1] Rerun Graph : 720");
+                            debugVideo("[1] Rerun Graph : 720");
                             _boolRerunGraph = false;
                             runGraph();
                         }
                     }
                 }
             }
-             */
+               */
+        }
+
+        private void CheckCaptureResolution()
+        {
+            if (_class.Var.IsBuildingGraph) return;
+
+            var intLineCount = 0;
+
+            if (_class.Graph.IamAvd != null)
+                _class.Graph.IamAvd.get_NumberOfLines(out intLineCount);
+
+            if (intLineCount == 0) return;
+
+            if (_class.Var.CurrentResByName != _checkCaptureRes)
+            {
+                _class.System.Debug("VideoResolution.Log", "Comparing: " + _class.Var.CurrentResByName + " to " + intLineCount);
+                _checkCaptureRes = _class.Var.CurrentResByName;
+                if (_checkCaptureRes.IndexOf('x') > -1)
+                {
+                    _checkCaptureHeight = _checkCaptureRes.Substring(_checkCaptureRes.IndexOf('x') + 1).Trim();
+                    if (_checkCaptureHeight.IndexOf(" ", StringComparison.Ordinal) > -1)
+                        _checkCaptureHeight = _checkCaptureHeight.Substring(0, _checkCaptureHeight.IndexOf(" ", StringComparison.Ordinal));
+                }
+            }
+
+            if (_checkCaptureHeight == intLineCount.ToString() && _rerunGraphCount == 0) return;
+
+
+            //Forces a second graph build
+            if (_rerunGraphCount > 0)
+            {
+                if (_rerunWait > 0)
+                {
+                    _rerunWait--;
+                    return;
+                }
+                else
+                {
+                    _rerunGraphCount--;
+                    _class.System.Debug("VideoResolution.log", "Rerun capture resolution: " + _rerunGraphCount);
+                    
+                    _class.Graph.MediaControl.Stop();
+                    _class.Graph.ClearGraph();
+                    _class.VideoCapture.RunGraph();
+                    return;                    
+                }
+            }
+
+            _class.System.Debug("VideoResolution.log", "Capture Resolution Mismatch");
+            _class.System.Debug("VideoResolution.log", "Current Output: " + intLineCount);
+            _class.System.Debug("VideoResolution.log", "Expected Output: " + _checkCaptureHeight);
+            if (intLineCount == 720)
+            {
+                _class.System.Debug("VideoResolution.log", "Setting 720p refresh mode");
+                _rerunWait = 50;
+                _rerunGraphCount = 1;
+            }
+            else
+            {
+                _rerunWait = 0;
+                _rerunGraphCount = 0;                
+            }
+            _class.System.Debug("VideoResolution.log", "Running graph");
+            //donttryagain = true;
+            //_class.VideoCapture.ChangeResolution();
+            _class.Graph.MediaControl.Stop();
+            _class.Graph.ClearGraph();
+            _class.VideoCapture.RunGraph();
         }
 
         public void ForceRebuildAfterResolution()
@@ -147,6 +230,7 @@ namespace consoleXstream.VideoCapture.Analyse
         }
 
 
+        // ReSharper disable once FunctionComplexityOverflow
         private static string CheckMediaType(AMMediaType media)
         {
             if (media.subType == MediaSubType.A2B10G10R10) { return "A2B10G10R10"; }

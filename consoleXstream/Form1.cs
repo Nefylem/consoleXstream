@@ -65,6 +65,8 @@ namespace consoleXstream
         public int RetryTimeOut;
 
         public List<string> ListToDevices;
+        public List<string> ListBackupToDevices;
+ 
         private int TitanOneListRefresh;
         private bool TitanOneListRefreshFail;
 
@@ -149,6 +151,10 @@ namespace consoleXstream
             if (File.Exists("menu.log")) File.Delete("menu.log"); 
             if (File.Exists("titanOne.log")) File.Delete("titanOne.log"); 
             if (File.Exists("controllerMax.log")) File.Delete("controllerMax.log");
+            if (File.Exists("connectTo.log")) File.Delete("connectTo.log");
+            if (File.Exists("listAll.log")) File.Delete("listAll.log");
+            if (File.Exists("VideoResolution.log")) File.Delete("VideoResolution.log");
+            if (File.Exists("video.log")) File.Delete("video.log");
         }
         //Copies files to test environment 
         private void CheckDevelopment()
@@ -338,17 +344,23 @@ namespace consoleXstream
             tmrSystem.Enabled = true;
         }
 
-        private void InitializeTitanOne()
+        public void InitializeTitanOne()
         {
-            ListToDevices = new List<string>();
+            if (ListToDevices == null)
+                ListToDevices = new List<string>();
 
             _system.Debug("[3] Configure TitanOne API");
             _titanOne.SetToInterface(Define.DevPid.TitanOne);
-            if (_system.TitanOneDevice.Length > 0)
+            
+            if (_system.TitanOneDevice != null)
             {
-                _titanOne.SetApiMethod(Define.ApiMethod.Multi);
-                _titanOne.SetTitanOneDevice(_system.TitanOneDevice);
+                if (_system.TitanOneDevice.Length > 0)
+                {
+                    _titanOne.SetApiMethod(Define.ApiMethod.Multi);
+                    _titanOne.SetTitanOneDevice(_system.TitanOneDevice);
+                }
             }
+
             _titanOne.Initialize();
         }
 
@@ -370,14 +382,14 @@ namespace consoleXstream
             _keymap.LoadKeyboardInputs();
 
             _system.LoadSetup();
-            _system.checkUserSettings();
+            _system.CheckUserSettings();
         }
 
         //Sends the settings into the video capture class. User settings already sent to class
         private void configureVideoCapture()
         {
             _videoCapture.InitialzeCapture();            
-            _videoCapture.runGraph();
+            _videoCapture.RunGraph();
         }
 
         public int Clamp(int value, int min, int max)
@@ -387,7 +399,7 @@ namespace consoleXstream
 
         private void CheckMouse()
         {
-
+            /*
             label4.Text = Cursor.Position.ToString();
             const int intModifierX = -35;
             const int intModifierY = -25;
@@ -411,6 +423,7 @@ namespace consoleXstream
 
             if (Cursor.Position.X > Screen.PrimaryScreen.Bounds.Width - _MouseScreenBounds)
                 CenterMouseX();
+             */
         }
 
         private void CenterMouseY()
@@ -611,19 +624,34 @@ namespace consoleXstream
 
         public void ListTitanOneDevices()
         {
+            ListBackupToDevices = new List<string>();
+
+            foreach (var item in ListToDevices)
+            {
+                ListBackupToDevices.Add(item);
+            }
+
+            _system.Debug("listAll.log", "clearList");
+
             ListToDevices = new List<string>();
+
+            _system.Debug("listAll.log", "check controllerMax");
 
             if (_controllerMax._gcapi_Unload != null)
                 _controllerMax.closeControllerMaxInterface();
 
+
+            _system.Debug("listAll.log", "setup update true");
             IsUpdatingTitanOneList = true;
-            TitanOneListRefresh = 100;
+            TitanOneListRefresh = 10;
             TitanOneListRefreshFail = false;
+            _system.Debug("listAll.log", "list devices");
             _titanOne.ListDevices(); 
         }
 
         private void CheckTitanOneConnectionList()
         {
+            _system.Debug("listAll.log", "_titanOne.CheckDevices()");
             var result = _titanOne.CheckDevices();
             if (result == 0)
             {
@@ -644,7 +672,13 @@ namespace consoleXstream
                         IsUpdatingTitanOneList = false;
                         TitanOneListRefresh = 0;
                         TitanOneListRefreshFail = false;
-                        _system.Debug("TitanOne.log", "Cant find TitanOnes, giving up");
+                        _system.Debug("listAll.log", "Cant find TitanOnes, passing from backup list");
+                        ListToDevices.Clear();
+
+                        foreach (var item in ListBackupToDevices) { ListToDevices.Add(item); }
+                        IsUpdatingTitanOneList = false;
+                        formMenu.PassToSubSelect(ListToDevices);
+
                     }
                 }
                 return;
@@ -652,6 +686,7 @@ namespace consoleXstream
 
             if (result > 0)
             {
+                _system.Debug("listAll.log", "found " + result + " results");
                 IsUpdatingTitanOneList = false;
                 formMenu.PassToSubSelect(ListToDevices);
             }
@@ -686,7 +721,12 @@ namespace consoleXstream
             }
         }
 
-        public void SetTitanOne(string serial) { _titanOne.SetTitanOneDevice(serial); _system.AddData("ControllerMax", "False"); }
+        public void SetTitanOne(string serial)
+        {
+            _titanOne.SetTitanOneDevice(serial); 
+            _system.AddData("ControllerMax", "False");
+            _system.AddData("TitanOne", "True");
+        }
         public string GetTitanOne() { return _titanOne.GetTitanOneDevice(); }
 
         public void SetTitanOneMode(string type)
@@ -697,6 +737,12 @@ namespace consoleXstream
         public void InitControllerMax()
         {
             _controllerMax.initControllerMax();
+        }
+
+        public void FocusWindow()
+        {
+            imgDisplay.BringToFront();
+            imgDisplay.Focus();
         }
     }
 }

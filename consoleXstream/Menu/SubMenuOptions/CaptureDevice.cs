@@ -53,7 +53,7 @@ namespace consoleXstream.Menu.SubMenuOptions
 
             _class.System.AddData("VideoCaptureDevice", strSet);
             _class.VideoCapture.SetVideoCaptureDevice(strSet);
-            _class.VideoCapture.runGraph();
+            _class.VideoCapture.RunGraph();
             _class.Data.Checked.Clear();
             _class.Data.Checked.Add(_class.VideoCapture.GetVideoDevice());
         }

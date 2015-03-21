@@ -8,13 +8,26 @@ namespace consoleXstream.Menu.SubSelectMenu
         public Menu(Classes classes) { _class = classes; }
         private readonly Classes _class;
 
-        private int _moveLeftWait;
-        private int _moveRightWait;
-        private int _menuOkWait;
+
+        private bool TryRetrieveSerial;
 
         public void Draw()
         {
-            CheckDelays();
+            if (!TryRetrieveSerial)
+            {
+                if (_class.SubSelectVar.TitanSerial != null)
+                {
+                    if (_class.SubSelectVar.TitanSerial.Length == 0)
+                    {
+                        TryRetrieveSerial = true;
+                        _class.SubSelectVar.TitanSerial = _class.Form1.GetTitanOne();
+                    }
+                }
+            }
+            _class.SubNav.CheckDelays();
+
+            if (_class.Var.CellWidth == 0) _class.Var.CellWidth = Properties.Resources.imgTileLow.Width;
+            if (_class.Var.CellHeight == 0) _class.Var.CellHeight = Properties.Resources.imgTileLow.Height;
 
             var bmpMenu = new Bitmap(Properties.Resources.imgSubMenu.Width, Properties.Resources.imgSubMenu.Height);
             var bmpSerial = new Bitmap(Properties.Resources.imgSubMenu.Width, Properties.Resources.imgSubMenu.Height);
@@ -22,6 +35,9 @@ namespace consoleXstream.Menu.SubSelectMenu
             _class.DrawGui.drawImage(bmpMenu, 0, 0, Properties.Resources.imgSubMenu);
             _class.DrawGui.drawImage(bmpSerial, 0, 0, Properties.Resources.imgSubMenu);
 
+            _class.DrawGui.drawText(bmpMenu, 0, 0, ">" + _class.SubSelectVar.TitanSerial);
+            _class.DrawGui.drawText(bmpMenu, 0, 15, ">" + _class.System.TitanOneDevice);
+            
             var intX = 0;
             if (_class.SubSelectVar.ListData.Count < 4)
             {
@@ -60,66 +76,6 @@ namespace consoleXstream.Menu.SubSelectMenu
 
             _class.DrawGui.drawImage(new Rectangle(8, 275, Properties.Resources.imgSubMenu.Width + 6, Properties.Resources.imgSubMenu.Height), bmpSerial);
             _class.DrawGui.drawImage(new Rectangle(8, 250, Properties.Resources.imgSubMenu.Width + 6, Properties.Resources.imgSubMenu.Height), bmpMenu);
-        }
-
-        public void GetCommand(string command)
-        {
-            if (command == "left" && _moveRightWait == 0) MenuLeft();
-            if (command == "right" && _moveRightWait == 0) MenuRight();
-            if (command == "ok" && _menuOkWait == 0) MenuOk();
-            if (command == "back") _class.Var.ShowSubSelection = false;
-        }
-
-        public void MenuLeft()
-        {
-            _moveLeftWait = SetMoveWait();
-            if (_class.SubSelectVar.Selected > 0)
-                _class.SubSelectVar.Selected--;
-        }
-
-        public void MenuRight()
-        {
-            _moveRightWait = SetMoveWait();
-            if (_class.SubSelectVar.Selected < _class.SubSelectVar.ListData.Count - 1)
-                _class.SubSelectVar.Selected++;
-        }
-
-        public void MenuOk()
-        {
-            _menuOkWait = SetMoveWait();
-
-            if (_class.SubSelectVar.Selected < _class.SubSelectVar.ListData.Count)
-            {
-                _class.SubSelectVar.TitanSerial = _class.SubSelectVar.ListData[_class.SubSelectVar.Selected];
-                
-                _class.Form1.SetTitanOne(_class.SubSelectVar.ListData[_class.SubSelectVar.Selected]);
-                _class.System.TitanOneDevice = _class.SubSelectVar.ListData[_class.SubSelectVar.Selected];
-                _class.System.boolControllerMax = false;
-                _class.System.boolTitanOne = true;
-
-                ChangeMenuSelections();
-            }
-        }
-
-        private void ChangeMenuSelections()
-        {
-            _class.Data.Checked.Clear();
-            _class.Data.Checked.Add("TitanOne");
-        }
-
-        public int SetMoveWait()
-        {
-            if (_class.Fps.Frames > 20)
-                return _class.Fps.Frames / 6;
-            else
-                return 3;
-        }
-
-        public void CheckDelays()
-        {
-            if (_moveRightWait > 0) _moveRightWait--;
-            if (_moveLeftWait > 0) _moveLeftWait--;
-            if (_menuOkWait > 0) _menuOkWait--;
         }
     }
 }

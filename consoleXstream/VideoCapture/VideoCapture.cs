@@ -1,20 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using DirectShowLib;
-using System.Runtime.InteropServices;
-using System.Runtime.InteropServices.ComTypes;
 using System.Drawing;
-using System.Linq;
+using System.Windows.Forms;
 using consoleXstream.Config;
-using consoleXstream.VideoCapture.Data;
-using consoleXstream.VideoCapture.Sampling;
+using consoleXstream.Menu.SubMenuOptions;
 
 namespace consoleXstream.VideoCapture
 {
     public class VideoCapture
     {
         private readonly Classes _class;
-
 
         public bool boolActiveVideo { get; private set; }
 
@@ -25,19 +21,8 @@ namespace consoleXstream.VideoCapture
             set { _class.Graph.MediaEvent = value; }
         }
 
-        public IAMCrossbar _xBar { get; set; }
-
-
-
         private int _intRestartGraph = 0;
-
         
-
-        private bool _boolBuildingGraph;
-        private bool _boolVideoFail;
-        
-        private bool _IsChangedDisplayResolution;
-
         public VideoCapture(Form1 mainForm, Configuration System)
         {
             _class = new Classes(this, mainForm, System);
@@ -57,34 +42,28 @@ namespace consoleXstream.VideoCapture
             _class.Resolution.Find();
 
             _class.Var.IsInitializeGraph = true;
-            //_class.Var.IsRestartGraph = true;
+            _class.Var.IsRestartGraph = true;
         }
 
         public void LoadUserSettings() { _class.User.LoadSettings(); }
 
-        #region DirectShow Graph
-        public void runGraph()
+        public void RunGraph()
         {
             _class.Debug.Log("[0] Build capture graph");
             if (_class.Capture.CurrentDevice > -1 && _class.Capture.CurrentDevice < _class.Var.VideoCaptureDevice.Count)
             {
                 int hr = 0;
 
-                _boolBuildingGraph = true;
+                _class.Var.IsBuildingGraph = true;
                 _class.Debug.Log("Using : " + _class.Var.VideoCaptureDevice[_class.Capture.CurrentDevice]);
                 _class.Debug.Log("");
 
                 if (_class.Graph.MediaControl != null) _class.Graph.MediaControl.StopWhenReady();
                 if (_class.Resolution.Type.Count == 0) { _class.Resolution.Find();  }
 
-                _class.Graph.CaptureGraph = null;
-                _class.Graph.MediaControl = null;
-                _class.Graph.MediaEvent = null;
-                _class.Graph.VideoWindow = null;
-                _class.Graph.VideoDef = null;
-                _class.Graph.XBar = null;
+                _class.Graph.ClearGraph();
 
-                _class.Graph.CaptureGraph = (IGraphBuilder)new FilterGraph();
+                _class.Graph.CaptureGraph = new FilterGraph() as IGraphBuilder;
 
                 if (_class.GraphBuild.BuildGraph())
                 {
@@ -93,19 +72,18 @@ namespace consoleXstream.VideoCapture
                     else
                         setupPreviewWindow();
 
-                    _class.Graph.MediaControl = (IMediaControl)_class.Graph.CaptureGraph;
-                    _class.Graph.MediaEvent = (IMediaEvent)_class.Graph.CaptureGraph;
+                    _class.Graph.MediaControl = _class.Graph.CaptureGraph as IMediaControl;
+                    _class.Graph.MediaEvent = _class.Graph.CaptureGraph as IMediaEvent;
 
                     _class.Debug.Log("");
                     _class.Debug.Log("Run compiled graph");
                     hr = _class.Graph.MediaControl.Run();
                     _class.Debug.Log("[2] " + DsError.GetErrorText(hr));
 
-                    //TODO: Check for major / minor errors before declaring video run
                     boolActiveVideo = true;
                 }
 
-                _boolBuildingGraph = false;
+                _class.Var.IsBuildingGraph = false;
 
                 if (_class.Graph.XBar != null)
                     if (_class.Var.CrossbarInput.Count == 0)
@@ -118,7 +96,111 @@ namespace consoleXstream.VideoCapture
                 _class.Debug.Log("[ERR] Unknown capture device");
         }
 
-        //TODO: add to main declaration list 
+        public void ChangeResolution()
+        {
+            /*
+            int hr = 0;
+            _class.Graph.MediaControl.Stop();
+            _class.GraphPin.ListPin(_class.Graph.CaptureDevice);
+            var captureVideoOut = _class.GraphPin.AssumePinOut("Capture", "Video");
+            var videoOut = _class.GraphPin.GetPin(_class.Graph.CaptureDevice, captureVideoOut);
+            if (videoOut == null)
+            {
+                _class.Debug.Log("[0] [WARN] Cant find video Capture output to change resolution");
+                return;
+            }
+
+            IPin videoConnect;
+            videoOut.ConnectedTo(out videoConnect);
+            if (videoConnect == null) return;
+
+            //videoOut.Disconnect();
+            //videoConnect.Disconnect();
+
+            if (_class.Var.VideoResolutionIndex == 0 || _class.System.IsAutoSetCaptureResolution)
+                _class.GraphResolution.Get();
+
+            if (_class.Var.VideoResolutionIndex > 0)
+            {
+                hr = _class.GraphResolution.Set(_class.Graph.CaptureDevice, captureVideoOut);
+                MessageBox.Show(DsError.GetErrorText(hr));
+                //hr = (IAMStreamConfig) videoConnect.SetFormat(_class.Graph.Resolution);
+                //hr = ((IAMStreamConfig)_class.GraphPin.GetPin(_class.Graph.CaptureFeed, _class.Graph.CaptureFeedIn)).SetFormat(_class.Resolution.Type[_class.Var.VideoResolutionIndex]);
+                //MessageBox.Show(DsError.GetErrorText(hr));
+                //var inPin = videoConnect as IAMStreamConfig;
+                //hr = inPin.SetFormat(_class.Graph.Resolution);
+                //MessageBox.Show(DsError.GetErrorText(hr));
+                //hr = videoConnect as (IAMStreamConfig).SetFormat(_class.Resolution.Type[_class.Var.VideoResolutionIndex]);
+                //hr = ((IAMStreamConfig)_class.GraphPin.GetPin(videoConnect).SetFormat(_class.Resolution.Type[_class.Var.VideoResolutionIndex]);
+            }
+            else
+                _class.Debug.Log("[0] [WARN] Cant find capture resolution - no input or unknown resolution type");
+
+            _class.FrmMain.Text = "set " + _class.Var.CurrentResByName;
+
+            hr = videoOut.Connect(videoConnect, _class.Graph.Resolution);
+            _class.FrmMain.Text = DsError.GetErrorText(hr);
+
+            //_class.FrmMain.Text = DsError.GetErrorText(hr);
+            hr = _class.Graph.MediaControl.Run();
+
+            /*
+            if (_class.Var.VideoResolutionIndex == 0 || _class.System.IsAutoSetCaptureResolution)
+                _class.GraphResolution.Get();
+
+            if (_class.Var.VideoResolutionIndex > 0)
+            {
+                hr = _class.GraphResolution.Set(_class.Graph.CaptureDevice, captureVideoOut);
+            }
+            else
+                _class.Debug.Log("[0] [WARN] Cant find capture resolution - no input or unknown resolution type");
+
+            hr = videoConnect.ConnectionMediaType(_class.Graph.Resolution);
+            MessageBox.Show(DsError.GetErrorText(hr));
+            //hr = videoOut.Connect(videoConnect, _class.Graph.Resolution);
+            //MessageBox.Show(DsError.GetErrorText(hr));
+            //hr = videoConnect.ReceiveConnection(videoOut, _class.Graph.Resolution);
+            //MessageBox.Show(DsError.GetErrorText(hr));
+            hr = _class.Graph.CaptureGraph.ConnectDirect(videoOut, videoConnect, null);
+            MessageBox.Show(DsError.GetErrorText(hr));
+            /*
+
+            if (_class.Var.VideoResolutionIndex == 0 || _class.System.IsAutoSetCaptureResolution)
+                _class.GraphResolution.Get();
+
+            if (_class.Var.VideoResolutionIndex > 0)
+                _class.GraphResolution.Set(_class.Graph.CaptureDevice, captureVideoOut);
+            else
+                _class.Debug.Log("[0] [WARN] Cant find capture resolution - no input or unknown resolution type");
+
+            videoConnect.ReceiveConnection(videoOut, _class.Resolution.Type[_class.Var.VideoResolutionIndex]);
+            var hr = _class.Graph.CaptureGraph.ConnectDirect(videoOut, videoConnect, null);
+            _class.Debug.Log("[0] &&& Reconnect to running graph");
+            _class.Debug.Log("-> " + DsError.GetErrorText(hr));
+            MessageBox.Show(DsError.GetErrorText(hr));
+            
+            hr = _class.Graph.MediaControl.Run();
+            _class.Debug.Log("[2] " + DsError.GetErrorText(hr));
+            MessageBox.Show(DsError.GetErrorText(hr));
+            */
+
+
+            //_class.Graph.CaptureDevice.FindPin("Capture", out videoOutput);
+
+            /*
+            IPin videoOutput;
+            if (videoOutput == null)
+            {
+                MessageBox.Show("vo null)");
+                return;
+            }
+            IPin videoConnection;
+            videoOutput.ConnectedTo(out videoConnection);
+            videoOutput.Disconnect();
+            */
+
+        }
+
         private IntPtr _previewWindow;
         private Point _previewBounds;
         private bool _boolPreviewFail;
@@ -175,14 +257,14 @@ namespace consoleXstream.VideoCapture
         public void checkVideoOutput()
         {
             //Reruns the graph once, find this needs to happen after quick resolution changes (PS3)
-            if (_class.Var.IsRestartGraph && !_boolVideoFail)           
+            if (_class.Var.IsRestartGraph && !_class.Var.IsVideoFail)           
             {
                 _class.Var.IsRestartGraph = false;
                 _class.Debug.Log("[3] Update graph");
-                runGraph();
+                RunGraph();
             }
 
-            if (!_boolVideoFail && _class.System.boolAutoSetCaptureResolution)
+            if (!_class.Var.IsVideoFail && _class.System.IsAutoSetCaptureResolution)
                 _class.Resolution.Check();
 
             if (_class.Var.IsRestartGraph)
@@ -192,16 +274,12 @@ namespace consoleXstream.VideoCapture
                 else 
                 { 
                     _class.Debug.Log("[3] Restart graph");
-                    _class.Var.IsRestartGraph = false; 
-                    _boolVideoFail = false; 
-                    runGraph(); 
+                    _class.Var.IsRestartGraph = false;
+                    _class.Var.IsVideoFail = false; 
+                    RunGraph(); 
                 }
             }
         }
-
-        //Compares video capture resolution with video out resolution, adjusts graph if needed
-
-        #endregion
 
         public List<string> GetVideoCaptureDevices()
         {
@@ -230,6 +308,8 @@ namespace consoleXstream.VideoCapture
         public void CloseGraph() { _class.Close.CloseGraph(); }
         public string GetVideoDevice() { return _class.Var.VideoDevice; }
         public string GetAudioDevice() { return _class.Var.AudioDevice; }
+        public string GetCrossbarSetting(string type) { return _class.Crossbar.GetActive(type); }
+        public int GetCrossbarId(string type) { return _class.Crossbar.GetActiveId(type); }
     }
 
 }
