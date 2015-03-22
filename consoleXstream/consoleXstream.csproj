@@ -51,6 +51,7 @@
   <ItemGroup>
     <Compile Include="Config\Classes.cs" />
     <Compile Include="Config\Debug.cs" />
+    <Compile Include="Config\Log.cs" />
     <Compile Include="Config\Profile.cs" />
     <Compile Include="Config\Set.cs" />
     <Compile Include="Config\Var.cs" />

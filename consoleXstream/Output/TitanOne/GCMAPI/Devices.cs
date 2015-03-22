@@ -15,7 +15,8 @@ namespace consoleXstream.Output.TitanOne.GCMAPI
 
         public void List()
         {
-            _class.System.Debug("listAll.log", "MWrite.listing devices");
+            //if (_class.System.)
+            //_class.System.Debug("listAll.log", "MWrite.listing devices");
             _class.System.ChangeTitanOne(true);
 
             _class.Write.SetApiMethod(TitanOne.Define.ApiMethod.Multi);
@@ -27,17 +28,17 @@ namespace consoleXstream.Output.TitanOne.GCMAPI
             if (_deviceLoaded == 0)
                 _deviceLoaded = _class.MDefine.GcmapiLoad();
 
-            _class.System.Debug("listAll.log", "Load: " + _class.MDefine.GcmapiLoad());
-            _class.System.Debug("listAll.log", "Device: " + _class.Write.DevId);
+            //_class.System.Debug("listAll.log", "Load: " + _class.MDefine.GcmapiLoad());
+            //_class.System.Debug("listAll.log", "Device: " + _class.Write.DevId);
 
             if (_class.MDefine.GcmapiConnect != null)
             {
-                _class.System.Debug("listAll.log", "GcmapiConnect " + _class.Write.DevId);
+                //_class.System.Debug("listAll.log", "GcmapiConnect " + _class.Write.DevId);
                 _deviceCount = _class.MDefine.GcmapiConnect((ushort) _class.Write.DevId);
             }
             else
             {
-                _class.System.Debug("listAll.log", "gcmapiconnect == null");
+                //_class.System.Debug("listAll.log", "gcmapiconnect == null");
             }
         }
 
@@ -56,7 +57,7 @@ namespace consoleXstream.Output.TitanOne.GCMAPI
 
             if (result != 0)
             {
-                _class.System.Debug("listAll.log", "result : " + result + " now reading serials");
+                //_class.System.Debug("listAll.log", "result : " + result + " now reading serials");
                 ReadSerials();
             }
 

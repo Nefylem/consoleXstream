@@ -37,14 +37,14 @@ namespace consoleXstream.Menu.SubMenuOptions
 
             if (Directory.Exists("Profiles") == false) { Directory.CreateDirectory("Profiles"); }
             if (File.Exists(@"Profiles\" + command + ".connectProfile")) { File.Delete(@"Profiles\" + command + ".connectProfile"); }
-            _class.System.Debug("Profile.log", "saving " + command + " .profile");
+            //_class.System.Debug("Profile.log", "saving " + command + " .profile");
 
             var strDev = _class.VideoCapture.GetVideoDevice();
             var strAud = _class.VideoCapture.GetAudioDevice();
             var strCrossVideo = _class.VideoCapture.GetCrossbarSetting("video");
             var strCrossAudio = _class.VideoCapture.GetCrossbarSetting("audio");
-            _class.System.Debug("Profile.log", "video " + strCrossVideo);
-            _class.System.Debug("Profile.log", "audio " + strCrossAudio);
+            //_class.System.Debug("Profile.log", "video " + strCrossVideo);
+            //_class.System.Debug("Profile.log", "audio " + strCrossAudio);
 
             var strSave = "<Profile>";
             strSave += "<Title>" + strTitle + "</Title>";
@@ -86,7 +86,7 @@ namespace consoleXstream.Menu.SubMenuOptions
             var strVideoPin = "";
             var strAudioPin = "";
 
-            _class.System.Debug("Profile.log", "loading " + strFile + ".profile");
+            //_class.System.Debug("Profile.log", "loading " + strFile + ".profile");
             var strSetting = "";
             if (Directory.Exists("Profiles") != true) return;
             if (File.Exists(@"Profiles\" + strFile + ".connectProfile") != true) return;

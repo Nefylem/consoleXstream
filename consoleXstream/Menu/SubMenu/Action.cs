@@ -205,9 +205,6 @@ namespace consoleXstream.Menu.SubMenu
 
         private void ListAllTitanOne()
         {
-            var a = _class.Form1.ListToDevices.Count;
-            var b = _class.System.TitanOneDevice;
-
             if (_class.Form1.ListToDevices == null)
                 _class.Form1.ListToDevices = new List<string>();
 

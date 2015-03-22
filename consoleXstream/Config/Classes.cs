@@ -21,6 +21,7 @@ namespace consoleXstream.Config
         public Output.TitanOne.Write TitanOne { get; set; }
         public VideoResolution VideoResolution { get; set; }
         public XmlData Xml { get; set; }
+        public Log Log { get; set; }
 
         public void DeclareClasses(Form1 mainForm)
         {
@@ -31,6 +32,7 @@ namespace consoleXstream.Config
             Set = new Set(this);
             Var = new Var(this);
             Xml = new XmlData(this);
+            Log = new Log();
         }
     }
 }

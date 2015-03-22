@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using consoleXstream.Input;
 
 namespace consoleXstream.Output.TitanOne.GCMAPI
 {
@@ -56,6 +58,13 @@ namespace consoleXstream.Output.TitanOne.GCMAPI
             if (_class.MDefine.GcmapiIsConnected(_activeDevice) == 1)
             {
                 _class.MDefine.GcmapiWrite(_activeDevice, _class.Gamepad.Output);
+
+                if (!_class.System.boolUseRumble) return;
+
+                var report = new Define.GcmapiReport();
+
+                if (_class.MDefine.GcmapiRead(_activeDevice, ref report) != IntPtr.Zero)
+                    GamePad.SetState(PlayerIndex.One, report.Rumble[0], report.Rumble[1]);
             }
         }
     }

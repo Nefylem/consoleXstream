@@ -88,7 +88,7 @@ namespace consoleXstream.VideoCapture.Analyse
 
             if (_class.Var.CurrentResByName != _checkCaptureRes)
             {
-                _class.System.Debug("VideoResolution.Log", "Comparing: " + _class.Var.CurrentResByName + " to " + intLineCount);
+                //_class.System.Debug("VideoResolution.Log", "Comparing: " + _class.Var.CurrentResByName + " to " + intLineCount);
                 _checkCaptureRes = _class.Var.CurrentResByName;
                 if (_checkCaptureRes.IndexOf('x') > -1)
                 {
@@ -117,7 +117,7 @@ namespace consoleXstream.VideoCapture.Analyse
 
             if (_class.Var.CurrentResByName != _checkCaptureRes)
             {
-                _class.System.Debug("VideoResolution.Log", "Comparing: " + _class.Var.CurrentResByName + " to " + intLineCount);
+                //_class.System.Debug("VideoResolution.Log", "Comparing: " + _class.Var.CurrentResByName + " to " + intLineCount);
                 _checkCaptureRes = _class.Var.CurrentResByName;
                 if (_checkCaptureRes.IndexOf('x') > -1)
                 {
@@ -141,7 +141,7 @@ namespace consoleXstream.VideoCapture.Analyse
                 else
                 {
                     _rerunGraphCount--;
-                    _class.System.Debug("VideoResolution.log", "Rerun capture resolution: " + _rerunGraphCount);
+                    //_class.System.Debug("VideoResolution.log", "Rerun capture resolution: " + _rerunGraphCount);
                     
                     _class.Graph.MediaControl.Stop();
                     _class.Graph.ClearGraph();
@@ -150,12 +150,12 @@ namespace consoleXstream.VideoCapture.Analyse
                 }
             }
 
-            _class.System.Debug("VideoResolution.log", "Capture Resolution Mismatch");
-            _class.System.Debug("VideoResolution.log", "Current Output: " + intLineCount);
-            _class.System.Debug("VideoResolution.log", "Expected Output: " + _checkCaptureHeight);
+            //_class.System.Debug("VideoResolution.log", "Capture Resolution Mismatch");
+            //_class.System.Debug("VideoResolution.log", "Current Output: " + intLineCount);
+            //_class.System.Debug("VideoResolution.log", "Expected Output: " + _checkCaptureHeight);
             if (intLineCount == 720)
             {
-                _class.System.Debug("VideoResolution.log", "Setting 720p refresh mode");
+                //_class.System.Debug("VideoResolution.log", "Setting 720p refresh mode");
                 _rerunWait = 25;
                 _rerunGraphCount = 2;
             }
@@ -164,7 +164,7 @@ namespace consoleXstream.VideoCapture.Analyse
                 _rerunWait = 0;
                 _rerunGraphCount = 0;                
             }
-            _class.System.Debug("VideoResolution.log", "Running graph");
+            //_class.System.Debug("VideoResolution.log", "Running graph");
 
             _class.Graph.MediaControl.Stop();
             _class.Graph.ClearGraph();

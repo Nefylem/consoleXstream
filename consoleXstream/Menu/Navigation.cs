@@ -22,7 +22,9 @@ namespace consoleXstream.Menu
         {
             command = command.ToLower();
             if (_class.Var.ShowSubSelection) { _class.SubNav.GetCommand(command); return; }
-            _class.System.Debug("menu.log", command);   
+            
+            if (_class.System.CheckLog("Menu")) _class.System.Debug("menu.log", command);   
+            
             if (command == "back") { if (_menuBackWait == 0) MenuBack(); else _menuBackWait = 5; }
             if (command == "up" && _moveUpWait == 0) MenuUp();
             if (command == "down" && _moveDownWait == 0) MenuDown();
@@ -143,8 +145,8 @@ namespace consoleXstream.Menu
         public void MenuOk()
         {
             _moveOkWait = 2;
-            _class.System.Debug("menu.log", ">OK>" + _class.User.Selected);
-            _class.System.Debug("menu.log", ">SUBOK>" + _class.User.SubSelected);
+            if (_class.System.CheckLog("Menu")) _class.System.Debug("menu.log", ">OK>" + _class.User.Selected);
+            if (_class.System.CheckLog("Menu")) _class.System.Debug("menu.log", ">SUBOK>" + _class.User.SubSelected);
 
             if (_class.Var.IsMainMenu)
                 _class.Action.MainMenu(_class.User.Selected);
@@ -163,7 +165,7 @@ namespace consoleXstream.Menu
                 if (intX < t.Rect.Left || intX > t.Rect.Right) continue;
                 //if (_class.Mouse.Hover == t.Command) return true;
 
-                _class.System.Debug("menu.log", ">Move>" + t.Command);
+                if (_class.System.CheckLog("Menu")) _class.System.Debug("menu.log", ">Move>" + t.Command);
 
                 if (_class.Var.IsMainMenu)
                     _class.User.Selected = t.Command;

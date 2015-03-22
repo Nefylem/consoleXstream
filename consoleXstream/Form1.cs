@@ -148,13 +148,13 @@ namespace consoleXstream
         {
             if (File.Exists("system.log")) File.Delete("system.log"); 
             if (File.Exists("video.log")) File.Delete("video.log"); 
-            if (File.Exists("menu.log")) File.Delete("menu.log"); 
             if (File.Exists("titanOne.log")) File.Delete("titanOne.log"); 
             if (File.Exists("controllerMax.log")) File.Delete("controllerMax.log");
             if (File.Exists("connectTo.log")) File.Delete("connectTo.log");
             if (File.Exists("listAll.log")) File.Delete("listAll.log");
             if (File.Exists("VideoResolution.log")) File.Delete("VideoResolution.log");
             if (File.Exists("video.log")) File.Delete("video.log");
+            if (File.Exists("menu.log")) File.Delete("Menu.log");
         }
         //Copies files to test environment 
         private void CheckDevelopment()
@@ -631,27 +631,27 @@ namespace consoleXstream
                 ListBackupToDevices.Add(item);
             }
 
-            _system.Debug("listAll.log", "clearList");
+            //_system.Debug("listAll.log", "clearList");
 
             ListToDevices = new List<string>();
 
-            _system.Debug("listAll.log", "check controllerMax");
+            //_system.Debug("listAll.log", "check controllerMax");
 
             if (_controllerMax._gcapi_Unload != null)
                 _controllerMax.closeControllerMaxInterface();
 
 
-            _system.Debug("listAll.log", "setup update true");
+            //_system.Debug("listAll.log", "setup update true");
             IsUpdatingTitanOneList = true;
             TitanOneListRefresh = 10;
             TitanOneListRefreshFail = false;
-            _system.Debug("listAll.log", "list devices");
+            //_system.Debug("listAll.log", "list devices");
             _titanOne.ListDevices(); 
         }
 
         private void CheckTitanOneConnectionList()
         {
-            _system.Debug("listAll.log", "_titanOne.CheckDevices()");
+            //_system.Debug("listAll.log", "_titanOne.CheckDevices()");
             var result = _titanOne.CheckDevices();
             if (result == 0)
             {
@@ -672,7 +672,7 @@ namespace consoleXstream
                         IsUpdatingTitanOneList = false;
                         TitanOneListRefresh = 0;
                         TitanOneListRefreshFail = false;
-                        _system.Debug("listAll.log", "Cant find TitanOnes, passing from backup list");
+                        //_system.Debug("listAll.log", "Cant find TitanOnes, passing from backup list");
                         ListToDevices.Clear();
 
                         foreach (var item in ListBackupToDevices) { ListToDevices.Add(item); }
@@ -686,7 +686,7 @@ namespace consoleXstream
 
             if (result > 0)
             {
-                _system.Debug("listAll.log", "found " + result + " results");
+                //_system.Debug("listAll.log", "found " + result + " results");
                 IsUpdatingTitanOneList = false;
                 formMenu.PassToSubSelect(ListToDevices);
             }

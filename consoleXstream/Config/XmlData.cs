@@ -68,6 +68,7 @@ namespace consoleXstream.Config
             strSave += _class.Set.CheckData("ControllerMax");
             strSave += _class.Set.CheckData("TitanOne");
             strSave += _class.Set.CheckData("UseTitanOne");
+            strSave += _class.Set.CheckData("MenuLog");
 
             strSave += "</Configuration>";
 

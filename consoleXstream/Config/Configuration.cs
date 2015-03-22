@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Windows.Forms;
-using consoleXstream.Output.TitanOne;
 using consoleXstream.Remap;
 
 namespace consoleXstream.Config
@@ -116,6 +114,7 @@ namespace consoleXstream.Config
             if (_class.Set.Check("checkcaptureres").ToLower() == "true") IsAutoSetCaptureResolution = true;
             if (_class.Set.Check("AutoResolution").ToLower() == "true") IsAutoSetDisplayResolution = true;
             if (_class.Set.Check("VR_Video").ToLower() == "true") IsVr = true;
+            if (_class.Set.Check("MenuLog").ToLower() == "true") _class.Log.SetValue("Menu", true);
             if (_class.Set.Check("UseTitanOne").Length > 0)
             {
                 TitanOneDevice = _class.Set.Check("UseTitanOne");
@@ -157,11 +156,13 @@ namespace consoleXstream.Config
         {
             if (useTitanOneAPI)
             {
-                Debug("TitanOne.Log", "Connecting ControllerMax using TO API");
+                if (CheckLog("TitanOne")) Debug("TitanOne.Log", "Connecting ControllerMax using TO API");
                 changeControllerMax_TOAPI();
                 return;
             }
-            Debug("ControllerMax.Log", "Using CM API");
+
+            if (CheckLog("ControllerMax")) Debug("ControllerMax.Log", "Using CM API");
+            
             if (boolControllerMax && boolTitanOne)      //Stop infinite loops
                 boolTitanOne = false;
 
@@ -362,42 +363,42 @@ namespace consoleXstream.Config
             if (res.IndexOf('x') > -1)
             {
                 var check = res.Substring(res.IndexOf("x ", StringComparison.Ordinal) + 1).Trim();
-                _class.System.Debug("VideoSetResolution.log", "Check: [" + check + "]" + " equals setRes: [" + height + "]");
+                //_class.System.Debug("VideoSetResolution.log", "Check: [" + check + "]" + " equals setRes: [" + height + "]");
                 
                 if (check == height.ToString())
                 {
-                    _class.System.Debug("VideoSetResolution.log", "resolution already set");
+                    //_class.System.Debug("VideoSetResolution.log", "resolution already set");
                     return;
                 }
             }
 
-            _class.System.Debug("VideoSetResolution.log", "AutoSetResolution: " + IsAutoSetDisplayResolution);
+            //_class.System.Debug("VideoSetResolution.log", "AutoSetResolution: " + IsAutoSetDisplayResolution);
             
             if (!IsAutoSetDisplayResolution) return;
             List<string> listRes = _class.VideoResolution.ListDisplayResolutions(_graphicsCardID);
 
             var set = "";
 
-            _class.System.Debug("VideoSetResolution.log", "listDisplayResolution: " + listRes);
+            //_class.System.Debug("VideoSetResolution.log", "listDisplayResolution: " + listRes);
             for (int count = 0; count < listRes.Count; count++)
             {
                 string title = listRes[count];
                 
                 if (title.IndexOf("x ", StringComparison.Ordinal) <= -1) continue;
-                _class.System.Debug("VideoSetResolution.log", "res: " + title);
+                //_class.System.Debug("VideoSetResolution.log", "res: " + title);
                 title = title.Substring(title.IndexOf("x ", StringComparison.Ordinal) + 1).Trim();
-                _class.System.Debug("VideoSetResolution.log", "height: " + height + " equals vcheight: " + height);
+                //_class.System.Debug("VideoSetResolution.log", "height: " + height + " equals vcheight: " + height);
                 
                 if (title != height.ToString()) continue;
                 set = listRes[count];
-                _class.System.Debug("VideoSetResolution.log", "set: " + set + " [] " + count);
+                //_class.System.Debug("VideoSetResolution.log", "set: " + set + " [] " + count);
                 break;
             }
 
 
             if (String.Equals(set, getResolution(), StringComparison.CurrentCultureIgnoreCase)) return;
 
-            _class.System.Debug("VideoSetResolution.log", "getResolution: " + getResolution());                    
+            //_class.System.Debug("VideoSetResolution.log", "getResolution: " + getResolution());                    
             
             setDisplayResolution(set);
         }
@@ -478,5 +479,6 @@ namespace consoleXstream.Config
         public void LoadSetup() { _class.Xml.Read(); }
         public void AddData(string title, string set) { _class.Set.Add(title, set); }
         public string CheckData(string title) { return _class.Set.Check(title);  }
+        public bool CheckLog(string title) { return _class.Log.CheckLog(title); }
     }
 }

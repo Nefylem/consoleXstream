@@ -36,35 +36,42 @@ namespace consoleXstream.Output.TitanOne.GCMAPI
             var ptrMLoad = LoadExternalFunction(ptrDll, "gcmapi_Load");
             if (ptrMLoad == IntPtr.Zero) { _class.System.Debug("titanOne.log", "[0] [FAIL] gcMapi_Load"); return; }
 
-            _class.MDefine.GcmapiLoad = (Define.GCMAPI_LOAD)Marshal.GetDelegateForFunctionPointer(ptrMLoad, typeof(Define.GCMAPI_LOAD));
-
             var ptrMUnload = LoadExternalFunction(ptrDll, "gcmapi_Unload");
             if (ptrMUnload == IntPtr.Zero) { _class.System.Debug("titanOne.log", "[0] [FAIL] gcMapi_Unload"); return; }
-
-            _class.MDefine.GcmapiUnload = (Define.GCMAPI_UNLOAD)Marshal.GetDelegateForFunctionPointer(ptrMUnload, typeof(Define.GCMAPI_UNLOAD));
 
             var ptrMConnect = LoadExternalFunction(ptrDll, "gcmapi_Connect");
             if (ptrMConnect == IntPtr.Zero) { _class.System.Debug("titanOne.log", "[0] [FAIL] gcmapi_Connect"); return; }
 
-            _class.MDefine.GcmapiConnect = (Define.GCMAPI_CONNECT)Marshal.GetDelegateForFunctionPointer(ptrMConnect, typeof(Define.GCMAPI_CONNECT));
-
             var ptrMConnected = LoadExternalFunction(ptrDll, "gcmapi_IsConnected");
             if (ptrMConnected == IntPtr.Zero) { _class.System.Debug("titanOne.log", "[0] [FAIL] gcmapi_IsConnected"); return; }
-
-            _class.MDefine.GcmapiIsConnected =
-                (Define.GCMAPI_ISCONNECTED)Marshal.GetDelegateForFunctionPointer(ptrMConnected, typeof(Define.GCMAPI_ISCONNECTED));
 
             var ptrSerial = LoadExternalFunction(ptrDll, "gcmapi_GetSerialNumber");
             if (ptrSerial == IntPtr.Zero) { _class.System.Debug("titanOne.log", "[0] [FAIL] gcmapi_GetSerialNumber"); return; }
 
-            _class.MDefine.GcmapiGetSerialNumber =
-                (Define.GCMAPI_GETSERIALNUMBER)
-                    Marshal.GetDelegateForFunctionPointer(ptrSerial, typeof (Define.GCMAPI_GETSERIALNUMBER));
-
             var ptrWrite = LoadExternalFunction(ptrDll, "gcmapi_Write");
             if (ptrWrite == IntPtr.Zero) { _class.System.Debug("titanOne.log", "[0] [FAIL] gcmapi_Write"); return; }
 
-            _class.MDefine.GcmapiWrite = (Define.GCMAPI_WRITE)Marshal.GetDelegateForFunctionPointer(ptrWrite, typeof(Define.GCMAPI_WRITE));
+            var ptrRead = LoadExternalFunction(ptrDll, "gcmapi_Read");
+            if (ptrRead == IntPtr.Zero) { _class.System.Debug("titanOne.log", "[0] [FAIL] gcmapi_Read"); return; }
+
+            try
+            {
+                _class.MDefine.GcmapiLoad = (Define.GCMAPI_LOAD)Marshal.GetDelegateForFunctionPointer(ptrMLoad, typeof(Define.GCMAPI_LOAD));
+                _class.MDefine.GcmapiUnload = (Define.GCMAPI_UNLOAD)Marshal.GetDelegateForFunctionPointer(ptrMUnload, typeof(Define.GCMAPI_UNLOAD));
+                _class.MDefine.GcmapiConnect = (Define.GCMAPI_CONNECT)Marshal.GetDelegateForFunctionPointer(ptrMConnect, typeof(Define.GCMAPI_CONNECT));
+                _class.MDefine.GcmapiGetSerialNumber = (Define.GCMAPI_GETSERIALNUMBER)Marshal.GetDelegateForFunctionPointer(ptrSerial, typeof(Define.GCMAPI_GETSERIALNUMBER));
+                _class.MDefine.GcmapiWrite = (Define.GCMAPI_WRITE)Marshal.GetDelegateForFunctionPointer(ptrWrite, typeof(Define.GCMAPI_WRITE));
+                _class.MDefine.GcmapiIsConnected = (Define.GCMAPI_ISCONNECTED)Marshal.GetDelegateForFunctionPointer(ptrMConnected, typeof(Define.GCMAPI_ISCONNECTED));
+                _class.MDefine.GcmapiRead = (Define.GCMAPI_READ)Marshal.GetDelegateForFunctionPointer(ptrRead, typeof(Define.GCMAPI_READ));
+            }
+            catch (Exception ex)
+            {
+                _class.System.Debug("titanOne.log", "[0] Fail -> " + ex);
+                _class.System.Debug("titanOne.log", "[0] [ERR] Critical failure loading TitanOne API.");
+                return;
+            }
+
+            _class.System.Debug("titanOne.log", "");
         }
 
         private IntPtr LoadExternalFunction(IntPtr ptrDll, string strFunction)
@@ -87,6 +94,7 @@ namespace consoleXstream.Output.TitanOne.GCMAPI
             _class.MDefine.GcmapiIsConnected = null;
             _class.MDefine.GcmapiLoad = null;
             _class.MDefine.GcmapiUnload = null;
+            _class.MDefine.GcmapiRead = null;
             _class.System.Debug("titanOne.log", "[OK] Closed TitanOne GCMAPI");
         }
 
