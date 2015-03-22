@@ -66,7 +66,7 @@ namespace consoleXstream.Input
             if (keyboard.getKey(_keymap.KeyDef.ButtonStart)) output[_remap.remapGamepad.start] = Convert.ToByte(100);
             if (keyboard.getKey(_keymap.KeyDef.ButtonHome)) output[_remap.remapGamepad.home] = Convert.ToByte(100);
 
-            if (system.boolEnableMouse)
+            if (system.IsEnableMouse)
             {
                 int intReplaceX = frmMain.intReplaceX;
                 int intReplaceY = frmMain.intReplaceY;

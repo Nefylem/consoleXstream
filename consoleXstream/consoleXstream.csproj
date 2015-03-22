@@ -50,10 +50,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Config\Classes.cs" />
+    <Compile Include="Config\ControllerMax.cs" />
     <Compile Include="Config\Debug.cs" />
+    <Compile Include="Config\Display.cs" />
+    <Compile Include="Config\Gamepad.cs" />
     <Compile Include="Config\Log.cs" />
     <Compile Include="Config\Profile.cs" />
     <Compile Include="Config\Set.cs" />
+    <Compile Include="Config\Settings.cs" />
+    <Compile Include="Config\TitanOne.cs" />
     <Compile Include="Config\Var.cs" />
     <Compile Include="Config\VRMode.cs" />
     <Compile Include="Config\XmlData.cs" />

@@ -77,7 +77,7 @@ namespace consoleXstream.Output.TitanOne
 
                 _class.Define.Write(_class.Gamepad.Output);
 
-                if (!_class.System.boolUseRumble) return;
+                if (!_class.System.UseRumble) return;
                 if (DevId == Define.DevPid.TitanOne)
                 {
                     var report = new Define.GcapiReportTitanone();

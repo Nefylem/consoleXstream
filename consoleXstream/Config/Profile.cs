@@ -3,7 +3,7 @@ using System.Xml;
 
 namespace consoleXstream.Config
 {
-    class Profile
+    public class Profile
     {
         public Profile(Classes classes) { _class = classes; }
         private readonly Classes _class;

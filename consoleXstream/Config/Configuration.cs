@@ -8,52 +8,57 @@ namespace consoleXstream.Config
     {
         private readonly Classes _class;
         
-        public bool boolFPS { get; private set; }
-        public bool boolHideMouse { get; private set; }
+        public bool IsHideMouse { get; set; }
+        public bool IsEnableMouse { get; set; }
+        public bool IsEnableKeyboard { get; set; }
 
-        public bool boolEnableMouse { get; private set; }
-        public bool boolEnableKeyboard { get; private set; }
-        public bool boolInternalCapture { get; private set; }
+        public bool UseInternalCapture { get; set; }
 
-        public bool boolPS4ControllerMode { get; private set; }
-        public bool boolNormalizeControls { get; private set; }
+        public bool UseRumble { get; set; }
+        public bool IsPs4ControllerMode { get; set; }
+        public bool IsNormalizeControls { get; set; }
 
-        public bool boolControllerMax { get; set; }
-        public bool boolTitanOne { get; set; }
+        public bool CheckFps { get; set; }
+        public bool IsStayOnTop { get; set; }
+        public bool IsAutoSetDisplayResolution { get; set; }
+        public bool IsAutoSetCaptureResolution { get; set; }
+        public bool IsVr { get; set; }
+        public string RefreshRate;
+        public string DisplayResolution;
+
+        public bool UseControllerMax { get; set; }
+        public bool UseTitanOne { get; set; }
+        public bool UseTitanOneApi { get; set; }
+        public string TitanOneDevice { get; set; }
+
+        public string CaptureProfile { get; set; }
+
         public bool boolGIMX { get; private set; }
         public bool boolRemoteGIMX { get; private set; }
         public bool boolMcShield { get; private set; }
         public bool boolControlVJOY { get; private set; }
-        public bool useTitanOneAPI { get; private set; }
 
         public bool boolBlockMenuButton { get; private set; }
-        public bool boolUseRumble { get; private set; }
 
-        public bool IsAutoSetDisplayResolution { get; private set; }
-        public bool IsAutoSetCaptureResolution { get; private set; }
         public bool EnableGcmapi { get; private set; }
         public bool DisableTitanOneRetry { get; set; }
         
         public bool boolMenu { get; set; }
-        public bool BoolStayOnTop { get; set; }
         public bool IsOverrideOnExit { get; set; }
-        public bool IsVr { get; set; }
+        
         public int VrVerticalOffset { get; set; }
         public int MouseMode { get; set; }
 
 
-        public string strCaptureProfile { get; set; }
         public string strCurrentResolution { get; set; }
         public string strSetResolution { get; set; }
-        public string TitanOneDevice { get; set; }
 
-        private int _graphicsCardID;
+        public int GraphicsCardId;
+        public string GraphicsCard;
+
         private int _refreshRateID;
         private int _displayResolutionID;
-        private string _graphicsCard;
-        private string _refreshRate;
-        private string _displayResolution;
-        private string _initialDisplay;
+        public string _initialDisplay;
         public Keymap.KeyboardKeys keyDef ;
         public Keymap.KeyboardKeys keyAltDef;
 
@@ -86,186 +91,12 @@ namespace consoleXstream.Config
             _class.Set.Add("ControllerRumble", "true");
             _class.Set.Add("Keyboard", "true");
             _class.Set.Add("HideMouse", "true");
-            boolEnableMouse = true;
-            BoolStayOnTop = true;
+            IsEnableMouse = true;
+            IsStayOnTop = true;
             IsAutoSetCaptureResolution = true;
             EnableGcmapi = true;
             VrVerticalOffset = 150;
             _class.Var.IsReadData = false;
-        }
-
-        public void CheckUserSettings()
-        {
-
-            if (_class.Set.Check("keyboard").ToLower() == "true") boolEnableKeyboard = true;
-            if (_class.Set.Check("mouse").ToLower() == "true") boolEnableMouse = true;
-            if (_class.Set.Check("hidemouse").ToLower() == "true") boolHideMouse = true;
-
-            if (_class.Set.Check("internalCapture").ToLower() == "true") boolInternalCapture = true;  
-            if (_class.Set.Check("controllerrumble").ToLower() == "true") boolUseRumble = true;
-
-            if (_class.Set.Check("ds4emulation").ToLower() == "true") boolPS4ControllerMode = true;
-            if (_class.Set.Check("normalize").ToLower() == "true") boolNormalizeControls = true;
-
-            if (_class.Set.Check("controllermax").ToLower() == "true") boolControllerMax = true;
-            if (_class.Set.Check("titanone").ToLower() == "true") boolTitanOne = true;
-            if (_class.Set.Check("showfps").ToLower() == "true") boolFPS = true;
-            if (_class.Set.Check("stayontop").ToLower() == "true") BoolStayOnTop = true;
-            if (_class.Set.Check("checkcaptureres").ToLower() == "true") IsAutoSetCaptureResolution = true;
-            if (_class.Set.Check("AutoResolution").ToLower() == "true") IsAutoSetDisplayResolution = true;
-            if (_class.Set.Check("VR_Video").ToLower() == "true") IsVr = true;
-            if (_class.Set.Check("MenuLog").ToLower() == "true") _class.Log.SetValue("Menu", true);
-            if (_class.Set.Check("UseTitanOne").Length > 0)
-            {
-                TitanOneDevice = _class.Set.Check("UseTitanOne");
-                _class.Main.SetTitanOne(_class.Set.Check("UseTitanOne"));
-            }
-
-            _refreshRate = _class.Set.Check("RefreshRate");
-            _displayResolution = _class.Set.Check("Resolution");
-
-            if (!IsAutoSetDisplayResolution && (_refreshRate.Length > 0 || _displayResolution.Length > 0))
-            {
-                if (_displayResolution.Length == 0)
-                    setDisplayRefresh(_refreshRate);
-                else
-                    setDisplayResolution(_displayResolution);
-            }
-
-            if (_class.Set.Check("CaptureResolution").Length > 0) changeResolution(_class.Set.Check("CaptureResolution"));
-
-            strCaptureProfile = _class.Set.Check("CurrentProfile");
-
-            if (_class.Main.boolIDE)
-                boolHideMouse = false;
-        }
-
-        public void changeDS4Emulation()
-        {
-            boolPS4ControllerMode = !boolPS4ControllerMode;
-            _class.Set.Add("DS4Emulation", boolPS4ControllerMode.ToString());
-        }
-
-        public void changeNormalizeGamepad()
-        {
-            boolNormalizeControls = !boolNormalizeControls;
-            _class.Set.Add("Normalize", boolNormalizeControls.ToString());
-        }
-
-        public void changeControllerMax()
-        {
-            if (useTitanOneAPI)
-            {
-                if (CheckLog("TitanOne")) Debug("TitanOne.Log", "Connecting ControllerMax using TO API");
-                changeControllerMax_TOAPI();
-                return;
-            }
-
-            if (CheckLog("ControllerMax")) Debug("ControllerMax.Log", "Using CM API");
-            
-            if (boolControllerMax && boolTitanOne)      //Stop infinite loops
-                boolTitanOne = false;
-
-            if (boolTitanOne) ChangeTitanOne();         //Disable if running
-
-
-            boolControllerMax = !boolControllerMax;
-            _class.Set.Add("ControllerMax", boolControllerMax.ToString());
-
-            if (boolControllerMax)
-                _class.ControllerMax.initControllerMax();
-            else
-                _class.ControllerMax.closeControllerMaxInterface();
-        }
-
-        public void changeControllerMax_TOAPI()
-        {
-            _class.TitanOne.Close();
-
-            boolControllerMax = !boolControllerMax;
-            _class.Set.Add("ControllerMax", boolControllerMax.ToString());
-
-            if (boolControllerMax)
-            {
-                boolTitanOne = false;
-                _class.Set.Add("TitanOne", boolTitanOne.ToString());
-            }
-
-            if (boolControllerMax)
-            {
-                _class.TitanOne.SetToInterface(Output.TitanOne.Define.DevPid.ControllerMax);
-                _class.TitanOne.Initialize();
-            }
-        }
-
-        public void ChangeTitanOne()
-        {
-            if (useTitanOneAPI)
-            {
-                changeTitanOne_TOAPI();
-                return;
-            }
-
-            if (boolControllerMax && boolTitanOne)      //Stop infinite loops
-                boolControllerMax = false;
-
-            if (boolControllerMax) changeControllerMax();       //Disable if running
-
-            boolTitanOne = !boolTitanOne;
-            _class.Set.Add("TitanOne", boolTitanOne.ToString());
-
-            if (boolTitanOne)
-            {
-                _class.TitanOne.Initialize();
-                            
-            }
-            else
-                _class.TitanOne.Close();
-        }
-
-        public void ChangeTitanOne(bool set)
-        {
-            if (useTitanOneAPI)
-            {
-                changeTitanOne_TOAPI();
-                return;
-            }
-
-            if (boolControllerMax && boolTitanOne)      //Stop infinite loops
-                boolControllerMax = false;
-
-            if (boolControllerMax) changeControllerMax();       //Disable if running
-
-            boolTitanOne = set;
-            _class.Set.Add("TitanOne", boolTitanOne.ToString());
-
-            if (boolTitanOne)
-            {
-                _class.TitanOne.Initialize();
-
-            }
-            else
-                _class.TitanOne.Close();
-        }
-
-        public void changeTitanOne_TOAPI()
-        {
-            _class.TitanOne.Close();
-
-            boolTitanOne = !boolTitanOne;
-            _class.Set.Add("TitanOne", boolTitanOne.ToString());
-
-            if (boolTitanOne)
-            {
-                boolControllerMax = false;
-                _class.Set.Add("ControllerMax", boolControllerMax.ToString());
-            }
-
-            if (boolTitanOne)
-            {
-                _class.TitanOne.SetToInterface(Output.TitanOne.Define.DevPid.TitanOne);
-                _class.TitanOne.Initialize();
-            }
         }
 
         public void ChangeCrossbar()
@@ -283,145 +114,6 @@ namespace consoleXstream.Config
 
             _class.VideoCapture.LoadUserSettings();
             _class.VideoCapture.RunGraph();
-        }
-
-        public string getGraphicsCard()
-        {
-            if (_graphicsCard == null || _graphicsCard.Length == 0)
-                _graphicsCard = _class.VideoResolution.GetVideoCard(_graphicsCardID);
-
-            return _graphicsCard;
-        }
-
-        public string getRefreshRate()
-        {
-            if (_refreshRate == null || _refreshRate.Length == 0)
-                _refreshRate = _class.VideoResolution.GetRefreshRate(_graphicsCardID);
-
-            return _refreshRate;
-        }
-
-        public string getResolution()
-        {
-            if (_displayResolution == null || _displayResolution.Length == 0)
-                _displayResolution = _class.VideoResolution.GetDisplayResolution(_graphicsCardID);
-
-            return _displayResolution;
-        }
-
-        public string getVolume()
-        {
-            return "100%";
-        }
-
-        public List<string> getDisplayResolutionList()
-        {
-            List<string> listRes = _class.VideoResolution.ListDisplayResolutions(_graphicsCardID);
-
-            return listRes;
-        }
-
-        public List<string> getDisplayRefresh()
-        {
-            List<string> listRefresh = _class.VideoResolution.ListDisplayRefresh(_graphicsCardID);
-            
-            return listRefresh;
-        }
-
-        public void setDisplayResolution(string video)
-        {
-            if (_refreshRate == null || _refreshRate.Length == 0)
-                _refreshRate = _class.VideoResolution.GetRefreshRate(_graphicsCardID);
-
-            string set = video + " - " + _refreshRate;
-
-            _class.VideoResolution.SetDisplayResolution(_graphicsCardID, set);
-
-            _class.Set.Add("Resolution", video);
-
-            _displayResolution = video;
-        }
-
-        public void setDisplayRefresh(string refresh)
-        {
-            if (_displayResolution == null || _displayResolution.Length == 0)
-                _displayResolution = _class.VideoResolution.GetDisplayResolution(_graphicsCardID);
-
-            string set = _displayResolution + " - " + refresh;
-
-            _class.VideoResolution.SetDisplayResolution(_graphicsCardID, set);
-            _class.Main.ChangeDisplayRes();
-
-            _class.Set.Add("RefreshRate", refresh);
-
-            _refreshRate = refresh;
-        }
-
-        public void AutoChangeRes(int height)
-        {
-            var res = getResolution();
-            if (res.IndexOf('x') > -1)
-            {
-                var check = res.Substring(res.IndexOf("x ", StringComparison.Ordinal) + 1).Trim();
-                //_class.System.Debug("VideoSetResolution.log", "Check: [" + check + "]" + " equals setRes: [" + height + "]");
-                
-                if (check == height.ToString())
-                {
-                    //_class.System.Debug("VideoSetResolution.log", "resolution already set");
-                    return;
-                }
-            }
-
-            //_class.System.Debug("VideoSetResolution.log", "AutoSetResolution: " + IsAutoSetDisplayResolution);
-            
-            if (!IsAutoSetDisplayResolution) return;
-            List<string> listRes = _class.VideoResolution.ListDisplayResolutions(_graphicsCardID);
-
-            var set = "";
-
-            //_class.System.Debug("VideoSetResolution.log", "listDisplayResolution: " + listRes);
-            for (int count = 0; count < listRes.Count; count++)
-            {
-                string title = listRes[count];
-                
-                if (title.IndexOf("x ", StringComparison.Ordinal) <= -1) continue;
-                //_class.System.Debug("VideoSetResolution.log", "res: " + title);
-                title = title.Substring(title.IndexOf("x ", StringComparison.Ordinal) + 1).Trim();
-                //_class.System.Debug("VideoSetResolution.log", "height: " + height + " equals vcheight: " + height);
-                
-                if (title != height.ToString()) continue;
-                set = listRes[count];
-                //_class.System.Debug("VideoSetResolution.log", "set: " + set + " [] " + count);
-                break;
-            }
-
-
-            if (String.Equals(set, getResolution(), StringComparison.CurrentCultureIgnoreCase)) return;
-
-            //_class.System.Debug("VideoSetResolution.log", "getResolution: " + getResolution());                    
-            
-            setDisplayResolution(set);
-        }
-
-        public void getInitialDisplay() { _initialDisplay = getResolution(); }
-        public void setInitialDisplay() { _class.VideoResolution.SetDisplayResolution(_graphicsCardID, _initialDisplay); }
-
-        public void setAutoChangeDisplay()
-        {
-            IsAutoSetDisplayResolution = !IsAutoSetDisplayResolution;
-
-            _class.Set.Add("AutoResolution", IsAutoSetDisplayResolution.ToString());
-        }
-
-        public void setStayOnTop()
-        {
-            BoolStayOnTop = !BoolStayOnTop;
-            _class.Set.Add("StayOnTop", BoolStayOnTop.ToString());
-        }
-
-        private void changeResolution(string resolution)
-        {
-            strSetResolution = resolution;
         }
 
         public void changeCaptureResolution(string resolution)
@@ -455,14 +147,9 @@ namespace consoleXstream.Config
             _class.Set.Add("CheckCaptureRes", IsAutoSetCaptureResolution.ToString());
         }
 
-        private void setupVR()
-        {
-            //_vrMode.InitializeVr();
-        }
-
         public void SetupMouse(int mouseType)
         {
-            boolEnableMouse = true;
+            IsEnableMouse = true;
         }
 
         public void ChangeVrVideo()
@@ -480,5 +167,26 @@ namespace consoleXstream.Config
         public void AddData(string title, string set) { _class.Set.Add(title, set); }
         public string CheckData(string title) { return _class.Set.Check(title);  }
         public bool CheckLog(string title) { return _class.Log.CheckLog(title); }
+        public void CheckUserSettings() { _class.Settings.Check(); }
+        public void ChangeControllerMax() { _class.ControllerMaxConfig.Change(); }
+        public void ChangeDs4Emulation() { _class.Gamepad.ChangeDs4Emulation(); }
+        public void ChangeNormalizeGamepad() { _class.Gamepad.ChangeNormalizeGamepad(); }
+        public void ChangeTitanOne() { _class.TitanOneConfig.Change(); }
+        public void ChangeTitanOne(bool set) { _class.TitanOneConfig.Change(set); }
+        public void SetDisplayRefresh(string command) { _class.Display.SetRefresh(command); }
+        public void SetDisplayResolution(string command) { _class.Display.SetResolution(command);}
+        public string GetGraphicsCard() { return _class.Display.GetGraphicsCard(); }
+        public string GetRefreshRate() { return _class.Display.GetRefreshRate(); }
+        public string GetResolution() { return _class.Display.GetResolution(); }
+        public List<string> GetDisplayRefresh() { return _class.Display.GetDisplayRefresh(); }
+        public List<string> GetDisplayResolutionList() { return _class.Display.GetDisplayResolutionList(); }
+        public string GetVolume() { return _class.Display.GetVolume(); }
+        public void AutoChangeRes(int height) { _class.Display.AutoChangeRes(height); }
+        public void GetInitialDisplay() { _class.Display.GetInitialDisplay(); }
+        public void SetInitialDisplay() { _class.Display.SetInitialDisplay(); }
+        public void SetAutoChangeDisplay() {_class.Display.SetAutoChangeDisplay(); }
+        public void SetStayOnTop() { _class.Display.SetStayOnTop(); }
+        private void ChangeResolution(string resolution) { _class.Display.ChangeResolution(resolution); }
+
     }
 }

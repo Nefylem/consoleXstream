@@ -284,7 +284,7 @@ namespace consoleXstream.Output
                     }
 
                     //Remap back buton to touchpad
-                    if (system.boolPS4ControllerMode)
+                    if (system.IsPs4ControllerMode)
                         output[(int)Xbox.Touch] = Convert.ToByte(100);
                     else
                         output[(int)Xbox.Back] = Convert.ToByte(100);
@@ -303,7 +303,7 @@ namespace consoleXstream.Output
                 double dblRX = _controls.ThumbSticks.Right.X * 100;
                 double dblRY = _controls.ThumbSticks.Right.Y * 100;
 
-                if (system.boolNormalizeControls == true)
+                if (system.IsNormalizeControls == true)
                 {
                     normalGamepad(ref dblLX, ref dblLY);
                     normalGamepad(ref dblRX, ref dblRY);
@@ -333,7 +333,7 @@ namespace consoleXstream.Output
                     output = checkKeys(output);
 
                 int intTarget = -1;
-                if (system.boolPS4ControllerMode == false) { intTarget = (int)Xbox.Back; } else { intTarget = (int)Xbox.Touch; }
+                if (system.IsPs4ControllerMode == false) { intTarget = (int)Xbox.Back; } else { intTarget = (int)Xbox.Touch; }
 
                 //Back button. Wait until released as its also the menu button
                 if (intTarget > -1)
@@ -379,7 +379,7 @@ namespace consoleXstream.Output
 
                 _gcapi_Write(output);
 
-                if (system.boolUseRumble == true)
+                if (system.UseRumble == true)
                 {
                     GCAPI_REPORT_CONTROLLERMAX report = new GCAPI_REPORT_CONTROLLERMAX();
                     if (_gcapi_Read_CM(ref report) != IntPtr.Zero)

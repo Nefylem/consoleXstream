@@ -103,10 +103,10 @@ namespace consoleXstream.Menu.SubMenu
             switch (command)
             {
                 case "capture resolution": return _class.System.strCurrentResolution;
-                case "graphics card": return _class.System.getGraphicsCard();
-                case "screen refresh": return _class.System.getRefreshRate();
-                case "display resolution": return _class.System.getResolution();
-                case "volume": return _class.System.getVolume();
+                case "graphics card": return _class.System.GetGraphicsCard();
+                case "screen refresh": return _class.System.GetRefreshRate();
+                case "display resolution": return _class.System.GetResolution();
+                case "volume": return _class.System.GetVolume();
                 case "titanone":
                     var toCount = _listTo.GetToCount("TitanOne");
                     ChangeToFolder("TitanOne", toCount > 1);
@@ -178,9 +178,9 @@ namespace consoleXstream.Menu.SubMenu
         private void ChangeSetting(string command)
         {
             command = command.ToLower();
-            if (command == "ds4 emulation") _class.System.changeDS4Emulation();
-            if (command == "normalize") _class.System.changeNormalizeGamepad();
-            if (command == "controllermax") _class.System.changeControllerMax();
+            if (command == "ds4 emulation") _class.System.ChangeDs4Emulation();
+            if (command == "normalize") _class.System.ChangeNormalizeGamepad();
+            if (command == "controllermax") _class.System.ChangeControllerMax();
             if (command == "titanone") ChangeTitanOne();
             if (command == "resolution") ListCaptureResolution();
             if (command == "crossbar") _class.System.ChangeCrossbar();

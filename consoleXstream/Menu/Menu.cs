@@ -64,7 +64,7 @@ namespace consoleXstream.Menu
             Height = 1;
             Opacity = 0.1;
 
-            if (_class.System.BoolStayOnTop)
+            if (_class.System.IsStayOnTop)
                 TopMost = true;
 
             Show();
@@ -141,7 +141,7 @@ namespace consoleXstream.Menu
 
             _class.DrawGui.setOutline(false);
 
-            if (_class.System.boolFPS)
+            if (_class.System.CheckFps)
                 _class.DrawGui.drawText(5, 500, "FPS: " + _class.Fps.Frames);
 
             if (_class.System.IsVr)

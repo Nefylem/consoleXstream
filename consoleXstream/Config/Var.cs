@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace consoleXstream.Config
 {
-    class Var
+    public class Var
     {
         public Var(Classes classes) { _class = classes; }
         private Classes _class;

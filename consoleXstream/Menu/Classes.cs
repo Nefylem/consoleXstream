@@ -6,6 +6,7 @@ using consoleXstream.Menu.MainMenu;
 using consoleXstream.Menu.SubMenu;
 using consoleXstream.Menu.SubMenuOptions;
 using consoleXstream.Remap;
+using Display = consoleXstream.Menu.SubMenuOptions.Display;
 
 namespace consoleXstream.Menu
 {

@@ -282,16 +282,16 @@ namespace consoleXstream.Menu.MainMenu
             foreach (var t in _class.Data.SubItems)
             {
                 if (t.Command.ToLower() == "ds4 emulation")
-                    if (_class.System.boolPS4ControllerMode) _class.Data.Checked.Add("DS4 Emulation");
+                    if (_class.System.IsPs4ControllerMode) _class.Data.Checked.Add("DS4 Emulation");
 
                 if (t.Command.ToLower() == "normalize")
-                    if (_class.System.boolNormalizeControls) _class.Data.Checked.Add("Normalize");
+                    if (_class.System.IsNormalizeControls) _class.Data.Checked.Add("Normalize");
 
                 if (t.Command.ToLower() == "controllermax")
-                    if (_class.System.boolControllerMax) _class.Data.Checked.Add("ControllerMax");
+                    if (_class.System.UseControllerMax) _class.Data.Checked.Add("ControllerMax");
 
                 if (t.Command.ToLower() == "titanone")
-                    if (_class.System.boolTitanOne) _class.Data.Checked.Add("TitanOne");
+                    if (_class.System.UseTitanOne) _class.Data.Checked.Add("TitanOne");
 
                 if (t.Command.ToLower() == "gimx")
                     if (_class.System.boolGIMX) _class.Data.Checked.Add("GIMX");

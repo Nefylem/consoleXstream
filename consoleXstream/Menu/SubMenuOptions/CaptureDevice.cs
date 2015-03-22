@@ -12,7 +12,7 @@ namespace consoleXstream.Menu.SubMenuOptions
 
         public void Find()
         {
-            if (_class.System.boolInternalCapture)
+            if (_class.System.UseInternalCapture)
             {
                 var videoList = _class.VideoCapture.GetVideoCaptureByName();
                 if (videoList != null && videoList.Count > 0)
@@ -40,7 +40,7 @@ namespace consoleXstream.Menu.SubMenuOptions
 
         public void Change(string strSet)
         {
-            if (!_class.System.boolInternalCapture)
+            if (!_class.System.UseInternalCapture)
                 return;
 
             var videoList = _class.VideoCapture.GetVideoCaptureByName();

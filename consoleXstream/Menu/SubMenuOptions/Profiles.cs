@@ -59,10 +59,10 @@ namespace consoleXstream.Menu.SubMenuOptions
                 if (strCrossAudio.Length > 0) { strSave += "<audioPin>" + strCrossAudio + "</audioPin>"; }
                 strSave += "</videoInput>";
             }
-            if (_class.System.boolControllerMax)
+            if (_class.System.UseControllerMax)
                 strSave += "<ControllerMax>True</ControllerMax>";
 
-            if (_class.System.boolTitanOne)
+            if (_class.System.UseTitanOne)
             {
                 strSave += "<TitanOne>True</TitanOne>";
                 if (_class.System.TitanOneDevice.Length > 0)
@@ -112,8 +112,8 @@ namespace consoleXstream.Menu.SubMenuOptions
                                 if (strSetting.ToLower() == "true")
                                 {
                                     _class.Form1.InitControllerMax();
-                                    _class.System.boolControllerMax = true;
-                                    _class.System.boolTitanOne = false;
+                                    _class.System.UseControllerMax = true;
+                                    _class.System.UseTitanOne = false;
                                 }
                             }
                             if (reader.Name.ToLower() == "titanone")
@@ -121,8 +121,8 @@ namespace consoleXstream.Menu.SubMenuOptions
                                 if (strSetting.ToLower() == "true")
                                 {
                                     _class.Form1.InitializeTitanOne();
-                                    _class.System.boolControllerMax = false;
-                                    _class.System.boolTitanOne = true;
+                                    _class.System.UseControllerMax = false;
+                                    _class.System.UseTitanOne = true;
                                 }
                             }
                             if (reader.Name.ToLower() == "titanonedevice")

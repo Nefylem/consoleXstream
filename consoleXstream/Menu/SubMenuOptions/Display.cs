@@ -39,8 +39,8 @@
             _class.Shutter.Explain = "";
             _class.User.Menu = "videorefresh";
 
-            var listDisplayRef = _class.System.getDisplayRefresh();
-            var currentRef = _class.System.getRefreshRate().ToLower();
+            var listDisplayRef = _class.System.GetDisplayRefresh();
+            var currentRef = _class.System.GetRefreshRate().ToLower();
 
             foreach (var title in listDisplayRef)
             {
@@ -65,8 +65,8 @@
             _class.Shutter.Explain = "";
             _class.User.Menu = "videoresolution";
 
-            var listDisplayRes = _class.System.getDisplayResolutionList();
-            var currentRes = _class.System.getResolution().ToLower();
+            var listDisplayRes = _class.System.GetDisplayResolutionList();
+            var currentRes = _class.System.GetResolution().ToLower();
 
             foreach (var title in listDisplayRes)
             {
@@ -84,7 +84,7 @@
             if (command.ToLower() == "resolution")
                 return;
 
-            _class.System.setDisplayResolution(command);
+            _class.System.SetDisplayResolution(command);
             _class.Data.Checked.Clear();
             _class.Data.Checked.Add(command);
             
@@ -96,7 +96,7 @@
             if (command.ToLower() == "refresh")
                 return;
 
-            _class.System.setDisplayRefresh(command);
+            _class.System.SetDisplayRefresh(command);
             _class.Data.Checked.Clear();
             _class.Data.Checked.Add(command);
 
@@ -110,7 +110,7 @@
             else
                 _class.Data.Checked.Add("Auto Set");
 
-            _class.System.setAutoChangeDisplay();
+            _class.System.SetAutoChangeDisplay();
         }
 
         private void ChangeStayOnTop()
@@ -120,7 +120,7 @@
             else
                 _class.Data.Checked.Add("Stay On Top");
 
-            _class.System.setStayOnTop();
+            _class.System.SetStayOnTop();
         }
 
         public void ChangeVideoDisplay(string command)

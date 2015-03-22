@@ -26,11 +26,11 @@ namespace consoleXstream.VideoCapture.GraphBuilder
                     _class.Graph.VideoWindow.SetWindowPosition(0, 0, intVideoWidth, intVideoHeight);
 
                 _class.Graph.VideoWindow.SetWindowForeground(OABool.True);
-                Application.DoEvents();
+                //Application.DoEvents();
 
                 if (_class.Graph.VideoWindow != null)
                     _class.Graph.VideoWindow.SetWindowPosition(0, 0, intVideoWidth, intVideoHeight);
-                Application.DoEvents();
+                //Application.DoEvents();
 
                 _class.Graph.VideoWindow.put_Visible(OABool.True);
                 _class.FrmMain.FocusWindow();

@@ -13,6 +13,7 @@ using consoleXstream.Output;
 using consoleXstream.Output.TitanOne;
 using consoleXstream.Remap;
 using consoleXstream.Scripting;
+using ControllerMax = consoleXstream.Output.ControllerMax;
 
 namespace consoleXstream
 {
@@ -34,7 +35,7 @@ namespace consoleXstream
         private KeyboardHook _keyboard;
         private KeyboardInterface _keyboardInterface;
 
-        private ControllerMax _controllerMax;
+        private Output.ControllerMax _controllerMax;
         private Output.TitanOne.Write _titanOne;
         private Gimx _gimx;
         private VideoCapture.VideoCapture _videoCapture;
@@ -180,12 +181,12 @@ namespace consoleXstream
             if (_system != null)
             {
                 _system.IsOverrideOnExit = true;
-                _system.setInitialDisplay();
+                _system.SetInitialDisplay();
 
-                if (_system.boolControllerMax)
+                if (_system.UseControllerMax)
                     _controllerMax.closeControllerMaxInterface();
 
-                if (_system.boolInternalCapture)
+                if (_system.UseInternalCapture)
                     _videoCapture.CloseGraph();
             }
             Application.Exit();
@@ -216,7 +217,7 @@ namespace consoleXstream
 
             RunMainLoop();
 
-            if (!_system.boolFPS) return;
+            if (!_system.CheckFps) return;
             if (_strFPSCheck != DateTime.Now.ToString("ss"))
             {
                 _intWatchFPS = _intCurrentFPS;
@@ -234,10 +235,10 @@ namespace consoleXstream
         //Configures system on startup
         private void RunStartup()
         {
-            _system.getInitialDisplay();
+            _system.GetInitialDisplay();
 
             _system.Debug("[3] runStartup");
-            BackColor = Color.Green;
+            BackColor = Color.Black;
 
             if (!boolIDE)
                 FormBorderStyle = FormBorderStyle.None;
@@ -281,25 +282,25 @@ namespace consoleXstream
             }
 
             if (boolIDE)
-                _system.BoolStayOnTop = false;
+                _system.IsStayOnTop = false;
 
-            if (_system.BoolStayOnTop)
+            if (_system.IsStayOnTop)
                 TopMost = true;
 
-            if (_system.boolEnableKeyboard)
+            if (_system.IsEnableKeyboard)
             {
                 _system.Debug("[3] Init keyboard hook");
                 _keyboardInterface.getKeyboardHandle(_keyboard);
                 _keyboard.enableKeyboardHook();
             }
 
-            if (_system.boolEnableMouse)
+            if (_system.IsEnableMouse)
             {
                 _system.Debug("[3] Init mouse event hook");
                 _mouse.enableMouseHook();
             }
 
-            if (_system.boolInternalCapture)
+            if (_system.UseInternalCapture)
             {
                 _system.Debug("[3] Init video capture variables");
                 configureVideoCapture();
@@ -315,9 +316,9 @@ namespace consoleXstream
                 }
             }
 
-            if (_system.boolControllerMax)
+            if (_system.UseControllerMax)
             {
-                if (!_system.useTitanOneAPI)
+                if (!_system.UseTitanOneApi)
                 {
                     _system.Debug("[3] Configure ControllerMax API");
                     _controllerMax.initControllerMax();
@@ -330,15 +331,15 @@ namespace consoleXstream
                 }
             }
 
-            if (_system.boolTitanOne) InitializeTitanOne();
+            if (_system.UseTitanOne) InitializeTitanOne();
 
-            if (_system.boolFPS)
+            if (_system.CheckFps)
             {
                 label1.Visible = true;
                 label2.Visible = true;
             }
 
-            if (_system.boolHideMouse)
+            if (_system.IsHideMouse)
                 Cursor.Hide();
 
             tmrSystem.Enabled = true;
@@ -448,13 +449,13 @@ namespace consoleXstream
             if (_intBlockMenu > 0)
                 _intBlockMenu--;
 
-            if (_system.boolInternalCapture)
+            if (_system.UseInternalCapture)
                 CheckRunningGraph();
 
             if (_system.boolMenu)
                 return;
 
-            if (_system.boolEnableKeyboard)
+            if (_system.IsEnableKeyboard)
             {
                 if (_keyboard.getKey(_keymap.KeyDef.ButtonBack))
                 {
@@ -466,7 +467,7 @@ namespace consoleXstream
                 _keyboardInterface.checkKeys();
             }
 
-            if (_system.boolEnableMouse)
+            if (_system.IsEnableMouse)
                 CheckMouse();
 
             CheckControllerInput();
@@ -475,13 +476,13 @@ namespace consoleXstream
         private void CheckControllerInput()
         {
             _gamepad.Check();
-            if (_system.useTitanOneAPI) _titanOne.Send();
+            if (_system.UseTitanOneApi) _titanOne.Send();
             else
             {
-                if (_system.boolControllerMax)
+                if (_system.UseControllerMax)
                     _controllerMax.checkControllerInput();
 
-                if (_system.boolTitanOne)
+                if (_system.UseTitanOne)
                     _titanOne.Send();
             }
         }
@@ -576,7 +577,7 @@ namespace consoleXstream
 
             Cursor.Show();
 
-            if (_system.BoolStayOnTop)
+            if (_system.IsStayOnTop)
                 TopMost = false;
 
             formMenu.ShowPanel();
@@ -584,12 +585,12 @@ namespace consoleXstream
 
         public void CloseMenuForm()
         {
-            if (_system.BoolStayOnTop)
+            if (_system.IsStayOnTop)
                 TopMost = true;
 
             _system.boolMenu = false;
             
-            if (_system.boolHideMouse)
+            if (_system.IsHideMouse)
                 Cursor.Hide();
 
             _intBlockMenu = 3;
@@ -603,7 +604,7 @@ namespace consoleXstream
             if (FormBorderStyle != FormBorderStyle.None)
             {
                 FormBorderStyle = FormBorderStyle.None;
-                if (_system.boolHideMouse)
+                if (_system.IsHideMouse)
                     Cursor.Hide();
             }
             else

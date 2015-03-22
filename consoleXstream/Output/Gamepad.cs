@@ -72,7 +72,7 @@ namespace consoleXstream.Output
                 }
 
                 //_remap back buton to touchpad
-                if (_system.boolPS4ControllerMode)
+                if (_system.IsPs4ControllerMode)
                     Output[_remap.remapGamepad.touch] = Convert.ToByte(100);
                 else
                     Output[_remap.remapGamepad.back] = Convert.ToByte(100);
@@ -91,7 +91,7 @@ namespace consoleXstream.Output
             double dblRX = _controls.ThumbSticks.Right.X * 100;
             double dblRY = _controls.ThumbSticks.Right.Y * 100;
 
-            if (_system.boolNormalizeControls)
+            if (_system.IsNormalizeControls)
             {
                 NormalGamepad(ref dblLX, ref dblLY);
                 NormalGamepad(ref dblRX, ref dblRY);
@@ -121,7 +121,7 @@ namespace consoleXstream.Output
                 Output = _shortcut.CheckKeys(Output);
 
             int intTarget = -1;
-            if (_system.boolPS4ControllerMode == false) { intTarget = _remap.remapGamepad.back; } else { intTarget = _remap.remapGamepad.touch; }
+            if (_system.IsPs4ControllerMode == false) { intTarget = _remap.remapGamepad.back; } else { intTarget = _remap.remapGamepad.touch; }
             /*
             //Back button. Wait until released as its also the menu button
             if (intTarget > -1)

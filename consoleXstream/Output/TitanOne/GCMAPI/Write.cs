@@ -59,7 +59,7 @@ namespace consoleXstream.Output.TitanOne.GCMAPI
             {
                 _class.MDefine.GcmapiWrite(_activeDevice, _class.Gamepad.Output);
 
-                if (!_class.System.boolUseRumble) return;
+                if (!_class.System.UseRumble) return;
 
                 var report = new Define.GcmapiReport();
 

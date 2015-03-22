@@ -60,8 +60,8 @@ namespace consoleXstream.Menu.SubSelectMenu
 
                 _class.Form1.SetTitanOne(_class.SubSelectVar.ListData[_class.SubSelectVar.Selected]);
                 _class.System.TitanOneDevice = _class.SubSelectVar.ListData[_class.SubSelectVar.Selected];
-                _class.System.boolControllerMax = false;
-                _class.System.boolTitanOne = true;
+                _class.System.UseControllerMax = false;
+                _class.System.UseTitanOne = true;
 
                 ChangeMenuSelections();
             }

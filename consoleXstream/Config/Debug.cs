@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace consoleXstream.Config
 {
-    class Debug
+    public class Debug
     {
         private int _intLastDebugLevel = 0;
         public int intDebugLevel = 5;           //All debug commands

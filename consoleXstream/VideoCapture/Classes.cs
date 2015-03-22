@@ -3,6 +3,7 @@ using consoleXstream.VideoCapture.Analyse;
 using consoleXstream.VideoCapture.Data;
 using consoleXstream.VideoCapture.GraphBuilder;
 using Crossbar = consoleXstream.VideoCapture.Analyse.Crossbar;
+using Display = consoleXstream.VideoCapture.GraphBuilder.Display;
 
 namespace consoleXstream.VideoCapture
 {

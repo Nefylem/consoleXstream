@@ -19,7 +19,7 @@ namespace consoleXstream.Menu.SubMenuOptions
 
         public void Find()
         {
-            if (_system.boolInternalCapture)
+            if (_system.UseInternalCapture)
             {
                 var crossbarList = _videoCapture.GetCrossbarList();
                 foreach (var t in crossbarList)

@@ -3,7 +3,7 @@ using System.Xml;
 
 namespace consoleXstream.Config
 {
-    class XmlData
+    public class XmlData
     {
         public XmlData(Classes classes) { _class = classes; }
         private readonly Classes _class;

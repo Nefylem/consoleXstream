@@ -34,7 +34,7 @@ namespace consoleXstream.Input.Mouse
         {
             if (!system.boolMenu)
             {
-                if (!system.boolEnableMouse || system.IsVr)
+                if (!system.IsEnableMouse || system.IsVr)
                     _gamepad.Ps4Touchpad = true;
                 else
                     keyboard.boolLeftMouse = true;
@@ -50,7 +50,7 @@ namespace consoleXstream.Input.Mouse
         {
             if (!system.boolMenu)
             {
-                if (system.boolEnableMouse && !system.IsVr)
+                if (system.IsEnableMouse && !system.IsVr)
                     keyboard.boolLeftMouse = false;
                 else
                     _gamepad.Ps4Touchpad = false;
@@ -61,7 +61,7 @@ namespace consoleXstream.Input.Mouse
         {
             if (!system.boolMenu)
             {
-                if (system.boolEnableMouse)
+                if (system.IsEnableMouse)
                     keyboard.boolRightMouse = true;
             }
         }
@@ -70,7 +70,7 @@ namespace consoleXstream.Input.Mouse
         {
             if (!system.boolMenu)
             {
-                if (system.boolEnableMouse)
+                if (system.IsEnableMouse)
                     keyboard.boolRightMouse = false;
             }
         }

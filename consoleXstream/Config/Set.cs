@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace consoleXstream.Config
 {
-    class Set
+    public class Set
     {
         public Set(Classes classes) { _class = classes; }
         private readonly Classes _class;
