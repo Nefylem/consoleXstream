@@ -1,20 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using consoleXstream.Config;
-using consoleXstream.Menu.Data;
 
 namespace consoleXstream.Menu.SubMenuOptions
 {
     public class CaptureDevice
     {
         public CaptureDevice(Classes classes) { _class = classes; }
-        private Classes _class;
+        private readonly Classes _class;
 
         public void Find()
         {
-            if (_class.System.UseInternalCapture)
+            if (_class.Base.System.UseInternalCapture)
             {
-                var videoList = _class.VideoCapture.GetVideoCaptureByName();
+                var videoList = _class.Base.VideoCapture.GetVideoCaptureByName();
                 if (videoList != null && videoList.Count > 0)
                 {
                     foreach (var device in videoList)
@@ -23,7 +21,7 @@ namespace consoleXstream.Menu.SubMenuOptions
                     }
 
                     _class.Data.Checked.Clear();
-                    _class.Data.Checked.Add(_class.VideoCapture.GetVideoDevice());
+                    _class.Data.Checked.Add(_class.Base.VideoCapture.GetVideoDevice());
                 }
                 else
                 {
@@ -40,10 +38,10 @@ namespace consoleXstream.Menu.SubMenuOptions
 
         public void Change(string strSet)
         {
-            if (!_class.System.UseInternalCapture)
+            if (!_class.Base.System.UseInternalCapture)
                 return;
 
-            var videoList = _class.VideoCapture.GetVideoCaptureByName();
+            var videoList = _class.Base.VideoCapture.GetVideoCaptureByName();
             
             if (videoList == null)
                 return;
@@ -51,11 +49,11 @@ namespace consoleXstream.Menu.SubMenuOptions
             if (videoList.Count == 0 || videoList.IndexOf(strSet) == -1)
                 return;
 
-            _class.System.AddData("VideoCaptureDevice", strSet);
-            _class.VideoCapture.SetVideoCaptureDevice(strSet);
-            _class.VideoCapture.RunGraph();
+            _class.Base.System.AddData("VideoCaptureDevice", strSet);
+            _class.Base.VideoCapture.SetVideoCaptureDevice(strSet);
+            _class.Base.VideoCapture.RunGraph();
             _class.Data.Checked.Clear();
-            _class.Data.Checked.Add(_class.VideoCapture.GetVideoDevice());
+            _class.Data.Checked.Add(_class.Base.VideoCapture.GetVideoDevice());
         }
 
         public void ListCaptureResolution()
@@ -72,8 +70,8 @@ namespace consoleXstream.Menu.SubMenuOptions
 
             var listAdded = new List<string>();
 
-            var listVideoRes = _class.VideoCapture.GetVideoResolution();
-            var currentResolution = _class.VideoCapture.GetVideoResolutionCurrent();
+            var listVideoRes = _class.Base.VideoCapture.GetVideoResolution();
+            var currentResolution = _class.Base.VideoCapture.GetVideoResolutionCurrent();
 
             for (var count = 0; count < listVideoRes.Count; count++)
             {
@@ -88,7 +86,7 @@ namespace consoleXstream.Menu.SubMenuOptions
 
                 if (count == currentResolution)
                 {
-                    _class.System.strCurrentResolution = listVideoRes[count];
+                    _class.Base.System.strCurrentResolution = listVideoRes[count];
                     _class.SubAction.AddSubItem(listVideoRes[count], "*" + listVideoRes[count], true);
                 }
                 else

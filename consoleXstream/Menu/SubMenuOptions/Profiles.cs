@@ -30,7 +30,7 @@ namespace consoleXstream.Menu.SubMenuOptions
             _class.Data.Checked.Add(command);
 
             _class.User.ConnectProfile = command;
-            _class.System.AddData("CurrentProfile", command);
+            _class.Base.System.AddData("CurrentProfile", command);
 
             var strTitle = command;
             command = command.Replace(" ", String.Empty);
@@ -39,10 +39,10 @@ namespace consoleXstream.Menu.SubMenuOptions
             if (File.Exists(@"Profiles\" + command + ".connectProfile")) { File.Delete(@"Profiles\" + command + ".connectProfile"); }
             //_class.System.Debug("Profile.log", "saving " + command + " .profile");
 
-            var strDev = _class.VideoCapture.GetVideoDevice();
-            var strAud = _class.VideoCapture.GetAudioDevice();
-            var strCrossVideo = _class.VideoCapture.GetCrossbarSetting("video");
-            var strCrossAudio = _class.VideoCapture.GetCrossbarSetting("audio");
+            var strDev = _class.Base.VideoCapture.GetVideoDevice();
+            var strAud = _class.Base.VideoCapture.GetAudioDevice();
+            var strCrossVideo = _class.Base.VideoCapture.GetCrossbarSetting("video");
+            var strCrossAudio = _class.Base.VideoCapture.GetCrossbarSetting("audio");
             //_class.System.Debug("Profile.log", "video " + strCrossVideo);
             //_class.System.Debug("Profile.log", "audio " + strCrossAudio);
 
@@ -59,14 +59,14 @@ namespace consoleXstream.Menu.SubMenuOptions
                 if (strCrossAudio.Length > 0) { strSave += "<audioPin>" + strCrossAudio + "</audioPin>"; }
                 strSave += "</videoInput>";
             }
-            if (_class.System.UseControllerMax)
+            if (_class.Base.System.UseControllerMax)
                 strSave += "<ControllerMax>True</ControllerMax>";
 
-            if (_class.System.UseTitanOne)
+            if (_class.Base.System.UseTitanOne)
             {
                 strSave += "<TitanOne>True</TitanOne>";
-                if (_class.System.TitanOneDevice.Length > 0)
-                    strSave += "<TitanOneDevice>" + _class.System.TitanOneDevice + "</TitanOneDevice>";
+                if (_class.Base.System.TitanOneDevice.Length > 0)
+                    strSave += "<TitanOneDevice>" + _class.Base.System.TitanOneDevice + "</TitanOneDevice>";
             }
 
             strSave += "</Profile>";
@@ -111,25 +111,25 @@ namespace consoleXstream.Menu.SubMenuOptions
                             {
                                 if (strSetting.ToLower() == "true")
                                 {
-                                    _class.Form1.InitControllerMax();
-                                    _class.System.UseControllerMax = true;
-                                    _class.System.UseTitanOne = false;
+                                    _class.Base.Home.InitControllerMax();
+                                    _class.Base.System.UseControllerMax = true;
+                                    _class.Base.System.UseTitanOne = false;
                                 }
                             }
                             if (reader.Name.ToLower() == "titanone")
                             {
                                 if (strSetting.ToLower() == "true")
                                 {
-                                    _class.Form1.InitializeTitanOne();
-                                    _class.System.UseControllerMax = false;
-                                    _class.System.UseTitanOne = true;
+                                    _class.Base.Home.InitializeTitanOne();
+                                    _class.Base.System.UseControllerMax = false;
+                                    _class.Base.System.UseTitanOne = true;
                                 }
                             }
                             if (reader.Name.ToLower() == "titanonedevice")
                             {
-                                _class.Form1.SetTitanOneMode("Multi");
-                                _class.Form1.SetTitanOne(strSetting);
-                                _class.System.TitanOneDevice = strSetting;
+                                _class.Base.Home.SetTitanOneMode("Multi");
+                                _class.Base.Home.SetTitanOne(strSetting);
+                                _class.Base.System.TitanOneDevice = strSetting;
                             }
                         }
                         strSetting = "";
@@ -139,20 +139,20 @@ namespace consoleXstream.Menu.SubMenuOptions
             reader.Close();
     
             _class.User.ConnectProfile = strFile;
-            _class.System.AddData("CurrentProfile", strFile);
-            _class.System.AddData("VideoCaptureDevice", strDevice);
-            _class.System.AddData("AudioPlaybackDevice", strAudio);
-            if (strVideoPin.Length > 0) _class.System.AddData("crossbarVideoPin", strVideoPin);
-            if (strAudio.Length > 0) _class.System.AddData("crossbarAudioPin", strAudioPin);
+            _class.Base.System.AddData("CurrentProfile", strFile);
+            _class.Base.System.AddData("VideoCaptureDevice", strDevice);
+            _class.Base.System.AddData("AudioPlaybackDevice", strAudio);
+            if (strVideoPin.Length > 0) _class.Base.System.AddData("crossbarVideoPin", strVideoPin);
+            if (strAudio.Length > 0) _class.Base.System.AddData("crossbarAudioPin", strAudioPin);
 
             _class.Data.Checked.Clear();
             _class.Data.Checked.Add(strFile);
 
-            _class.VideoCapture.SetVideoCaptureDevice(strDevice);
+            _class.Base.VideoCapture.SetVideoCaptureDevice(strDevice);
             //TODO: set Audio device
-            _class.VideoCapture.SetCrossbar(strVideoPin);
-            _class.VideoCapture.SetCrossbar(strAudioPin);
-            _class.VideoCapture.RunGraph();
+            _class.Base.VideoCapture.SetCrossbar(strVideoPin);
+            _class.Base.VideoCapture.SetCrossbar(strAudioPin);
+            _class.Base.VideoCapture.RunGraph();
         }
 
     }

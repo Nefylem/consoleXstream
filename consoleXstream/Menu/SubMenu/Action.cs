@@ -102,11 +102,11 @@ namespace consoleXstream.Menu.SubMenu
 
             switch (command)
             {
-                case "capture resolution": return _class.System.strCurrentResolution;
-                case "graphics card": return _class.System.GetGraphicsCard();
-                case "screen refresh": return _class.System.GetRefreshRate();
-                case "display resolution": return _class.System.GetResolution();
-                case "volume": return _class.System.GetVolume();
+                case "capture resolution": return _class.Base.System.strCurrentResolution;
+                case "graphics card": return _class.Base.System.GetGraphicsCard();
+                case "screen refresh": return _class.Base.System.GetRefreshRate();
+                case "display resolution": return _class.Base.System.GetResolution();
+                case "volume": return _class.Base.System.GetVolume();
                 case "titanone":
                     var toCount = _listTo.GetToCount("TitanOne");
                     ChangeToFolder("TitanOne", toCount > 1);
@@ -141,7 +141,7 @@ namespace consoleXstream.Menu.SubMenu
 
         private void SetVrMode(string command)
         {
-            if (command == "VrVideo") _class.System.ChangeVrVideo();
+            if (command == "VrVideo") _class.Base.System.ChangeVrVideo();
             _class.Action.CheckDisplaySettings();
             _class.DisplayMenu.PositionMenu();
         }
@@ -149,8 +149,8 @@ namespace consoleXstream.Menu.SubMenu
         private void ChangeCrossbar(string command)
         {
             var crossbar = new SubMenuOptions.Crossbar();
-            crossbar.GetVideoCapture(_class.VideoCapture);
-            crossbar.GetSystemHandle(_class.System);
+            crossbar.GetVideoCapture(_class.Base.VideoCapture);
+            crossbar.GetSystemHandle(_class.Base.System);
             crossbar.Change(command);
         }
 
@@ -178,14 +178,15 @@ namespace consoleXstream.Menu.SubMenu
         private void ChangeSetting(string command)
         {
             command = command.ToLower();
-            if (command == "ds4 emulation") _class.System.ChangeDs4Emulation();
-            if (command == "normalize") _class.System.ChangeNormalizeGamepad();
-            if (command == "controllermax") _class.System.ChangeControllerMax();
+            if (command == "ds4 emulation") _class.Base.System.ChangeDs4Emulation();
+            if (command == "normalize") _class.Base.System.ChangeNormalizeGamepad();
+            if (command == "rumble") _class.Base.System.ChangeRumble();
+            if (command == "controllermax") _class.Base.System.ChangeControllerMax();
             if (command == "titanone") ChangeTitanOne();
             if (command == "resolution") ListCaptureResolution();
-            if (command == "crossbar") _class.System.ChangeCrossbar();
-            if (command == "avirender") _class.System.ChangeAviRender();
-            if (command == "checkcaptureres") _class.System.ChangeCaptureAutoRes();
+            if (command == "crossbar") _class.Base.System.ChangeCrossbar();
+            if (command == "avirender") _class.Base.System.ChangeAviRender();
+            if (command == "checkcaptureres") _class.Base.System.ChangeCaptureAutoRes();
 
             _class.Action.CheckDisplaySettings();
         }
@@ -198,7 +199,7 @@ namespace consoleXstream.Menu.SubMenu
                 ListAllTitanOne();
             else
             {
-                _class.System.ChangeTitanOne();
+                _class.Base.System.ChangeTitanOne();
                 //_class.Form1.InitTitanOne();
                 //_class.Form1.SetTitanOneDevice();
             }
@@ -206,14 +207,14 @@ namespace consoleXstream.Menu.SubMenu
 
         private void ListAllTitanOne()
         {
-            if (_class.Form1.ListToDevices == null)
-                _class.Form1.ListToDevices = new List<string>();
+            if (_class.Base.Home.ListToDevices == null)
+                _class.Base.Home.ListToDevices = new List<string>();
 
-            if (_class.Form1.ListToDevices.Count > 0)
+            if (_class.Base.Home.ListToDevices.Count > 0)
             {
-                _class.SubSelectVar.TitanSerial = _class.System.TitanOneDevice;
-                _class.SubSelectVar.ListData = _class.Form1.ListToDevices;
-                _class.Form1.SetTitanOneMode("Multi");
+                _class.SubSelectVar.TitanSerial = _class.Base.System.TitanOneDevice;
+                _class.SubSelectVar.ListData = _class.Base.Home.ListToDevices;
+                _class.Base.Home.SetTitanOneMode("Multi");
 
                 _class.SubNav.SetMenuOkWait();
                 _class.Var.ShowSubSelection = true;
@@ -224,12 +225,12 @@ namespace consoleXstream.Menu.SubMenu
                 _class.SubSelectVar.DisplayMessage = "Please wait";
 
                 _class.SubSelectVar.ListData.Clear();
-                _class.SubSelectVar.TitanSerial = _class.System.TitanOneDevice;
+                _class.SubSelectVar.TitanSerial = _class.Base.System.TitanOneDevice;
 
-                _class.Form1.SetTitanOneMode("Multi");
-                _class.Form1.ListTitanOneDevices();  
-                
-                if (_class.Form1.GetTitanOne().Length > 0)
+                _class.Base.Home.SetTitanOneMode("Multi");
+                _class.Base.Home.ListTitanOneDevices();
+
+                if (_class.Base.Home.GetTitanOne().Length > 0)
                     _class.Data.Checked.Add("TitanOne");
 
                 _class.SubNav.SetMenuOkWait();
@@ -245,7 +246,7 @@ namespace consoleXstream.Menu.SubMenu
         private void Exit(string command)
         {
             command = command.ToLower();
-            if (command == "exit") _class.Form1.CloseSystem();
+            if (command == "exit") _class.Base.Home.CloseSystem();
             if (command == "back") _class.Nav.MenuBack();
         }
 

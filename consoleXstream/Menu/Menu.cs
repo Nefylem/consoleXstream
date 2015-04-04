@@ -10,17 +10,20 @@ namespace consoleXstream.Menu
 {
     public partial class ShowMenu : Form
     {
-        public ShowMenu(Form1 form1, Configuration system, KeyboardHook keyHook, VideoCapture.VideoCapture inVideo, Remapping inMap, Keymap keymap, Gamepad _gamepad)
+        //public ShowMenu(Form1 form1, Configuration system, KeyboardHook keyHook, VideoCapture.VideoCapture inVideo, Remapping inMap, Keymap keymap, Output.Gamepad _gamepad)
+        public ShowMenu(BaseClass baseClass)
         {
             _class = new Classes(this);
-            _class.DeclareClasses();
+            _class.DeclareClasses(baseClass);
 
-            _class.Form1 = form1;
-            _class.System = system;
-            _class.KeyboardHook = keyHook;
-            _class.VideoCapture = inVideo;
-            _class.Remap = inMap;
-            _class.Keymap = keymap; 
+            //_class.Form1 = baseClass.Home;
+            //_class.System = baseClass.System;
+            //_class.KeyboardHook = baseClass.Keyboard;
+            //_class.VideoCapture = baseClass._videoCapture;
+            //_class.Remap = baseClass.Remap;
+            //_class.Keymap = baseClass.Keymap;
+
+            //_class.GamepadOutput = baseClass.Gamepad; 
 
             InitializeComponent();
         }
@@ -46,7 +49,7 @@ namespace consoleXstream.Menu
 
         public void ShowPanel()
         {
-            if (_class.Form1 == null) { _class.Form1 = (Form1)Application.OpenForms["Form1"]; }
+            if (_class.Base.Home == null) { _class.Base.Home = (Form1)Application.OpenForms["Form1"]; }
             _class.Nav.ListHistory = new List<string>();
 
             _class.CreateMain.Menu();
@@ -64,7 +67,7 @@ namespace consoleXstream.Menu
             Height = 1;
             Opacity = 0.1;
 
-            if (_class.System.IsStayOnTop)
+            if (_class.Base.System.IsStayOnTop)
                 TopMost = true;
 
             Show();
@@ -81,7 +84,7 @@ namespace consoleXstream.Menu
 
         public void PositionMenu()
         {
-            if (!_class.System.IsVr)
+            if (!_class.Base.System.IsVr)
             {
                 Left = (Screen.PrimaryScreen.Bounds.Width / 2) - (Properties.Resources.imgMainMenu.Width / 2);
                 Top = (Screen.PrimaryScreen.Bounds.Height / 2) - (Properties.Resources.imgMainMenu.Height / 2);
@@ -141,10 +144,10 @@ namespace consoleXstream.Menu
 
             _class.DrawGui.setOutline(false);
 
-            if (_class.System.CheckFps)
+            if (_class.Base.System.CheckFps)
                 _class.DrawGui.drawText(5, 500, "FPS: " + _class.Fps.Frames);
 
-            if (_class.System.IsVr)
+            if (_class.Base.System.IsVr)
             {
                 Image menu = _class.DrawGui.drawGraph();
                 Image showMenu = new Bitmap(imgDisplay.Width, menu.Height);
@@ -184,7 +187,7 @@ namespace consoleXstream.Menu
         {
             tmrMenu.Enabled = false;
             Hide();
-            _class.Form1.CloseMenuForm();
+            _class.Base.Home.CloseMenuForm();
         }
     }
 }

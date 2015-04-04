@@ -17,8 +17,8 @@ namespace consoleXstream.Menu.SubMenu
 
                 if (_class.User.Menu == "video input")
                 {
-                    intPinAudio = _class.VideoCapture.GetCrossbarId("Audio");
-                    intPinVideo = _class.VideoCapture.GetCrossbarId("Video");
+                    intPinAudio = _class.Base.VideoCapture.GetCrossbarId("Audio");
+                    intPinVideo = _class.Base.VideoCapture.GetCrossbarId("Video");
                 }
 
                 var bmpShutter = new Bitmap(Properties.Resources.imgSubMenu.Width, _class.Shutter.Height);

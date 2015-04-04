@@ -1,26 +1,17 @@
 ﻿using System;
-using consoleXstream.Config;
 using consoleXstream.Input;
-using consoleXstream.Remap;
 
 namespace consoleXstream.Output
 {
     public class Gamepad
     {
-        public Gamepad(Form1 home, Remapping remap, Configuration system, KeyboardInterface keyboard)
+        public Gamepad(BaseClass baseClass)
         {
-            _frmMain = home;
-            _remap = remap;
-            _system = system;
-            _keyboard = keyboard;
-
+            _class = baseClass;
             _shortcut = new Shortcut();
         }
 
-        private readonly Form1 _frmMain;
-        private readonly Remapping _remap;
-        private readonly Configuration _system;
-        private readonly KeyboardInterface _keyboard;
+        private readonly BaseClass _class;
         private readonly Shortcut _shortcut;
 
         private GamePadState _controls;
@@ -49,79 +40,79 @@ namespace consoleXstream.Output
             if (_XboxCount == 0) { _XboxCount = Enum.GetNames(typeof(Xbox)).Length; }
             Output = new byte[_XboxCount];
 
-            if (_controls.DPad.Left) { Output[_remap.remapGamepad.left] = Convert.ToByte(100); }
-            if (_controls.DPad.Right) { Output[_remap.remapGamepad.right] = Convert.ToByte(100); }
-            if (_controls.DPad.Up) { Output[_remap.remapGamepad.up] = Convert.ToByte(100); }
-            if (_controls.DPad.Down) { Output[_remap.remapGamepad.down] = Convert.ToByte(100); }
+            if (_controls.DPad.Left) { Output[_class.Remap.RemapGamepad.Left] = Convert.ToByte(100); }
+            if (_controls.DPad.Right) { Output[_class.Remap.RemapGamepad.Right] = Convert.ToByte(100); }
+            if (_controls.DPad.Up) { Output[_class.Remap.RemapGamepad.Up] = Convert.ToByte(100); }
+            if (_controls.DPad.Down) { Output[_class.Remap.RemapGamepad.Down] = Convert.ToByte(100); }
 
-            if (_controls.Buttons.A) { Output[_remap.remapGamepad.a] = Convert.ToByte(100); }
-            if (_controls.Buttons.B) { Output[_remap.remapGamepad.b] = Convert.ToByte(100); }
-            if (_controls.Buttons.X) { Output[_remap.remapGamepad.x] = Convert.ToByte(100); }
-            if (_controls.Buttons.Y) { Output[_remap.remapGamepad.y] = Convert.ToByte(100); }
+            if (_controls.Buttons.A) { Output[_class.Remap.RemapGamepad.A] = Convert.ToByte(100); }
+            if (_controls.Buttons.B) { Output[_class.Remap.RemapGamepad.B] = Convert.ToByte(100); }
+            if (_controls.Buttons.X) { Output[_class.Remap.RemapGamepad.X] = Convert.ToByte(100); }
+            if (_controls.Buttons.Y) { Output[_class.Remap.RemapGamepad.Y] = Convert.ToByte(100); }
 
-            if (_controls.Buttons.Start) { Output[_remap.remapGamepad.start] = Convert.ToByte(100); }
-            if (_controls.Buttons.Guide) { Output[_remap.remapGamepad.home] = Convert.ToByte(100); }
+            if (_controls.Buttons.Start) { Output[_class.Remap.RemapGamepad.Start] = Convert.ToByte(100); }
+            if (_controls.Buttons.Guide) { Output[_class.Remap.RemapGamepad.Home] = Convert.ToByte(100); }
             if (_controls.Buttons.Back)
             {
-                if (_system.boolBlockMenuButton == false)
+                if (_class.System.boolBlockMenuButton == false)
                 {
                     _MenuWait++;
-                    if (_system.boolMenu == false)
+                    if (_class.System.boolMenu == false)
                         if (_MenuWait >= _MenuShow + 20)
                             OpenMenu();
                 }
 
-                //_remap back buton to touchpad
-                if (_system.IsPs4ControllerMode)
-                    Output[_remap.remapGamepad.touch] = Convert.ToByte(100);
+                //_class.Remap back buton to touchpad
+                if (_class.System.IsPs4ControllerMode)
+                    Output[_class.Remap.RemapGamepad.Touch] = Convert.ToByte(100);
                 else
-                    Output[_remap.remapGamepad.back] = Convert.ToByte(100);
+                    Output[_class.Remap.RemapGamepad.Back] = Convert.ToByte(100);
             }
 
-            if (_controls.Buttons.LeftShoulder) { Output[_remap.remapGamepad.leftShoulder] = Convert.ToByte(100); }
-            if (_controls.Buttons.RightShoulder) { Output[_remap.remapGamepad.rightShoulder] = Convert.ToByte(100); }
-            if (_controls.Buttons.LeftStick) { Output[_remap.remapGamepad.leftStick] = Convert.ToByte(100); }
-            if (_controls.Buttons.RightStick) { Output[_remap.remapGamepad.rightStick] = Convert.ToByte(100); }
+            if (_controls.Buttons.LeftShoulder) { Output[_class.Remap.RemapGamepad.LeftShoulder] = Convert.ToByte(100); }
+            if (_controls.Buttons.RightShoulder) { Output[_class.Remap.RemapGamepad.RightShoulder] = Convert.ToByte(100); }
+            if (_controls.Buttons.LeftStick) { Output[_class.Remap.RemapGamepad.LeftStick] = Convert.ToByte(100); }
+            if (_controls.Buttons.RightStick) { Output[_class.Remap.RemapGamepad.RightStick] = Convert.ToByte(100); }
 
-            if (_controls.Triggers.Left > 0) { Output[_remap.remapGamepad.leftTrigger] = Convert.ToByte(_controls.Triggers.Left * 100); }
-            if (_controls.Triggers.Right > 0) { Output[_remap.remapGamepad.rightTrigger] = Convert.ToByte(_controls.Triggers.Right * 100); }
+            if (_controls.Triggers.Left > 0) { Output[_class.Remap.RemapGamepad.LeftTrigger] = Convert.ToByte(_controls.Triggers.Left * 100); }
+            if (_controls.Triggers.Right > 0) { Output[_class.Remap.RemapGamepad.RightTrigger] = Convert.ToByte(_controls.Triggers.Right * 100); }
 
-            double dblLX = _controls.ThumbSticks.Left.X * 100;
-            double dblLY = _controls.ThumbSticks.Left.Y * 100;
-            double dblRX = _controls.ThumbSticks.Right.X * 100;
-            double dblRY = _controls.ThumbSticks.Right.Y * 100;
+            double dblLx = _controls.ThumbSticks.Left.X * 100;
+            double dblLy = _controls.ThumbSticks.Left.Y * 100;
+            double dblRx = _controls.ThumbSticks.Right.X * 100;
+            double dblRy = _controls.ThumbSticks.Right.Y * 100;
 
-            if (_system.IsNormalizeControls)
+            if (_class.System.IsNormalizeControls)
             {
-                NormalGamepad(ref dblLX, ref dblLY);
-                NormalGamepad(ref dblRX, ref dblRY);
+                NormalGamepad(ref dblLx, ref dblLy);
+                NormalGamepad(ref dblRx, ref dblRy);
             }
             else
             {
-                dblLY = -dblLY;
-                dblRY = -dblRY;
+                dblLy = -dblLy;
+                dblRy = -dblRy;
             }
 
-            if (dblLX != 0) { Output[_remap.remapGamepad.leftX] = (byte)Convert.ToSByte((int)(dblLX)); }
-            if (dblLY != 0) { Output[_remap.remapGamepad.leftY] = (byte)Convert.ToSByte((int)(dblLY)); }
-            if (dblRX != 0) { Output[_remap.remapGamepad.rightX] = (byte)Convert.ToSByte((int)(dblRX)); }
-            if (dblRY != 0) { Output[_remap.remapGamepad.rightY] = (byte)Convert.ToSByte((int)(dblRY)); }
+            if (dblLx != 0) { Output[_class.Remap.RemapGamepad.LeftX] = (byte)Convert.ToSByte((int)(dblLx)); }
+            if (dblLy != 0) { Output[_class.Remap.RemapGamepad.LeftY] = (byte)Convert.ToSByte((int)(dblLy)); }
+            if (dblRx != 0) { Output[_class.Remap.RemapGamepad.RightX] = (byte)Convert.ToSByte((int)(dblRx)); }
+            if (dblRy != 0) { Output[_class.Remap.RemapGamepad.RightY] = (byte)Convert.ToSByte((int)(dblRy)); }
 
             if (CMHomeCount > 0)
             {
-                Output[_remap.remapGamepad.home] = Convert.ToByte(100);
+                Output[_class.Remap.RemapGamepad.Home] = Convert.ToByte(100);
                 CMHomeCount--;
             }
 
             if (Ps4Touchpad)
-                Output[_remap.remapGamepad.touch] = Convert.ToByte(100);
+                Output[_class.Remap.RemapGamepad.Touch] = Convert.ToByte(100);
 
 
             if (_boolLoadShortcuts)
                 Output = _shortcut.CheckKeys(Output);
 
-            int intTarget = -1;
-            if (_system.IsPs4ControllerMode == false) { intTarget = _remap.remapGamepad.back; } else { intTarget = _remap.remapGamepad.touch; }
+            var intTarget = -1;
+            intTarget = _class.System.IsPs4ControllerMode == false ? _class.Remap.RemapGamepad.Back : _class.Remap.RemapGamepad.Touch;
             /*
             //Back button. Wait until released as its also the menu button
             if (intTarget > -1)
@@ -157,15 +148,12 @@ namespace consoleXstream.Output
             }
             */
             //Dont think that needs to be here
-            if (_keyboard != null && _keyboard.output != null)
+            if (_class.KeyboardInterface == null || _class.KeyboardInterface.output == null) return;
+            for (var intCount = 0; intCount < _XboxCount; intCount++)
             {
-                for (int intCount = 0; intCount < _XboxCount; intCount++)
-                {
-                    if (_keyboard.output[intCount] != 0)
-                        Output[intCount] = _keyboard.output[intCount];
-                }
+                if (_class.KeyboardInterface.output[intCount] != 0)
+                    Output[intCount] = _class.KeyboardInterface.output[intCount];
             }
-            
         }
 
         private void NormalGamepad(ref double dblLx, ref double dblLy)
@@ -201,9 +189,7 @@ namespace consoleXstream.Output
             _boolHoldBack = false;
             _MenuWait = 0;
 
-            _frmMain.OpenMenu();
+            _class.Home.OpenMenu();
         }
-
-
     }
 }

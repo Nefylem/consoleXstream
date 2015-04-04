@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using consoleXstream.Remap;
 
 namespace consoleXstream.Config
@@ -59,13 +58,13 @@ namespace consoleXstream.Config
         private int _refreshRateID;
         private int _displayResolutionID;
         public string _initialDisplay;
-        public Keymap.KeyboardKeys keyDef ;
-        public Keymap.KeyboardKeys keyAltDef;
+        public Keymap.KeyboardKeys KeyDef ;
+        public Keymap.KeyboardKeys KeyAltDef;
 
-        public Configuration(Form1 mainForm)
+        public Configuration(BaseClass home)
         {
             _class = new Classes(this);
-            _class.DeclareClasses(mainForm);
+            _class.DeclareClasses(home);
 
             _class.Set.Title = new List<string>();
             _class.Set.Data = new List<string>();
@@ -88,7 +87,7 @@ namespace consoleXstream.Config
             _class.Set.Add("Preview", "true");
             _class.Set.Add("AVIRender", "true");
 
-            _class.Set.Add("ControllerRumble", "true");
+            //_class.Set.Add("ControllerRumble", "true");
             _class.Set.Add("Keyboard", "true");
             _class.Set.Add("HideMouse", "true");
             //IsEnableMouse = true;
@@ -187,6 +186,6 @@ namespace consoleXstream.Config
         public void SetAutoChangeDisplay() {_class.Display.SetAutoChangeDisplay(); }
         public void SetStayOnTop() { _class.Display.SetStayOnTop(); }
         private void ChangeResolution(string resolution) { _class.Display.ChangeResolution(resolution); }
-
+        public void ChangeRumble() { _class.Gamepad.ChangeRumble(); }
     }
 }

@@ -13,7 +13,7 @@
 
             if (_class.Set.Check("internalCapture").ToLower() == "true") _class.System.UseInternalCapture = true;
 
-            if (_class.Set.Check("controllerrumble").ToLower() == "true") _class.System.UseRumble = true;
+            if (_class.Set.Check("rumble").ToLower() == "true") _class.System.UseRumble = true;
             if (_class.Set.Check("ds4emulation").ToLower() == "true") _class.System.IsPs4ControllerMode = true;
             if (_class.Set.Check("normalize").ToLower() == "true") _class.System.IsNormalizeControls = true;
 

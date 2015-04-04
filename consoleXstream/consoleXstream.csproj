@@ -49,6 +49,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BaseClass.cs" />
     <Compile Include="Config\Classes.cs" />
     <Compile Include="Config\ControllerMax.cs" />
     <Compile Include="Config\Debug.cs" />
@@ -97,6 +98,7 @@
     <Compile Include="Menu\SubSelectMenu\Menu.cs" />
     <Compile Include="Menu\SubSelectMenu\Navigation.cs" />
     <Compile Include="Menu\SubSelectMenu\Var.cs" />
+    <Compile Include="Output\Classes.cs" />
     <Compile Include="Output\ControllerMax.cs" />
     <Compile Include="Output\Gamepad.cs" />
     <Compile Include="Output\Shortcut.cs" />

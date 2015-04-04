@@ -1,13 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.NetworkInformation;
-using System.Text;
-using System.Threading.Tasks;
-using consoleXstream.Input;
-using consoleXstream.Remap;
-
-namespace consoleXstream.Menu
+﻿namespace consoleXstream.Menu
 {
     public class Keyboard
     {
@@ -17,14 +8,14 @@ namespace consoleXstream.Menu
 
         public void CheckInput()
         {
-            if (_class.KeyboardHook.getKey(_class.Keymap.KeyDef.DpadUp) || _class.KeyboardHook.getKey(_class.Keymap.KeyAltDef.DpadUp)) _class.Nav.CheckCommand("up");
-            if (_class.KeyboardHook.getKey(_class.Keymap.KeyDef.DpadDown) || _class.KeyboardHook.getKey(_class.Keymap.KeyAltDef.DpadDown)) _class.Nav.CheckCommand("down");
-            if (_class.KeyboardHook.getKey(_class.Keymap.KeyDef.DpadLeft) || _class.KeyboardHook.getKey(_class.Keymap.KeyAltDef.DpadLeft)) _class.Nav.CheckCommand("left");
-            if (_class.KeyboardHook.getKey(_class.Keymap.KeyDef.DpadRight) || _class.KeyboardHook.getKey(_class.Keymap.KeyAltDef.DpadRight)) _class.Nav.CheckCommand("right");
-            if (_class.KeyboardHook.getKey(_class.Keymap.KeyDef.ButtonB) || _class.KeyboardHook.getKey(_class.Keymap.KeyAltDef.ButtonB)) _class.Nav.CheckCommand("back");
-            if (_class.KeyboardHook.getKey(_class.Keymap.KeyDef.ButtonBack) || _class.KeyboardHook.getKey(_class.Keymap.KeyAltDef.ButtonBack)) _class.Nav.CheckCommand("back");
-            if (_class.KeyboardHook.getKey(_class.Keymap.KeyDef.ButtonA) || _class.KeyboardHook.getKey(_class.Keymap.KeyAltDef.ButtonA)) _class.Nav.CheckCommand("ok");
-            if (_class.KeyboardHook.getKey(_class.Keymap.KeyDef.ButtonStart) || _class.KeyboardHook.getKey(_class.Keymap.KeyAltDef.ButtonStart)) _class.Nav.CheckCommand("ok");
+            if (_class.Base.Keyboard.GetKey(_class.Base.Keymap.KeyDef.DpadUp) || _class.Base.Keyboard.GetKey(_class.Base.Keymap.KeyAltDef.DpadUp)) _class.Nav.CheckCommand("up");
+            if (_class.Base.Keyboard.GetKey(_class.Base.Keymap.KeyDef.DpadDown) || _class.Base.Keyboard.GetKey(_class.Base.Keymap.KeyAltDef.DpadDown)) _class.Nav.CheckCommand("down");
+            if (_class.Base.Keyboard.GetKey(_class.Base.Keymap.KeyDef.DpadLeft) || _class.Base.Keyboard.GetKey(_class.Base.Keymap.KeyAltDef.DpadLeft)) _class.Nav.CheckCommand("left");
+            if (_class.Base.Keyboard.GetKey(_class.Base.Keymap.KeyDef.DpadRight) || _class.Base.Keyboard.GetKey(_class.Base.Keymap.KeyAltDef.DpadRight)) _class.Nav.CheckCommand("right");
+            if (_class.Base.Keyboard.GetKey(_class.Base.Keymap.KeyDef.ButtonB) || _class.Base.Keyboard.GetKey(_class.Base.Keymap.KeyAltDef.ButtonB)) _class.Nav.CheckCommand("back");
+            if (_class.Base.Keyboard.GetKey(_class.Base.Keymap.KeyDef.ButtonBack) || _class.Base.Keyboard.GetKey(_class.Base.Keymap.KeyAltDef.ButtonBack)) _class.Nav.CheckCommand("back");
+            if (_class.Base.Keyboard.GetKey(_class.Base.Keymap.KeyDef.ButtonA) || _class.Base.Keyboard.GetKey(_class.Base.Keymap.KeyAltDef.ButtonA)) _class.Nav.CheckCommand("ok");
+            if (_class.Base.Keyboard.GetKey(_class.Base.Keymap.KeyDef.ButtonStart) || _class.Base.Keyboard.GetKey(_class.Base.Keymap.KeyAltDef.ButtonStart)) _class.Nav.CheckCommand("ok");
         }
     }
 }

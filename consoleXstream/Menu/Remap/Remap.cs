@@ -10,7 +10,7 @@ namespace consoleXstream.Menu.Remap
     public class Remap
     {
         public Remap(Classes classes) { _class = classes; }
-        private Classes _class;
+        private readonly Classes _class;
 
         public void ChangeRemapScreen(string command)
         {

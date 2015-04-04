@@ -3,8 +3,12 @@ using System.Windows.Forms;
 
 namespace consoleXstream.Input.Mouse
 {
-    class Hook
+    public class Hook
     {
+        public Hook(BaseClass baseClass) { _class = baseClass; }
+        private BaseClass _class;
+
+        /*
         public Hook(Form1 mainForm, Output.Gamepad game) { frmMain = mainForm; _gamepad = game; }
 
         private Output.Gamepad _gamepad;
@@ -12,11 +16,11 @@ namespace consoleXstream.Input.Mouse
         private Menu.ShowMenu formMenu;
         private Config.Configuration system;
         private Input.KeyboardInterface keyboard;
-
+        */
 
         public void enableMouseHook()
         {
-            MouseDownFilter mouseFilter = new MouseDownFilter(frmMain);
+            MouseDownFilter mouseFilter = new MouseDownFilter(_class.Home);
             mouseFilter.LeftClick += mouseFilter_leftClick;
             mouseFilter.LeftRelease += mouseFilter_leftRelease;
             mouseFilter.mouseMoved += mouseFilter_mouseMovement;
@@ -25,53 +29,53 @@ namespace consoleXstream.Input.Mouse
 
             Application.AddMessageFilter(mouseFilter);
         }
-
+        /*
         public void GetSystemHandle(Config.Configuration inSystem) { system = inSystem; }
         public void GetKeyboardInterfaceHandle(Input.KeyboardInterface inKey) { keyboard = inKey; }
         public void GetMenuHandle(Menu.ShowMenu inMenu) { formMenu = inMenu; }
-            
+          */  
         void mouseFilter_leftClick(object sender, EventArgs e)
         {
-            if (!system.boolMenu)
+            if (!_class.System.boolMenu)
             {
-                if (!system.IsEnableMouse || system.IsVr)
-                    _gamepad.Ps4Touchpad = true;
+                if (!_class.System.IsEnableMouse || _class.System.IsVr)
+                    _class.Gamepad.Ps4Touchpad = true;
                 else
-                    keyboard.boolLeftMouse = true;
+                    _class.KeyboardInterface.boolLeftMouse = true;
             }
             else
             {
-                formMenu.BringToFront();
-                formMenu.Focus();                
+                _class.Menu.BringToFront();
+                _class.Menu.Focus();                
             }
         }
 
         void mouseFilter_leftRelease(object sender, EventArgs e)
         {
-            if (!system.boolMenu)
+            if (!_class.System.boolMenu)
             {
-                if (system.IsEnableMouse && !system.IsVr)
-                    keyboard.boolLeftMouse = false;
+                if (_class.System.IsEnableMouse && !_class.System.IsVr)
+                    _class.KeyboardInterface.boolLeftMouse = false;
                 else
-                    _gamepad.Ps4Touchpad = false;
+                    _class.Gamepad.Ps4Touchpad = false;
             }
         }
 
         void mouseFilter_rightClick(object sender, EventArgs e)
         {
-            if (!system.boolMenu)
+            if (!_class.System.boolMenu)
             {
-                if (system.IsEnableMouse)
-                    keyboard.boolRightMouse = true;
+                if (_class.System.IsEnableMouse)
+                    _class.KeyboardInterface.boolRightMouse = true;
             }
         }
 
         void mouseFilter_rightRelease(object sender, EventArgs e)
         {
-            if (!system.boolMenu)
+            if (!_class.System.boolMenu)
             {
-                if (system.IsEnableMouse)
-                    keyboard.boolRightMouse = false;
+                if (_class.System.IsEnableMouse)
+                    _class.KeyboardInterface.boolRightMouse = false;
             }
         }
 

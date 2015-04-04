@@ -17,6 +17,12 @@
             _class.Set.Add("Normalize", _class.System.IsNormalizeControls.ToString());
         }
 
+        public void ChangeRumble()
+        {
+            _class.System.UseRumble = !_class.System.UseRumble;
+            _class.Set.Add("Rumble", _class.System.UseRumble.ToString());
+        }
+
 
     }
 }

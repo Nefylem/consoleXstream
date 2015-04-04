@@ -7,21 +7,21 @@
 
         public void ChangeResolution(string resolution)
         {
-            _class.System.strCurrentResolution = resolution;
+            _class.Base.System.strCurrentResolution = resolution;
             resolution = resolution.ToLower();
             if (resolution == "resolution")
                 return;
 
-            var listRes = _class.VideoCapture.GetVideoResolution();
+            var listRes = _class.Base.VideoCapture.GetVideoResolution();
             for (var count = 0; count < listRes.Count; count++)
             {
                 if (resolution != listRes[count].ToLower())
                     continue;
 
-                _class.VideoCapture.SetVideoResolution(count);
-                _class.VideoCapture.RunGraph();
+                _class.Base.VideoCapture.SetVideoResolution(count);
+                _class.Base.VideoCapture.RunGraph();
 
-                _class.System.AddData("CaptureResolution", resolution);
+                _class.Base.System.AddData("CaptureResolution", resolution);
 
                 break;
             }
@@ -39,8 +39,8 @@
             _class.Shutter.Explain = "";
             _class.User.Menu = "videorefresh";
 
-            var listDisplayRef = _class.System.GetDisplayRefresh();
-            var currentRef = _class.System.GetRefreshRate().ToLower();
+            var listDisplayRef = _class.Base.System.GetDisplayRefresh();
+            var currentRef = _class.Base.System.GetRefreshRate().ToLower();
 
             foreach (var title in listDisplayRef)
             {
@@ -65,8 +65,8 @@
             _class.Shutter.Explain = "";
             _class.User.Menu = "videoresolution";
 
-            var listDisplayRes = _class.System.GetDisplayResolutionList();
-            var currentRes = _class.System.GetResolution().ToLower();
+            var listDisplayRes = _class.Base.System.GetDisplayResolutionList();
+            var currentRes = _class.Base.System.GetResolution().ToLower();
 
             foreach (var title in listDisplayRes)
             {
@@ -84,7 +84,7 @@
             if (command.ToLower() == "resolution")
                 return;
 
-            _class.System.SetDisplayResolution(command);
+            _class.Base.System.SetDisplayResolution(command);
             _class.Data.Checked.Clear();
             _class.Data.Checked.Add(command);
             
@@ -96,7 +96,7 @@
             if (command.ToLower() == "refresh")
                 return;
 
-            _class.System.SetDisplayRefresh(command);
+            _class.Base.System.SetDisplayRefresh(command);
             _class.Data.Checked.Clear();
             _class.Data.Checked.Add(command);
 
@@ -110,7 +110,7 @@
             else
                 _class.Data.Checked.Add("Auto Set");
 
-            _class.System.SetAutoChangeDisplay();
+            _class.Base.System.SetAutoChangeDisplay();
         }
 
         private void ChangeStayOnTop()
@@ -120,7 +120,7 @@
             else
                 _class.Data.Checked.Add("Stay On Top");
 
-            _class.System.SetStayOnTop();
+            _class.Base.System.SetStayOnTop();
         }
 
         public void ChangeVideoDisplay(string command)

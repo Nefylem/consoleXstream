@@ -24,7 +24,7 @@ namespace consoleXstream.Menu
             if (_class.Var.ShowSubSelection) { _class.SubNav.GetCommand(command); return; }
             if (_class.Var.SetupGamepad) { _class.RemapNav.GetCommand(command); return; }
 
-            if (_class.System.CheckLog("Menu")) _class.System.Debug("menu.log", command);   
+            if (_class.Base.System.CheckLog("Menu")) _class.Base.System.Debug("menu.log", command);   
             
             if (command == "back") { if (_menuBackWait == 0) MenuBack(); else _menuBackWait = 5; }
             if (command == "up" && _moveUpWait == 0) MenuUp();
@@ -146,8 +146,8 @@ namespace consoleXstream.Menu
         public void MenuOk()
         {
             _moveOkWait = 2;
-            if (_class.System.CheckLog("Menu")) _class.System.Debug("menu.log", ">OK>" + _class.User.Selected);
-            if (_class.System.CheckLog("Menu")) _class.System.Debug("menu.log", ">SUBOK>" + _class.User.SubSelected);
+            if (_class.Base.System.CheckLog("Menu")) _class.Base.System.Debug("menu.log", ">OK>" + _class.User.Selected);
+            if (_class.Base.System.CheckLog("Menu")) _class.Base.System.Debug("menu.log", ">SUBOK>" + _class.User.SubSelected);
 
             if (_class.Var.IsMainMenu)
                 _class.Action.MainMenu(_class.User.Selected);
@@ -166,7 +166,7 @@ namespace consoleXstream.Menu
                 if (intX < t.Rect.Left || intX > t.Rect.Right) continue;
                 //if (_class.Mouse.Hover == t.Command) return true;
 
-                if (_class.System.CheckLog("Menu")) _class.System.Debug("menu.log", ">Move>" + t.Command);
+                if (_class.Base.System.CheckLog("Menu")) _class.Base.System.Debug("menu.log", ">Move>" + t.Command);
 
                 if (_class.Var.IsMainMenu)
                     _class.User.Selected = t.Command;

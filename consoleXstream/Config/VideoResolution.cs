@@ -6,6 +6,10 @@ namespace consoleXstream.Config
 {
     public class VideoResolution
     {
+        public VideoResolution(BaseClass baseClass) { _class = baseClass; }
+        private readonly BaseClass _class;
+
+
         [DllImport("User32.dll")]
         private static extern bool EnumDisplayDevices(IntPtr lpDevice, int iDevNum, ref DisplayDevice lpDisplayDevice, int dwFlags);
 
@@ -74,9 +78,6 @@ namespace consoleXstream.Config
             public int dmDisplayFrequency;
         }
 
-        private readonly Form1 _frmMain;
-
-        public VideoResolution(Form1 mainForm) { _frmMain = mainForm; }
 
         private readonly List<string> _listDisplayDevices = new List<string>();
         private readonly List<string> _listRefreshRate = new List<string>();
@@ -121,7 +122,7 @@ namespace consoleXstream.Config
             var setDev = GetDevmode(cardId, setRes);
             if (!(setDev.dmBitsPerPel != 0 & setDev.dmPelsWidth != 0 & setDev.dmPelsHeight != 0)) return;
             ChangeDisplaySettings(ref setDev, 0);
-            _frmMain.ChangeDisplayRes();
+            _class.Home.ChangeDisplayRes();
         }
 
         public List<string> ListDisplayResolutions(int cardId)

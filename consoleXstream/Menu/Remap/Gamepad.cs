@@ -23,7 +23,7 @@ namespace consoleXstream.Menu.Remap
 
         private string FindRemapValue(string title)
         {
-            var gamepadCode = _class.Remap.findRemapName(title);
+            var gamepadCode = _class.Base.Remap.FindRemapName(title);
             return gamepadCode == -1 ? "Undefined" : FindGamepadValue(gamepadCode);
         }
 
@@ -52,8 +52,13 @@ namespace consoleXstream.Menu.Remap
 
             if (_gamepadCount == 0) _gamepadCount = Enum.GetNames(typeof(Xbox)).Length;
 
-            DrawButton(new Rectangle(10, 20, 275, 20), "Save Profile", "Save Profile", "Save Profile" == _class.RemapNav.Selected);
-            DrawButton(new Rectangle(295, 20, 275, 20), "Load Profile", "Load Profile", "Load Profile" == _class.RemapNav.Selected);
+            //DrawButton(new Rectangle(10, 20, 275, 20), "Save Profile", "Save Profile", "Save Profile" == _class.RemapNav.Selected);
+            //DrawButton(new Rectangle(295, 20, 275, 20), "Load Profile", "Load Profile", "Load Profile" == _class.RemapNav.Selected);
+            _class.DrawGui.setOutline(true);
+            _class.DrawGui.setFontSize(25);
+            _class.DrawGui.CenterText(new Rectangle(0, 0, 600, 40), "Remap Gamepad Inputs");
+            _class.DrawGui.setOutline(false);
+            _class.DrawGui.setFontSize(12);
 
             var start = 50;
             var leftTitle = 10;
@@ -99,29 +104,39 @@ namespace consoleXstream.Menu.Remap
         {
             var controls = GamePad.GetState(PlayerIndex.One);
 
-            if (controls.DPad.Left) { }
-            if (controls.DPad.Right) {}
-            if (controls.DPad.Up) { }
-            if (controls.DPad.Down) { }
+            if (controls.DPad.Left) { SetGamepadButton("D-Pad Left"); }
+            if (controls.DPad.Right) { SetGamepadButton("D-Pad Right"); }
+            if (controls.DPad.Up) { SetGamepadButton("D-Pad Up"); }
+            if (controls.DPad.Down) { SetGamepadButton("D-Pad Down"); }
 
-            if (controls.Buttons.A) { }
-            if (controls.Buttons.B) { }
-            if (controls.Buttons.X) { }
-            if (controls.Buttons.Y) { }
+            if (controls.Buttons.A && _class.RemapNav._moveOkWait == 0) { SetGamepadButton("A"); }
+            if (controls.Buttons.B) { SetGamepadButton("B"); }
+            if (controls.Buttons.X) { SetGamepadButton("X"); }
+            if (controls.Buttons.Y) { SetGamepadButton("Y"); }
 
-            if (controls.Buttons.Start) { }
-            if (controls.Buttons.Guide) { }
-            if (controls.Buttons.Back)
-            {
-            }
+            if (controls.Buttons.Start) { SetGamepadButton("Start"); }
+            if (controls.Buttons.Guide) { SetGamepadButton("Guide"); }
+            if (controls.Buttons.Back) { SetGamepadButton("Back"); }
 
-            if (controls.Buttons.LeftShoulder) { }
-            if (controls.Buttons.RightShoulder) {}
-            if (controls.Buttons.LeftStick) { }
-            if (controls.Buttons.RightStick) {}
+            if (controls.Buttons.LeftShoulder) { SetGamepadButton("LeftShoulder"); }
+            if (controls.Buttons.RightShoulder) { SetGamepadButton("RightShoulder"); }
+            if (controls.Buttons.LeftStick) { SetGamepadButton("LeftStick"); }
+            if (controls.Buttons.RightStick) { SetGamepadButton("RightStick"); }
 
             if (controls.Triggers.Left > 0) { }
             if (controls.Triggers.Right > 0) { }
+            //LX
+            //LY
+            //RX
+            //RY
+        }
+
+        private void SetGamepadButton(string button)
+        {
+            _class.Base.Remap.SetRemapCode(_class.RemapNav.SetMap, button);
+            _class.RemapNav.ShowCommand = "";
+            _class.RemapNav.SetMap = "";
+            _class.RemapNav.WaitInput = false;
         }
     }
 }

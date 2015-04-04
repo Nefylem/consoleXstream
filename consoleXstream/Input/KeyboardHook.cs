@@ -1,51 +1,42 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.Runtime.InteropServices;
+﻿using System.Collections.Generic;
 
 namespace consoleXstream.Input
 {
     public class KeyboardHook
     {
-        readonly KeyboardHookDef _keyboardHook = new KeyboardHookDef();
+        public KeyboardHook(BaseClass baseClass) { _class = baseClass; }
+        private BaseClass _class;
 
-        private Form1 frmMain;
+        readonly KeyboardHookDef _keyboardHook = new KeyboardHookDef();
 
         private bool _boolKeyHookActive;
         private List<string> _listKey;
 
-        public KeyboardHook(Form1 mainForm) { frmMain = mainForm; }
-
-        public void enableKeyboardHook()
+        public void EnableKeyboardHook()
         {
-            if (_boolKeyHookActive == false)
-            {
-                _boolKeyHookActive = true;
-                _keyboardHook.KeyDown += new KeyboardHookDef.KeyboardHookCallback(keyboardHook_KeyDown);
-                _keyboardHook.KeyUp += new KeyboardHookDef.KeyboardHookCallback(keyboardHook_KeyUp);
+            if (_boolKeyHookActive) return;
+            _boolKeyHookActive = true;
+            _keyboardHook.KeyDown += keyboardHook_KeyDown;
+            _keyboardHook.KeyUp += keyboardHook_KeyUp;
 
-                _listKey = new List<string>();
+            _listKey = new List<string>();
 
-                _keyboardHook.Install();
-            }
+            _keyboardHook.Install();
         }
 
-        public void disableKeyHook()
+        public void DisableKeyHook()
         {
             _keyboardHook.Uninstall();
         }
 
-        void keyboardHook_KeyUp(KeyboardHookDef.VKeys key) { setKey(key, false); }
-        void keyboardHook_KeyDown(KeyboardHookDef.VKeys key) { setKey(key, true); }
+        void keyboardHook_KeyUp(KeyboardHookDef.VKeys key) { SetKey(key, false); }
+        void keyboardHook_KeyDown(KeyboardHookDef.VKeys key) { SetKey(key, true); }
 
-        private void setKey(KeyboardHookDef.VKeys key, bool boolSet)
+        private void SetKey(KeyboardHookDef.VKeys key, bool boolSet)
         {
-            string strKey = key.ToString();
+            var strKey = key.ToString();
 
-            int intIndex = _listKey.IndexOf(strKey);
+            var intIndex = _listKey.IndexOf(strKey);
 
             if (boolSet)
             {
@@ -59,13 +50,9 @@ namespace consoleXstream.Input
             }
         }
 
-        public bool getKey(string strKey)
+        public bool GetKey(string strKey)
         {
-            if (_listKey.IndexOf(strKey) > -1)
-                return true;
-
-            return false;
+            return _listKey.IndexOf(strKey) > -1;
         }
-        
     }
 }

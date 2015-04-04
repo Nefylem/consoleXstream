@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
 using System.Xml;
 using System.Reflection;
-using System.Threading;
 using System.ComponentModel;
+using System.Windows.Forms;
 using consoleXstream.Input;
 
 namespace consoleXstream.Remap
@@ -15,58 +11,58 @@ namespace consoleXstream.Remap
 
     public class Remapping
     {
-        public class remapCodes
+        public class RemapCodes
         {
             [Description("Home")]
-            public int home { get; set; }
+            public int Home { get; set; }
             [Description("Back")]
-            public int back { get; set; }
+            public int Back { get; set; }
             [Description("Start")]
-            public int start { get; set; }
+            public int Start { get; set; }
 
             [Description("Right Shoulder")]
-            public int rightShoulder { get; set; }
+            public int RightShoulder { get; set; }
             [Description("Right Trigger")]
-            public int rightTrigger { get; set; }   //0 - 100
+            public int RightTrigger { get; set; }   //0 - 100
             [Description("Right Stick")]
-            public int rightStick { get; set; }
+            public int RightStick { get; set; }
 
             [Description("Left Shoulder")]
-            public int leftShoulder { get; set; }
+            public int LeftShoulder { get; set; }
             [Description("Left Trigger")]
-            public int leftTrigger { get; set; }    //0 - 100
+            public int LeftTrigger { get; set; }    //0 - 100
             [Description("Left Stick")]
-            public int leftStick { get; set; }
+            public int LeftStick { get; set; }
 
             [Description("RightThumb X")]
-            public int rightX { get; set; }
+            public int RightX { get; set; }
             [Description("RightThumb Y")]
-            public int rightY { get; set; }
+            public int RightY { get; set; }
             [Description("LeftThumb X")]
-            public int leftX { get; set; }
+            public int LeftX { get; set; }
             [Description("LeftThumb Y")]
-            public int leftY { get; set; }
+            public int LeftY { get; set; }
 
             [Description("D-Pad Up")]
-            public int up { get; set; }
+            public int Up { get; set; }
             [Description("D-Pad Down")]
-            public int down { get; set; }
+            public int Down { get; set; }
             [Description("D-Pad Left")]
-            public int left { get; set; }
+            public int Left { get; set; }
             [Description("D-Pad Right")]
-            public int right { get; set; }
+            public int Right { get; set; }
 
             [Description("Y")]
-            public int y { get; set; }
+            public int Y { get; set; }
             [Description("B")]
-            public int b { get; set; }
+            public int B { get; set; }
             [Description("A")]
-            public int a { get; set; }
+            public int A { get; set; }
             [Description("X")]
-            public int x { get; set; }
+            public int X { get; set; }
 
             [Description("Touchpad")]
-            public int touch { get; set; }
+            public int Touch { get; set; }
              /*
             accX = 21,      //rotate X. 90 = -25, 180 = 0, 270 = +25, 360 = 0 (ng)
             accY = 22,      //shake vertically. +25 (top) to -25 (bottom) (ng)
@@ -78,74 +74,67 @@ namespace consoleXstream.Remap
             touchY = 29
              */
         }
-        public remapCodes remapGamepad;
+        public RemapCodes RemapGamepad;
 
-        public void setDefaultGamepad()
+        public void SetDefaultGamepad()
         {
-            remapGamepad = new remapCodes();
-
-            remapGamepad.home = 0;
-            remapGamepad.back = 1;
-            remapGamepad.start = 2;
-
-            remapGamepad.rightShoulder = 3;
-            remapGamepad.rightTrigger = 4;
-            remapGamepad.rightStick = 5;
-
-            remapGamepad.leftShoulder = 6;
-            remapGamepad.leftTrigger = 7;
-            remapGamepad.leftStick = 8;
-
-            remapGamepad.rightX = 9;
-            remapGamepad.rightY = 10;
-            remapGamepad.leftX = 11;
-            remapGamepad.leftY = 12;
-
-            remapGamepad.up = 13;
-            remapGamepad.down = 14;
-            remapGamepad.left = 15;
-            remapGamepad.right = 16;
-
-            remapGamepad.y = 17;
-            remapGamepad.b = 18;
-            remapGamepad.a = 19;
-            remapGamepad.x = 20;
-
-            remapGamepad.touch = 27;
+            RemapGamepad = new RemapCodes
+            {
+                Home = 0,
+                Back = 1,
+                Start = 2,
+                RightShoulder = 3,
+                RightTrigger = 4,
+                RightStick = 5,
+                LeftShoulder = 6,
+                LeftTrigger = 7,
+                LeftStick = 8,
+                RightX = 9,
+                RightY = 10,
+                LeftX = 11,
+                LeftY = 12,
+                Up = 13,
+                Down = 14,
+                Left = 15,
+                Right = 16,
+                Y = 17,
+                B = 18,
+                A = 19,
+                X = 20,
+                Touch = 27
+            };
         }
 
-        public void loadGamepadRemap()
+        public void LoadGamepadRemap()
         {
-            if (Directory.Exists("Profiles"))
+            if (!Directory.Exists("Profiles")) return;
+            if (!File.Exists(@"Profiles\gamepad.remap")) return;
+            
+            var setting = "";
+            
+            var reader = new XmlTextReader(@"Profiles\gamepad.remap");
+            while (reader.Read())
             {
-                if (File.Exists(@"Profiles\gamepad.remap"))
+                switch (reader.NodeType)
                 {
-                    string setting = "";
-                    XmlTextReader reader = new XmlTextReader(@"Profiles\gamepad.remap");
-                    while (reader.Read())
-                    {
-                        switch (reader.NodeType)
-                        {
-                            case XmlNodeType.Element: // The node is an element.
-                                //MessageBox.Show("<" + reader.Name);
-                                break;
-                            case XmlNodeType.Text: //Display the text in each element.
-                                setting = reader.Value;
-                                break;
-                            case XmlNodeType.EndElement: //Display the end of the element.
-                                if (setting.Length > 0) 
-                                    addRemapData(reader.Name, setting);
+                    case XmlNodeType.Element: // The node is an element.
+                        //MessageBox.Show("<" + reader.Name);
+                        break;
+                    case XmlNodeType.Text: //Display the text in each element.
+                        setting = reader.Value;
+                        break;
+                    case XmlNodeType.EndElement: //Display the end of the element.
+                        if (setting.Length > 0) 
+                            AddRemapData(reader.Name, setting);
 
-                                setting = "";
-                                break;
-                        }
-                    }
-                    reader.Close();
+                        setting = "";
+                        break;
                 }
             }
+            reader.Close();
         }
 
-        private void addRemapData(string title, string setting)
+        private void AddRemapData(string title, string setting)
         {
             /*
             title = title.ToLower();
@@ -168,95 +157,136 @@ namespace consoleXstream.Remap
              */
         }
 
-        public void saveGamepadRemap()
+        public void SaveGamepadRemap()
         {
-            if (!Directory.Exists("Profiles"))
-                Directory.CreateDirectory("Profiles");
+            if (!Directory.Exists("Profiles")) Directory.CreateDirectory("Profiles");
 
-            if (File.Exists(@"Profiles\gamepad.remap") == true) File.Delete(@"Profiles\gamepad.remap");
+            if (File.Exists(@"Profiles\gamepad.remap")) File.Delete(@"Profiles\gamepad.remap");
 
-            string save = "<Gamepad>";
-            Type myClassType = remapGamepad.GetType();
-            PropertyInfo[] properties = myClassType.GetProperties();
+            var save = "<Gamepad>";
+            var myClassType = RemapGamepad.GetType();
+            var properties = myClassType.GetProperties();
             
-            foreach (PropertyInfo property in properties)
+            foreach (var property in properties)
             {
-                string find = property.GetValue(remapGamepad, null).ToString();
+                var find = property.GetValue(RemapGamepad, null).ToString();
                 try
                 {
-                    int id = Convert.ToInt32(find.Trim());
+                    var id = Convert.ToInt32(find.Trim());
                     save += "<" + property.Name + ">";
-                    save += findGamepadValue(id);
+                    save += FindGamepadValue(id);
                     save += "</" + property.Name + ">";
                 }
-                catch { }
-                //save += "<" + property.Name + ">" + property.GetValue(remapGamepad, null) + "</" + property.Name + ">";
+                catch
+                {
+                    // ignored
+                }
             }
             save += "</Gamepad>";
 
-            XmlDocument doc = new XmlDocument();
+            var doc = new XmlDocument();
             doc.LoadXml(save);
-            XmlWriterSettings settings = new XmlWriterSettings();
-            settings.Indent = true;
-            XmlWriter writer = XmlWriter.Create(@"Profiles\gamepad.remap", settings);
+            var settings = new XmlWriterSettings {Indent = true};
+            var writer = XmlWriter.Create(@"Profiles\gamepad.remap", settings);
             doc.Save(writer);
             writer.Close();
         }
 
         static string GetDescription(MemberInfo type)
         {
-            DescriptionAttribute[] descriptions = (DescriptionAttribute[])
-                type.GetCustomAttributes(typeof(DescriptionAttribute), false);
+            var descriptions = (DescriptionAttribute[])type.GetCustomAttributes(typeof(DescriptionAttribute), false);
 
-            if (descriptions.Length > 0)
-                return descriptions[0].Description;
-            else
-                return "";
+            return descriptions.Length > 0 ? descriptions[0].Description : "";
         }
 
-        public int findRemapName(string title)
+        public int FindRemapName(string title)
         {
             title = title.ToLower();
-            Type myClassType = remapGamepad.GetType();
-            PropertyInfo[] properties = myClassType.GetProperties();
+            var myClassType = RemapGamepad.GetType();
+            var properties = myClassType.GetProperties();
             
-            foreach (PropertyInfo property in properties)
+            foreach (var property in properties)
             {
-                string newTitle = GetDescription(property);
-                if (title == newTitle.ToLower())
+                var newTitle = GetDescription(property);
+                if (title != newTitle.ToLower()) continue;
+                try
                 {
-                    try
-                    {
-                        return Convert.ToInt32(property.GetValue(remapGamepad, null).ToString());
-                    }
-                    catch { }
+                    return Convert.ToInt32(property.GetValue(RemapGamepad, null).ToString());
+                }
+                catch
+                {
+                    // ignored
                 }
             }
             return -1;
         }
 
-        private string findGamepadValue(int value)
+        private string FindGamepadValue(int value)
         {
-            Xbox xboxValue = (Xbox)value;
+            var xboxValue = (Xbox)value;
             return GetEnumDescription(xboxValue);
         }
 
         public static string GetEnumDescription(Enum value)
         {
-            FieldInfo fi = value.GetType().GetField(value.ToString());
+            var fi = value.GetType().GetField(value.ToString());
 
-            if (fi != null)
+            if (fi == null) return value.ToString();
+            var attributes = (DescriptionAttribute[])fi.GetCustomAttributes(typeof(DescriptionAttribute), false);
+
+            return attributes.Length > 0 ? attributes[0].Description : value.ToString();
+        }
+
+        public void SetRemapCode(string button, string newCommand)
+        {
+            var set = FindRemapName(newCommand);
+            switch (button.ToLower())
             {
-                DescriptionAttribute[] attributes =
-                    (DescriptionAttribute[])fi.GetCustomAttributes(typeof(DescriptionAttribute), false);
-
-                if (attributes != null && attributes.Length > 0)
-                    return attributes[0].Description;
-                else
-                    return value.ToString();
+                case "home":
+                    RemapGamepad.Home = set;
+                    break;
+                case "back":
+                    RemapGamepad.Back = set; break;
+                case "rightshoulder":
+                    RemapGamepad.RightShoulder= set; break;
+                case "righttrigger":
+                    RemapGamepad.RightTrigger = set; break;
+                case "rightstick":
+                    RemapGamepad.RightStick = set; break;
+                case "leftshoulder":
+                    RemapGamepad.LeftShoulder = set; break;
+                case "leftrigger":
+                    RemapGamepad.LeftTrigger = set; break;
+                case "leftstick":
+                    RemapGamepad.LeftStick = set; break;
+                case "rightx":
+                    RemapGamepad.RightX = set; break;
+                case "righty":
+                    RemapGamepad.RightY = set; break;
+                case "leftx":
+                    RemapGamepad.LeftX = set; break;
+                case "lefty":
+                    RemapGamepad.LeftY = set; break;
+                case "d-pad up":
+                    RemapGamepad.Up = set; break;
+                case "d-pad down":
+                    RemapGamepad.Down = set; break;
+                case "d-pad left":
+                    RemapGamepad.Left = set; break;
+                case "d-pad right":
+                    RemapGamepad.Right = set; break;
+                case "y":
+                    RemapGamepad.Y = set; break;
+                case "b":
+                    RemapGamepad.B = set; break;
+                case "a":
+                    RemapGamepad.A = set; break;
+                case "x":
+                    RemapGamepad.X = set; break;
+                case "touch":
+                    RemapGamepad.Touch = set; break;
             }
-
-            return value.ToString();
+            SaveGamepadRemap();
         }
     }
 }

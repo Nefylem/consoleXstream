@@ -9,7 +9,7 @@ namespace consoleXstream.Menu.Remap
 
         public string Selected;
         public string ShowCommand;
-        private string SetMap;
+        public string SetMap;
 
         public int CellHeight = 20;
         public int CellSpace = 5;
@@ -102,7 +102,7 @@ namespace consoleXstream.Menu.Remap
                 if (intY < t.Rect.Top || intY > t.Rect.Bottom) continue;
                 if (intX < t.Rect.Left || intX > t.Rect.Right) continue;
 
-                if (_class.System.CheckLog("Menu")) _class.System.Debug("menu.log", ">Move>" + t.Command);
+                if (_class.Base.System.CheckLog("Menu")) _class.Base.System.Debug("menu.log", ">Move>" + t.Command);
 
                 Selected = t.Command;
                 return true;

@@ -5,45 +5,16 @@ using System.Linq;
 using System.Windows.Forms;
 using System.IO;
 using System.Reflection;
-using consoleXstream.Config;
-using consoleXstream.Input;
-using consoleXstream.Input.Mouse;
-using consoleXstream.Menu;
-using consoleXstream.Output;
 using consoleXstream.Output.TitanOne;
-using consoleXstream.Remap;
-using consoleXstream.Scripting;
-using ControllerMax = consoleXstream.Output.ControllerMax;
 
 namespace consoleXstream
 {
     public partial class Form1 : Form
     {
-        #region Definitions
-        #region development
         string strPath = @"\\gamer-pc\shield\consoleXstream\";
         public bool boolIDE = false;
-        #endregion
 
-        private Configuration _system;
-        private ExternalScript _external;
-
-        //private GamepadXInput _gamepad;
-        private Output.Gamepad _gamepad;
-
-        private Input.Mouse.Hook _mouse;
-        private KeyboardHook _keyboard;
-        private KeyboardInterface _keyboardInterface;
-
-        private Output.ControllerMax _controllerMax;
-        private Output.TitanOne.Write _titanOne;
-        private Gimx _gimx;
-        private VideoCapture.VideoCapture _videoCapture;
-        private VideoResolution _videoResolution;
-        private Remap.Remapping _remap;
-        private Remap.Keymap _keymap;
-
-        private ShowMenu formMenu;
+        private BaseClass _class;
 
         public int intSampleFPS;
         public int intLineSample;
@@ -55,7 +26,7 @@ namespace consoleXstream
         private string _strFPSCheck;
         private int _intBlockMenu;
 
-        private int _MouseScreenBounds;
+        private int MouseScreenBounds;
         private int _intMouseX;
         private int _intMouseY;
         private bool _boolChangeFullscreen;
@@ -71,10 +42,6 @@ namespace consoleXstream
         private int TitanOneListRefresh;
         private bool TitanOneListRefreshFail;
 
-        //private int _intScreenWidth;
-        //private int _intScreenHeight;
-        #endregion
-
         public Form1()
         {
             InitializeComponent();
@@ -82,15 +49,17 @@ namespace consoleXstream
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            _class = new BaseClass(this);
+            _class.Declare();
+
             //captureImage = new Bitmap(Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height);
 
-            _MouseScreenBounds = 25;
+            MouseScreenBounds = 25;
             DeleteLogs();
 
             if (System.Diagnostics.Debugger.IsAttached)
                 boolIDE = true;
 
-            DeclareClasses();
             CheckDevelopment();
 
             RunStartup();
@@ -99,49 +68,6 @@ namespace consoleXstream
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {
             CloseSystem();
-        }
-
-        //Definitions for calling from classes
-        private void DeclareClasses()
-        {
-            _remap = new Remapping();
-            _keyboardInterface = new KeyboardInterface(this);
-            _system = new Configuration(this);
-            _gamepad = new Output.Gamepad(this, _remap, _system, _keyboardInterface);
-            _titanOne = new Write(this, _system, _gamepad);
-
-            _external = new ExternalScript(this);
-
-            //_gamepad = new GamepadXInput(this);
-            _keyboard = new KeyboardHook(this);
-
-            _controllerMax = new ControllerMax(this);
-            _gimx = new Gimx(this);
-
-            _videoResolution = new VideoResolution(this);
-            _keymap = new Keymap();
-
-            _mouse = new Hook(this, _gamepad);
-            _videoCapture = new VideoCapture.VideoCapture(this, _system);
-
-            formMenu = new ShowMenu(this, _system, _keyboard, _videoCapture, _remap, _keymap, _gamepad);
-
-            //Pass to subforms as needed
-            _system.GetClassHandles(_videoCapture, _controllerMax, _titanOne, _videoResolution);
-
-            _controllerMax.getSystemHandle(_system);
-            _controllerMax.getKeyboardInterfaceHandle(_keyboardInterface);
-
-            _keyboardInterface.getSystemHandle(_system);
-            _keyboardInterface.getRemapHangle(_remap);
-            _keyboardInterface.getKeymapHandle(_keymap);
-
-            _mouse.GetSystemHandle(_system);
-            _mouse.GetKeyboardInterfaceHandle(_keyboardInterface);
-            _mouse.GetMenuHandle(formMenu);
-
-            _keymap.InitializeKeyboardDefaults();
-
         }
 
         //Deletes the log files on startup so only shows latest information
@@ -157,6 +83,7 @@ namespace consoleXstream
             if (File.Exists("video.log")) File.Delete("video.log");
             if (File.Exists("menu.log")) File.Delete("Menu.log");
         }
+
         //Copies files to test environment 
         private void CheckDevelopment()
         {
@@ -178,16 +105,16 @@ namespace consoleXstream
         //Kill active functions
         public void CloseSystem()
         {
-            if (_system != null)
+            if (_class.System != null)
             {
-                _system.IsOverrideOnExit = true;
-                _system.SetInitialDisplay();
+                _class.System.IsOverrideOnExit = true;
+                _class.System.SetInitialDisplay();
 
-                if (_system.UseControllerMax)
-                    _controllerMax.closeControllerMaxInterface();
+                if (_class.System.UseControllerMax)
+                    _class.ControllerMax.closeControllerMaxInterface();
 
-                if (_system.UseInternalCapture)
-                    _videoCapture.CloseGraph();
+                if (_class.System.UseInternalCapture)
+                    _class.VideoCapture.CloseGraph();
             }
             Application.Exit();
         }
@@ -204,20 +131,20 @@ namespace consoleXstream
                         RetrySetTitanOne = "";
                     }
 
-                    int result = _titanOne.CheckDevices();
+                    int result = _class.TitanOne.CheckDevices();
                     if (result > 0)
                     {
                         string serial = RetrySetTitanOne;
                         RetrySetTitanOne = "";
-                        _system.DisableTitanOneRetry = true;
-                        _titanOne.SetTitanOneDevice(serial);
+                        _class.System.DisableTitanOneRetry = true;
+                        _class.TitanOne.SetTitanOneDevice(serial);
                     }
                 }
             }
 
             RunMainLoop();
 
-            if (!_system.CheckFps) return;
+            if (!_class.System.CheckFps) return;
             if (_strFPSCheck != DateTime.Now.ToString("ss"))
             {
                 _intWatchFPS = _intCurrentFPS;
@@ -235,9 +162,9 @@ namespace consoleXstream
         //Configures system on startup
         private void RunStartup()
         {
-            _system.GetInitialDisplay();
+            _class.System.GetInitialDisplay();
 
-            _system.Debug("[3] runStartup");
+            _class.System.Debug("[3] runStartup");
             BackColor = Color.Black;
 
             if (!boolIDE)
@@ -253,11 +180,11 @@ namespace consoleXstream
             loadBackground();                           //If theres a background in the resource file, splash that
             loadUserConfig();
 
-            _remap.setDefaultGamepad();
-            _remap.loadGamepadRemap();
+            _class.Remap.SetDefaultGamepad();
+            _class.Remap.LoadGamepadRemap();
             //remap.saveGamepadRemap();
 
-            if (_system.IsVr)
+            if (_class.System.IsVr)
             {
                 imgDisplayVr.Visible = true;
                 imgDisplayVr.BackColor = Color.Black;
@@ -282,61 +209,61 @@ namespace consoleXstream
             }
 
             if (boolIDE)
-                _system.IsStayOnTop = false;
+                _class.System.IsStayOnTop = false;
 
-            if (_system.IsStayOnTop)
+            if (_class.System.IsStayOnTop)
                 TopMost = true;
 
-            if (_system.IsEnableKeyboard)
+            if (_class.System.IsEnableKeyboard)
             {
-                _system.Debug("[3] Init keyboard hook");
-                _keyboardInterface.getKeyboardHandle(_keyboard);
-                _keyboard.enableKeyboardHook();
+                _class.System.Debug("[3] Init keyboard hook");
+                _class.KeyboardInterface.getKeyboardHandle(_class.Keyboard);
+                _class.Keyboard.EnableKeyboardHook();
             }
 
-            _system.Debug("[3] Init mouse event hook");
-            _mouse.enableMouseHook();
+            _class.System.Debug("[3] Init mouse event hook");
+            _class.Mouse.enableMouseHook();
 
-            if (_system.UseInternalCapture)
+            if (_class.System.UseInternalCapture)
             {
-                _system.Debug("[3] Init video capture variables");
+                _class.System.Debug("[3] Init video capture variables");
                 configureVideoCapture();
 
-                if (_system.strSetResolution != null)
+                if (_class.System.strSetResolution != null)
                 {
-                    _system.Debug("[3] set user res ");
-                    if (_system.strSetResolution.Length > 0)
+                    _class.System.Debug("[3] set user res ");
+                    if (_class.System.strSetResolution.Length > 0)
                     {
-                        _system.Debug("[3] set user res [" + _system.strSetResolution + "]");
-                        _system.changeCaptureResolution(_system.strSetResolution);
+                        _class.System.Debug("[3] set user res [" + _class.System.strSetResolution + "]");
+                        _class.System.changeCaptureResolution(_class.System.strSetResolution);
                     }
                 }
             }
 
-            if (_system.UseControllerMax)
+            if (_class.System.UseControllerMax)
             {
-                if (!_system.UseTitanOneApi)
+                if (!_class.System.UseTitanOneApi)
                 {
-                    _system.Debug("[3] Configure ControllerMax API");
-                    _controllerMax.initControllerMax();
+                    _class.System.Debug("[3] Configure ControllerMax API");
+                    _class.ControllerMax.initControllerMax();
                 }
                 else
                 {
-                    //_system.Debug("[3] Configure ControllerMax using TitanOne API");
-                    //_titanOne.setTOInterface(Output.TitanOne.DevPID.ControllerMax);
-                    //_titanOne.initTitanOne();
+                    //_class.System.Debug("[3] Configure ControllerMax using TitanOne API");
+                    //_class.TitanOne.setTOInterface(Output.TitanOne.DevPID.ControllerMax);
+                    //_class.TitanOne.initTitanOne();
                 }
             }
 
-            if (_system.UseTitanOne) InitializeTitanOne();
+            if (_class.System.UseTitanOne) InitializeTitanOne();
 
-            if (_system.CheckFps)
+            if (_class.System.CheckFps)
             {
                 label1.Visible = true;
                 label2.Visible = true;
             }
 
-            if (_system.IsHideMouse)
+            if (_class.System.IsHideMouse)
                 Cursor.Hide();
 
             tmrSystem.Enabled = true;
@@ -347,19 +274,19 @@ namespace consoleXstream
             if (ListToDevices == null)
                 ListToDevices = new List<string>();
 
-            _system.Debug("[3] Configure TitanOne API");
-            _titanOne.SetToInterface(Define.DevPid.TitanOne);
+            _class.System.Debug("[3] Configure TitanOne API");
+            _class.TitanOne.SetToInterface(Define.DevPid.TitanOne);
             
-            if (_system.TitanOneDevice != null)
+            if (_class.System.TitanOneDevice != null)
             {
-                if (_system.TitanOneDevice.Length > 0)
+                if (_class.System.TitanOneDevice.Length > 0)
                 {
-                    _titanOne.SetApiMethod(Define.ApiMethod.Multi);
-                    _titanOne.SetTitanOneDevice(_system.TitanOneDevice);
+                    _class.TitanOne.SetApiMethod(Define.ApiMethod.Multi);
+                    _class.TitanOne.SetTitanOneDevice(_class.System.TitanOneDevice);
                 }
             }
 
-            _titanOne.Initialize();
+            _class.TitanOne.Initialize();
         }
 
         //Loads a background - if present in the resource file
@@ -374,20 +301,20 @@ namespace consoleXstream
 
         private void loadUserConfig()
         {
-            _system.loadDefaults();
+            _class.System.loadDefaults();
             
-            _keymap.InitializeKeyboardDefaults();
-            _keymap.LoadKeyboardInputs();
+            _class.Keymap.InitializeKeyboardDefaults();
+            _class.Keymap.LoadKeyboardInputs();
 
-            _system.LoadSetup();
-            _system.CheckUserSettings();
+            _class.System.LoadSetup();
+            _class.System.CheckUserSettings();
         }
 
         //Sends the settings into the video capture class. User settings already sent to class
         private void configureVideoCapture()
         {
-            _videoCapture.InitialzeCapture();            
-            _videoCapture.RunGraph();
+            _class.VideoCapture.InitialzeCapture();            
+            _class.VideoCapture.RunGraph();
         }
 
         public int Clamp(int value, int min, int max)
@@ -410,16 +337,16 @@ namespace consoleXstream
 
             label5.Text = intReplaceX + @" / " + intReplaceY;
 
-            if (Cursor.Position.Y > Screen.PrimaryScreen.Bounds.Height - _MouseScreenBounds)
+            if (Cursor.Position.Y > Screen.PrimaryScreen.Bounds.Height - _class.MouseScreenBounds)
                 CenterMouseY();
 
-            if (Cursor.Position.Y < _MouseScreenBounds)
+            if (Cursor.Position.Y < _class.MouseScreenBounds)
                 CenterMouseY();
 
-            if (Cursor.Position.X < _MouseScreenBounds)
+            if (Cursor.Position.X < _class.MouseScreenBounds)
                 CenterMouseX();
 
-            if (Cursor.Position.X > Screen.PrimaryScreen.Bounds.Width - _MouseScreenBounds)
+            if (Cursor.Position.X > Screen.PrimaryScreen.Bounds.Width - _class.MouseScreenBounds)
                 CenterMouseX();
              */
         }
@@ -446,25 +373,25 @@ namespace consoleXstream
             if (_intBlockMenu > 0)
                 _intBlockMenu--;
 
-            if (_system.UseInternalCapture)
+            if (_class.System.UseInternalCapture)
                 CheckRunningGraph();
 
-            if (_system.boolMenu)
+            if (_class.System.boolMenu)
                 return;
 
-            if (_system.IsEnableKeyboard)
+            if (_class.System.IsEnableKeyboard)
             {
-                if (_keyboard.getKey(_keymap.KeyDef.ButtonBack))
+                if (_class.Keyboard.GetKey(_class.Keymap.KeyDef.ButtonBack))
                 {
                     if (_intBlockMenu == 0)
                         OpenMenu();
                     else
                         _intBlockMenu = 3;
                 }
-                _keyboardInterface.checkKeys();
+                _class.KeyboardInterface.checkKeys();
             }
 
-            if (_system.IsEnableMouse)
+            if (_class.System.IsEnableMouse)
                 CheckMouse();
 
             CheckControllerInput();
@@ -472,23 +399,23 @@ namespace consoleXstream
 
         private void CheckControllerInput()
         {
-            _gamepad.Check();
-            if (_system.UseTitanOneApi) _titanOne.Send();
+            _class.Gamepad.Check();
+            if (_class.System.UseTitanOneApi) _class.TitanOne.Send();
             else
             {
-                if (_system.UseControllerMax)
-                    _controllerMax.checkControllerInput();
+                if (_class.System.UseControllerMax)
+                    _class.ControllerMax.CheckControllerInput();
 
-                if (_system.UseTitanOne)
-                    _titanOne.Send();
+                if (_class.System.UseTitanOne)
+                    _class.TitanOne.Send();
             }
         }
 
         #region Video capture links to main form
         private void CheckRunningGraph()
         {
-            if (_videoCapture.boolActiveVideo)
-                _videoCapture.checkVideoOutput();
+            if (_class.VideoCapture.boolActiveVideo)
+                _class.VideoCapture.checkVideoOutput();
         }
 
         public IntPtr ReturnVideoHandle()
@@ -514,7 +441,7 @@ namespace consoleXstream
         public Point SetVideoWindowBounds()
         {
             var ptReturn = new Point(0, 0);
-            if (_system.IsVr)
+            if (_class.System.IsVr)
             {
                 ptReturn = new Point(ClientSize.Width / 2, ClientSize.Height);
                 imgDisplay.SetBounds(0, 0, ClientSize.Width / 2, ClientSize.Height);
@@ -531,7 +458,7 @@ namespace consoleXstream
         public Point SetVideoWindowBoundsVr()
         {
             var ptReturn = new Point(0, 0);
-            if (_system.IsVr)
+            if (_class.System.IsVr)
             {
                 ptReturn = new Point(ClientSize.Width / 2, ClientSize.Height);
                 imgDisplayVr.SetBounds(ClientSize.Width / 2, 0, ClientSize.Width / 2, ClientSize.Height);
@@ -544,10 +471,10 @@ namespace consoleXstream
         public void ChangeDisplayRes()
         {
             /*
-            if (_system.IsOverrideOnExit) return;
+            if (_class.System.IsOverrideOnExit) return;
 
             Application.DoEvents();
-            //_videoCapture.DebugVideo("[0] Reset after display change: " + Screen.PrimaryScreen.Bounds.Width + " / " + Screen.PrimaryScreen.Bounds.Height);
+            //_class._videoCapture.DebugVideo("[0] Reset after display change: " + Screen.PrimaryScreen.Bounds.Width + " / " + Screen.PrimaryScreen.Bounds.Height);
 
             BringToFront();
             Focus();
@@ -556,12 +483,12 @@ namespace consoleXstream
             Application.DoEvents();
             imgDisplay.Dock = DockStyle.Fill;
 
-            _videoCapture.setupVideoWindow();
+            _class._videoCapture.setupVideoWindow();
 
             imgDisplay.BringToFront();
             imgDisplay.Focus();
 
-            //_videoCapture.ForceRebuildAfterResolution();
+            //_class._videoCapture.ForceRebuildAfterResolution();
              */
         }
         #endregion
@@ -570,24 +497,24 @@ namespace consoleXstream
         {
             if (_intBlockMenu != 0) return;
 
-            _system.boolMenu = true;
+            _class.System.boolMenu = true;
 
             Cursor.Show();
 
-            if (_system.IsStayOnTop)
+            if (_class.System.IsStayOnTop)
                 TopMost = false;
 
-            formMenu.ShowPanel();
+            _class.Menu.ShowPanel();
         }
 
         public void CloseMenuForm()
         {
-            if (_system.IsStayOnTop)
+            if (_class.System.IsStayOnTop)
                 TopMost = true;
 
-            _system.boolMenu = false;
+            _class.System.boolMenu = false;
             
-            if (_system.IsHideMouse)
+            if (_class.System.IsHideMouse)
                 Cursor.Hide();
 
             _intBlockMenu = 3;
@@ -601,7 +528,7 @@ namespace consoleXstream
             if (FormBorderStyle != FormBorderStyle.None)
             {
                 FormBorderStyle = FormBorderStyle.None;
-                if (_system.IsHideMouse)
+                if (_class.System.IsHideMouse)
                     Cursor.Hide();
             }
             else
@@ -629,28 +556,28 @@ namespace consoleXstream
                 ListBackupToDevices.Add(item);
             }
 
-            //_system.Debug("listAll.log", "clearList");
+            //_class.System.Debug("listAll.log", "clearList");
 
             ListToDevices = new List<string>();
 
-            //_system.Debug("listAll.log", "check controllerMax");
+            //_class.System.Debug("listAll.log", "check controllerMax");
 
-            if (_controllerMax._gcapi_Unload != null)
-                _controllerMax.closeControllerMaxInterface();
+            if (_class.ControllerMax._gcapi_Unload != null)
+                _class.ControllerMax.closeControllerMaxInterface();
 
 
-            //_system.Debug("listAll.log", "setup update true");
+            //_class.System.Debug("listAll.log", "setup update true");
             IsUpdatingTitanOneList = true;
             TitanOneListRefresh = 10;
             TitanOneListRefreshFail = false;
-            //_system.Debug("listAll.log", "list devices");
-            _titanOne.ListDevices(); 
+            //_class.System.Debug("listAll.log", "list devices");
+            _class.TitanOne.ListDevices(); 
         }
 
         private void CheckTitanOneConnectionList()
         {
-            //_system.Debug("listAll.log", "_titanOne.CheckDevices()");
-            var result = _titanOne.CheckDevices();
+            //_class.System.Debug("listAll.log", "_class.TitanOne.CheckDevices()");
+            var result = _class.TitanOne.CheckDevices();
             if (result == 0)
             {
                 if (TitanOneListRefresh > 0)
@@ -663,19 +590,19 @@ namespace consoleXstream
                     {
                         TitanOneListRefreshFail = true;
                         TitanOneListRefresh = 10;
-                        _titanOne.ListDevices();                        
+                        _class.TitanOne.ListDevices();                        
                     }
                     else
                     {
                         IsUpdatingTitanOneList = false;
                         TitanOneListRefresh = 0;
                         TitanOneListRefreshFail = false;
-                        //_system.Debug("listAll.log", "Cant find TitanOnes, passing from backup list");
+                        //_class.System.Debug("listAll.log", "Cant find TitanOnes, passing from backup list");
                         ListToDevices.Clear();
 
                         foreach (var item in ListBackupToDevices) { ListToDevices.Add(item); }
                         IsUpdatingTitanOneList = false;
-                        formMenu.PassToSubSelect(ListToDevices);
+                        _class.Menu.PassToSubSelect(ListToDevices);
 
                     }
                 }
@@ -684,15 +611,15 @@ namespace consoleXstream
 
             if (result > 0)
             {
-                //_system.Debug("listAll.log", "found " + result + " results");
+                //_class.System.Debug("listAll.log", "found " + result + " results");
                 IsUpdatingTitanOneList = false;
-                formMenu.PassToSubSelect(ListToDevices);
+                _class.Menu.PassToSubSelect(ListToDevices);
             }
         }
 
         public void ChangeVr()
         {
-            if (_system.IsVr)
+            if (_class.System.IsVr)
             {
                 imgDisplay.Dock = DockStyle.None;
                 
@@ -721,31 +648,31 @@ namespace consoleXstream
 
         public void SetTitanOne(string serial)
         {
-            _titanOne.SetTitanOneDevice(serial); 
-            _system.AddData("ControllerMax", "False");
-            _system.AddData("TitanOne", "True");
+            _class.TitanOne.SetTitanOneDevice(serial); 
+            _class.System.AddData("ControllerMax", "False");
+            _class.System.AddData("TitanOne", "True");
         }
-        public string GetTitanOne() { return _titanOne.GetTitanOneDevice(); }
+        public string GetTitanOne() { return _class.TitanOne.GetTitanOneDevice(); }
 
         public void SetTitanOneMode(string type)
         {
-            _titanOne.SetApiMethod(type.ToLower() == "single" ? Define.ApiMethod.Single : Define.ApiMethod.Multi);
+            _class.TitanOne.SetApiMethod(type.ToLower() == "single" ? Define.ApiMethod.Single : Define.ApiMethod.Multi);
         }
 
         public void InitControllerMax()
         {
-            _controllerMax.initControllerMax();
+            _class.ControllerMax.initControllerMax();
         }
 
         public void InitTitanOne()
         {
-            _system.Debug("titanone.log", "InitializeTitanOne");
-            _titanOne.Initialize();
+            _class.System.Debug("titanone.log", "InitializeTitanOne");
+            _class.TitanOne.Initialize();
         }
 
         public void SetTitanOneDevice()
         {
-            _titanOne.SetTitanOneDevice();   
+            _class.TitanOne.SetTitanOneDevice();   
         }
 
         public void FocusWindow()
@@ -756,7 +683,7 @@ namespace consoleXstream
 
         public void SetDisplayRecord(string res)
         {
-            _videoCapture.SetDisplay(res);
+            _class.VideoCapture.SetDisplay(res);
         }
     }
 }

@@ -20,7 +20,7 @@ namespace consoleXstream.Menu.SubSelectMenu
                     if (_class.SubSelectVar.TitanSerial.Length == 0)
                     {
                         TryRetrieveSerial = true;
-                        _class.SubSelectVar.TitanSerial = _class.Form1.GetTitanOne();
+                        _class.SubSelectVar.TitanSerial = _class.Base.Home.GetTitanOne();
                     }
                 }
             }
@@ -36,7 +36,7 @@ namespace consoleXstream.Menu.SubSelectMenu
             _class.DrawGui.drawImage(bmpSerial, 0, 0, Properties.Resources.imgSubMenu);
 
             _class.DrawGui.DrawText(bmpMenu, 0, 0, ">" + _class.SubSelectVar.TitanSerial);
-            _class.DrawGui.DrawText(bmpMenu, 0, 15, ">" + _class.System.TitanOneDevice);
+            _class.DrawGui.DrawText(bmpMenu, 0, 15, ">" + _class.Base.System.TitanOneDevice);
             
             var intX = 0;
             if (_class.SubSelectVar.ListData.Count < 4)

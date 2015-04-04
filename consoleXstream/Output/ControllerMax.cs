@@ -1,25 +1,24 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Runtime.InteropServices;
 using System.IO;
+using System.Runtime.InteropServices;
 using consoleXstream.Input;
 
 namespace consoleXstream.Output
 {
     public class ControllerMax
     {
+        public ControllerMax(BaseClass baseClass) { _class = baseClass; }
+        private readonly BaseClass _class;
+
         [DllImport("kernel32.dll")]
         public static extern IntPtr LoadLibrary(string dllToLoad);
 
         [DllImport("kernel32.dll")]
         public static extern IntPtr GetProcAddress(IntPtr hModule, string procedureName);
 
-        private Form1 frmMain;
-        private Config.Configuration system;
-        private Input.KeyboardInterface keyboardInterface;
+        //private Form1 frmMain;
+        //private Config.Configuration system;
+        //private Input.KeyboardInterface keyboardInterface;
 
         public int intCMHomeCount { get; set; }
 
@@ -112,18 +111,6 @@ namespace consoleXstream.Output
         public GCAPI_UNLOAD _gcapi_Unload = null;
         #endregion
 
-        public ControllerMax(Form1 mainForm) { frmMain = mainForm; }
-
-        public void getSystemHandle(Config.Configuration inSystem)
-        {
-            system = inSystem;
-        }
-
-        public void getKeyboardInterfaceHandle(KeyboardInterface inKeyInterface)
-        {
-            keyboardInterface = inKeyInterface;
-        }
-
         public void initControllerMax()
         {
             //TODO: Read from setup menu
@@ -133,39 +120,39 @@ namespace consoleXstream.Output
             string strRef = "CMDI";
             string strAPI = "controllerMax_gcdapi.dll";
 
-            system.Debug("ControllerMax.log", "[0] Opening " + strDevice + " api");
+            _class.System.Debug("ControllerMax.log", "[0] Opening " + strDevice + " api");
             string strDir = Directory.GetCurrentDirectory() + @"\";
             _strCMDevice = strDevice;
 
             if (File.Exists(strDir + strAPI) == false)
             {
-                system.Debug("ControllerMax.log", "[0] [FAIL] Unable to find " + strDevice + " API");
+                _class.System.Debug("ControllerMax.log", "[0] [FAIL] Unable to find " + strDevice + " API");
                 return;
             }
 
-            system.Debug("ControllerMax.log", "[TRY] Attempting to open " + strDevice + " Device Interface (" + strRef + ")");
+            _class.System.Debug("ControllerMax.log", "[TRY] Attempting to open " + strDevice + " Device Interface (" + strRef + ")");
 
             IntPtr ptrDll = LoadLibrary(strDir + strAPI);
             if (ptrDll == IntPtr.Zero)
             {
-                system.Debug("ControllerMax.log", "[0] [FAIL] Unable to allocate Device API");
+                _class.System.Debug("ControllerMax.log", "[0] [FAIL] Unable to allocate Device API");
                 return;
             }
 
             IntPtr ptrLoad = loadExternalFunction(ptrDll, "gcdapi_Load");
-            if (ptrLoad == IntPtr.Zero) { system.Debug("ControllerMax.log", "[0] [FAIL] gcapi_Load"); return; }
+            if (ptrLoad == IntPtr.Zero) { _class.System.Debug("ControllerMax.log", "[0] [FAIL] gcapi_Load"); return; }
 
             IntPtr ptrIsConnected = loadExternalFunction(ptrDll, "gcapi_IsConnected");
-            if (ptrIsConnected == IntPtr.Zero) { system.Debug("ControllerMax.log", "[0] [FAIL] gcapi_IsConnected"); return; }
+            if (ptrIsConnected == IntPtr.Zero) { _class.System.Debug("ControllerMax.log", "[0] [FAIL] gcapi_IsConnected"); return; }
 
             IntPtr ptrUnload = loadExternalFunction(ptrDll, "gcdapi_Unload");
-            if (ptrUnload == IntPtr.Zero) { system.Debug("ControllerMax.log", "[0] [FAIL] gcapi_Unload"); return; }
+            if (ptrUnload == IntPtr.Zero) { _class.System.Debug("ControllerMax.log", "[0] [FAIL] gcapi_Unload"); return; }
 
             IntPtr ptrGetTimeVal = loadExternalFunction(ptrDll, "gcapi_GetTimeVal");
-            if (ptrGetTimeVal == IntPtr.Zero) { system.Debug("ControllerMax.log", "[0] [FAIL] gcapi_GetTimeVal"); return; }
+            if (ptrGetTimeVal == IntPtr.Zero) { _class.System.Debug("ControllerMax.log", "[0] [FAIL] gcapi_GetTimeVal"); return; }
             
             IntPtr ptrGetFwVer = loadExternalFunction(ptrDll, "gcapi_GetFWVer");
-            if (ptrGetFwVer == IntPtr.Zero) { system.Debug("ControllerMax.log", "[0] [FAIL] gcapi_GetFWVer"); return; }
+            if (ptrGetFwVer == IntPtr.Zero) { _class.System.Debug("ControllerMax.log", "[0] [FAIL] gcapi_GetFWVer"); return; }
 
             IntPtr ptrWrite = loadExternalFunction(ptrDll, "gcapi_Write");
             if (ptrWrite == IntPtr.Zero) return;
@@ -177,7 +164,7 @@ namespace consoleXstream.Output
             IntPtr ptrReadEx = IntPtr.Zero;
             
             IntPtr ptrCalcPressTime = loadExternalFunction(ptrDll, "gcapi_CalcPressTime");
-            if (ptrCalcPressTime == IntPtr.Zero) { system.Debug("ControllerMax.log", "[0] [FAIL] gcapi_CalcPressTime"); return; }
+            if (ptrCalcPressTime == IntPtr.Zero) { _class.System.Debug("ControllerMax.log", "[0] [FAIL] gcapi_CalcPressTime"); return; }
 
             try
             {
@@ -192,11 +179,11 @@ namespace consoleXstream.Output
             }
             catch (Exception ex)
             {
-                system.Debug("ControllerMax.log", "[0] Fail -> " + ex.ToString());
+                _class.System.Debug("ControllerMax.log", "[0] Fail -> " + ex.ToString());
             }
 
             _gcapi_Load();
-            system.Debug("ControllerMax.log", "[0] Initialize ControllerMax GCAPI ok");
+            _class.System.Debug("ControllerMax.log", "[0] Initialize ControllerMax GCAPI ok");
             
             loadShortcutKeys();
             _boolGCAPILoaded = true;
@@ -209,11 +196,11 @@ namespace consoleXstream.Output
             ptrFunction = GetProcAddress(ptrDll, strFunction);
             if (ptrFunction == IntPtr.Zero)
             {
-                system.Debug("ControllerMax.log", "[0] [NG] " + strFunction + " alloc fail");
+                _class.System.Debug("ControllerMax.log", "[0] [NG] " + strFunction + " alloc fail");
             }
             else
             {
-                system.Debug("ControllerMax.log", "[5] [OK] " + strFunction);
+                _class.System.Debug("ControllerMax.log", "[5] [OK] " + strFunction);
             }
             return ptrFunction;
         }
@@ -239,21 +226,17 @@ namespace consoleXstream.Output
 
             _boolGCAPILoaded = false;
 
-            system.Debug("ControllerMax.log", "[OK] Closed " + strDevice + " (" + strRef + ")");
+            _class.System.Debug("ControllerMax.log", "[OK] Closed " + strDevice + " (" + strRef + ")");
         }
 
-        public void checkControllerInput()
+        public void CheckControllerInput()
         {
             if (!_boolGCAPILoaded)
                 return;
 
-            bool boolOverride = false;
+            var boolOverride = _class.Home.boolIDE;
 
-            if (frmMain.boolIDE)
-                boolOverride = true;
-
-
-            if ((_gcapi_IsConnected() == 1) || (boolOverride == true))
+            if ((_gcapi_IsConnected() == 1) || boolOverride)
             {
                 //Update gamepad status
                 _controls = GamePad.GetState(PlayerIndex.One);
@@ -275,16 +258,16 @@ namespace consoleXstream.Output
                 if (_controls.Buttons.Guide) { output[(int)Xbox.Home] = Convert.ToByte(100); }
                 if (_controls.Buttons.Back)
                 {
-                    if (system.boolBlockMenuButton == false)
+                    if (_class.System.boolBlockMenuButton == false)
                     {
                         _intMenuWait++;
-                        if (system.boolMenu == false)
+                        if (_class.System.boolMenu == false)
                             if (_intMenuWait >= _intMenuShow + 20)
                                 openMenu();
                     }
 
                     //Remap back buton to touchpad
-                    if (system.IsPs4ControllerMode)
+                    if (_class.System.IsPs4ControllerMode)
                         output[(int)Xbox.Touch] = Convert.ToByte(100);
                     else
                         output[(int)Xbox.Back] = Convert.ToByte(100);
@@ -303,7 +286,7 @@ namespace consoleXstream.Output
                 double dblRX = _controls.ThumbSticks.Right.X * 100;
                 double dblRY = _controls.ThumbSticks.Right.Y * 100;
 
-                if (system.IsNormalizeControls == true)
+                if (_class.System.IsNormalizeControls == true)
                 {
                     normalGamepad(ref dblLX, ref dblLY);
                     normalGamepad(ref dblRX, ref dblRY);
@@ -333,19 +316,19 @@ namespace consoleXstream.Output
                     output = checkKeys(output);
 
                 int intTarget = -1;
-                if (system.IsPs4ControllerMode == false) { intTarget = (int)Xbox.Back; } else { intTarget = (int)Xbox.Touch; }
+                if (_class.System.IsPs4ControllerMode == false) { intTarget = (int)Xbox.Back; } else { intTarget = (int)Xbox.Touch; }
 
                 //Back button. Wait until released as its also the menu button
                 if (intTarget > -1)
                 {
-                    if (system.boolBlockMenuButton)
+                    if (_class.System.boolBlockMenuButton)
                     {
                         if (output[intTarget] == 100)
                         {
                             _boolHoldBack = true;
                             output[intTarget] = Convert.ToByte(0);
                             _intMenuWait++;
-                            if (!system.boolMenu)
+                            if (!_class.System.boolMenu)
                             {
                                 if (_intMenuWait >= _intMenuShow)
                                 {
@@ -356,7 +339,7 @@ namespace consoleXstream.Output
                         }
                         else
                         {
-                            if (_boolHoldBack == true)
+                            if (_boolHoldBack)
                             {
                                 _boolHoldBack = false;
                                 output[intTarget] = Convert.ToByte(100);
@@ -368,31 +351,28 @@ namespace consoleXstream.Output
                     }
                 }
                 
-                if (keyboardInterface != null)
+                if (_class.KeyboardInterface != null)
                 {
-                    for (int intCount = 0; intCount < _intXboxCount; intCount++)
+                    for (var intCount = 0; intCount < _intXboxCount; intCount++)
                     {
-                        if (keyboardInterface.output[intCount] != 0)
-                            output[intCount] = keyboardInterface.output[intCount];
+                        if (_class.KeyboardInterface.output[intCount] != 0)
+                            output[intCount] = _class.KeyboardInterface.output[intCount];
                     }
                 }
 
                 _gcapi_Write(output);
 
-                if (system.UseRumble == true)
-                {
-                    GCAPI_REPORT_CONTROLLERMAX report = new GCAPI_REPORT_CONTROLLERMAX();
-                    if (_gcapi_Read_CM(ref report) != IntPtr.Zero)
-                        GamePad.SetState(PlayerIndex.One, report.rumble[0], report.rumble[1]);
-
-                }
+                if (_class.System.UseRumble != true) return;
+                var report = new GCAPI_REPORT_CONTROLLERMAX();
+                if (_gcapi_Read_CM(ref report) != IntPtr.Zero)
+                    GamePad.SetState(PlayerIndex.One, report.rumble[0], report.rumble[1]);
             }
             else
             {
                 //If device just disconnected open up notice to tell user
                 if (_boolNoticeCMDisconnected == false)
                 {
-                    system.Debug("ControllerMax.log", "[NOTE] " + _strCMDevice + " is disconnected");
+                    _class.System.Debug("ControllerMax.log", "[NOTE] " + _strCMDevice + " is disconnected");
                     _boolNoticeCMDisconnected = true;
                 }
 
@@ -400,13 +380,13 @@ namespace consoleXstream.Output
                 _controls = GamePad.GetState(PlayerIndex.One);
                 if (_controls.Buttons.Back)
                 {
-                    if (system.boolBlockMenuButton== false)
+                    if (_class.System.boolBlockMenuButton== false)
                     {
                         _intMenuWait++;
-                        if (!system.boolMenu)
+                        if (!_class.System.boolMenu)
                         {
                             if (_intMenuWait >= _intMenuShow + 20)
-                                frmMain.OpenMenu();
+                                _class.Home.OpenMenu();
                         }
                     }
                 }
@@ -530,7 +510,7 @@ namespace consoleXstream.Output
             _boolHoldBack = false;
             _intMenuWait = 0;
 
-            frmMain.OpenMenu();
+            _class.Home.OpenMenu();
         }
 
     }

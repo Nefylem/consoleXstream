@@ -28,10 +28,12 @@ namespace consoleXstream.Config
         public Display Display { get; set; }
         public TitanOne TitanOneConfig { get; set; }
         public ControllerMax ControllerMaxConfig { get; set; }
+        public BaseClass BaseClass { get; set; }
 
-        public void DeclareClasses(Form1 mainForm)
+        public void DeclareClasses(BaseClass baseClass)
         {
-            Main = mainForm;
+            BaseClass = baseClass;
+            Main = baseClass.Home;
 
             Debug = new Debug();
             Profile = new Profile(this);

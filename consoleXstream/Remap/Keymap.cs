@@ -2,6 +2,14 @@
 {
     public class Keymap
     {
+        public Keymap(BaseClass classes)
+        {
+            _class = classes;
+            InitializeKeyboardDefaults();
+        }
+
+        private BaseClass _class;
+
         public class KeyboardKeys
         {
             public string DpadDown { get; set; }

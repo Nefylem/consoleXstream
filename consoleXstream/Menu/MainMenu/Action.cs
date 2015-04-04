@@ -123,7 +123,7 @@ namespace consoleXstream.Menu.MainMenu
             SetMenu(command);
             ClearSub();
 
-            _class.SubAction.AddSubItem("VrVideo", "VR Mode\nVideo", _class.System.IsVr);
+            _class.SubAction.AddSubItem("VrVideo", "VR Mode\nVideo", _class.Base.System.IsVr);
 
             SelectSubItem();
             _class.Shutter.SetActive(currentRow + 1);            
@@ -138,8 +138,8 @@ namespace consoleXstream.Menu.MainMenu
             crossbar.GetDataHandle(_class.Data);
             crossbar.GetShutterHandle(_class.Shutter);
             crossbar.GetSubActionHandle(_class.SubAction);
-            crossbar.GetSystemHandle(_class.System);
-            crossbar.GetVideoCapture(_class.VideoCapture);
+            crossbar.GetSystemHandle(_class.Base.System);
+            crossbar.GetVideoCapture(_class.Base.VideoCapture);
             
             crossbar.Find();
             SelectSubItem();
@@ -177,12 +177,12 @@ namespace consoleXstream.Menu.MainMenu
             SetMenu(command);
             ClearSub();
 
-            _class.SubAction.AddSubItem("AutoSet", "Auto Set", _class.System.IsAutoSetDisplayResolution);
+            _class.SubAction.AddSubItem("AutoSet", "Auto Set", _class.Base.System.IsAutoSetDisplayResolution);
             _class.SubAction.AddSubItemFolder("Device", "Graphics Device", "Graphics Card");
             _class.SubAction.AddSubItemFolder("Resolution", "Resolution", "Display Resolution");
             _class.SubAction.AddSubItemFolder("Refresh", "Refresh Rate", "Screen Refresh");
             _class.SubAction.AddSubItemFolder("Volume", "Volume", "Volume");
-            _class.SubAction.AddSubItem("StayOnTop", "Stay On Top", _class.System.IsAutoSetDisplayResolution);
+            _class.SubAction.AddSubItem("StayOnTop", "Stay On Top", _class.Base.System.IsAutoSetDisplayResolution);
 
             SelectSubItem();
             _class.Shutter.SetActive(currentRow + 1);
@@ -195,6 +195,7 @@ namespace consoleXstream.Menu.MainMenu
 
             _class.SubAction.AddSubItem("DS4 Emulation", "DS4 Emulation");
             _class.SubAction.AddSubItem("Normalize", "Normalize");
+            _class.SubAction.AddSubItem("Rumble", "Rumble");
 
             CheckDisplaySettings();
 
@@ -266,7 +267,7 @@ namespace consoleXstream.Menu.MainMenu
 
         private bool CheckSystemSetting(string strCommand)
         {
-            return _class.System.CheckData(strCommand.ToLower()).ToLower() == "true";
+            return _class.Base.System.CheckData(strCommand.ToLower()).ToLower() == "true";
         }
 
         private void RegisterWatcher(string title)
@@ -282,28 +283,31 @@ namespace consoleXstream.Menu.MainMenu
             foreach (var t in _class.Data.SubItems)
             {
                 if (t.Command.ToLower() == "ds4 emulation")
-                    if (_class.System.IsPs4ControllerMode) _class.Data.Checked.Add("DS4 Emulation");
+                    if (_class.Base.System.IsPs4ControllerMode) _class.Data.Checked.Add("DS4 Emulation");
 
                 if (t.Command.ToLower() == "normalize")
-                    if (_class.System.IsNormalizeControls) _class.Data.Checked.Add("Normalize");
+                    if (_class.Base.System.IsNormalizeControls) _class.Data.Checked.Add("Normalize");
+
+                if (t.Command.ToLower() == "rumble")
+                    if (_class.Base.System.UseRumble) _class.Data.Checked.Add("Rumble");
 
                 if (t.Command.ToLower() == "controllermax")
-                    if (_class.System.UseControllerMax) _class.Data.Checked.Add("ControllerMax");
+                    if (_class.Base.System.UseControllerMax) _class.Data.Checked.Add("ControllerMax");
 
                 if (t.Command.ToLower() == "titanone")
-                    if (_class.System.UseTitanOne) _class.Data.Checked.Add("TitanOne");
+                    if (_class.Base.System.UseTitanOne) _class.Data.Checked.Add("TitanOne");
 
                 if (t.Command.ToLower() == "gimx")
-                    if (_class.System.boolGIMX) _class.Data.Checked.Add("GIMX");
+                    if (_class.Base.System.boolGIMX) _class.Data.Checked.Add("GIMX");
 
                 if (t.Command.ToLower() == "remote gimx")
-                    if (_class.System.boolRemoteGIMX) _class.Data.Checked.Add("remote gimx");
+                    if (_class.Base.System.boolRemoteGIMX) _class.Data.Checked.Add("remote gimx");
 
                 if (t.Command.ToLower() == "McShield")
-                    if (_class.System.boolMcShield) _class.Data.Checked.Add("McShield");
+                    if (_class.Base.System.boolMcShield) _class.Data.Checked.Add("McShield");
 
                 if (t.Command.ToLower() == "control vjoy")
-                    if (_class.System.boolControlVJOY) _class.Data.Checked.Add("Control VJOY");
+                    if (_class.Base.System.boolControlVJOY) _class.Data.Checked.Add("Control VJOY");
 
                 if (t.Command.ToLower() == "crossbar")
                     if (CheckSystemSetting("Crossbar")) _class.Data.Checked.Add("Crossbar");

@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace consoleXstream.Output
 {
-    class Gimx
+    public class Classes
     {
-        public Gimx(BaseClass baseClass) { _class = baseClass; }
-        private BaseClass _class;
+        /*
+*/
+
     }
 }

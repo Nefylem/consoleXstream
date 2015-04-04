@@ -62,9 +62,13 @@ namespace consoleXstream.Config
             strSave += _class.Set.CheckData("StayOnTop");
             strSave += "</DisplaySettings>";
 
-            strSave += _class.Set.CheckData("CurrentProfile");
+            strSave += "<Controller>";
             strSave += _class.Set.CheckData("DS4Emulation");
             strSave += _class.Set.CheckData("Normalize");
+            strSave += _class.Set.CheckData("Rumble");
+            strSave += "</Controller>";
+
+            strSave += _class.Set.CheckData("CurrentProfile");
             strSave += _class.Set.CheckData("ControllerMax");
             strSave += _class.Set.CheckData("TitanOne");
             strSave += _class.Set.CheckData("UseTitanOne");

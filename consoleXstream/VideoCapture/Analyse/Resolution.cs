@@ -111,11 +111,16 @@ namespace consoleXstream.VideoCapture.Analyse
             if (_class.Var.CurrentResByName != _checkCaptureRes)
             {
                 _checkCaptureRes = _class.Var.CurrentResByName;
-                if (_checkCaptureRes.IndexOf('x') > -1)
+                
+                if (_checkCaptureRes != null)
                 {
-                    _checkCaptureHeight = _checkCaptureRes.Substring(_checkCaptureRes.IndexOf('x') + 1).Trim();
-                    if (_checkCaptureHeight.IndexOf(" ", StringComparison.Ordinal) > -1)
-                        _checkCaptureHeight = _checkCaptureHeight.Substring(0, _checkCaptureHeight.IndexOf(" ", StringComparison.Ordinal));
+                    if (_checkCaptureRes.IndexOf('x') > -1)
+                    {
+                        _checkCaptureHeight = _checkCaptureRes.Substring(_checkCaptureRes.IndexOf('x') + 1).Trim();
+                        if (_checkCaptureHeight.IndexOf(" ", StringComparison.Ordinal) > -1)
+                            _checkCaptureHeight = _checkCaptureHeight.Substring(0,
+                                _checkCaptureHeight.IndexOf(" ", StringComparison.Ordinal));
+                    }
                 }
             }
 

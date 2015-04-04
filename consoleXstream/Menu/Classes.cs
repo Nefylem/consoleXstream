@@ -14,7 +14,8 @@ namespace consoleXstream.Menu
     {
         public Classes(ShowMenu men) { DisplayMenu = men; }
 
-        public Form1 Form1 { get; set; }
+        public BaseClass Base { get; set; }
+        //public Form1 Form1 { get; set; }
         public ShowMenu DisplayMenu { get; set; }
         public MainMenu.Action Action { get; set; }
         public SubMenu.Action SubAction { get; set; }
@@ -30,27 +31,28 @@ namespace consoleXstream.Menu
         public Shutter Shutter { get; set; }
         public Gamepad Gamepad { get; set; }
         public Keyboard Keyboard { get; set; }
-        public KeyboardHook KeyboardHook { get; set; }
-        public Keymap Keymap { get; set; }
+        //public KeyboardHook KeyboardHook { get; set; }
+        //public Keymap Keymap { get; set; }
         public User User { get; set; }
-        public Configuration System { get; set; }
-        public VideoCapture.VideoCapture VideoCapture { get; set; }
+        //public Configuration System { get; set; }
+        //public VideoCapture.VideoCapture VideoCapture { get; set; }
         public Display Display { get; set; }
         public SubSelectMenu.Navigation SubNav { get; set; }
-        public Remapping Remap { get; set; }
+        //public Remapping Remap { get; set; }
         public CaptureDevice VideoDevice { get; set; }
         public DrawGraph DrawGui { get; set; }
         public Profiles Profiles { get; set; }
-        public Output.Gamepad GamepadOutput { get; set; }
+        //public Output.Gamepad GamepadOutput { get; set; }
         public SubSelectMenu.Menu SubSelectMenu { get; set; }
         public SubSelectMenu.Var SubSelectVar { get; set; }
 
         public Remap.Remap RemapMenu { get; set; }
         public Remap.Gamepad RemapGamepad { get; set; }
         public Remap.Navigation RemapNav { get; set; }
-
-        public void DeclareClasses()
+        
+        public void DeclareClasses(BaseClass baseClass)
         {
+            Base = baseClass;
             Action = new MainMenu.Action(this);
             Button = new ButtonItem(this);
             CreateMain = new Create(this);
@@ -75,8 +77,6 @@ namespace consoleXstream.Menu
             Display = new Display(this);
             VideoDevice = new CaptureDevice(this);
             Profiles = new Profiles(this);
-
-            GamepadOutput = new Output.Gamepad();
 
             RemapMenu = new Remap.Remap(this);
             RemapGamepad = new Remap.Gamepad(this);
