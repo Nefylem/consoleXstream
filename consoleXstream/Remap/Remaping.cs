@@ -47,13 +47,13 @@ namespace consoleXstream.Remap
             [Description("LeftThumb Y")]
             public int leftY { get; set; }
 
-            [Description("Up")]
+            [Description("D-Pad Up")]
             public int up { get; set; }
-            [Description("Down")]
+            [Description("D-Pad Down")]
             public int down { get; set; }
-            [Description("Left")]
+            [Description("D-Pad Left")]
             public int left { get; set; }
-            [Description("Right")]
+            [Description("D-Pad Right")]
             public int right { get; set; }
 
             [Description("Y")]

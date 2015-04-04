@@ -91,7 +91,7 @@ namespace consoleXstream.Config
             _class.Set.Add("ControllerRumble", "true");
             _class.Set.Add("Keyboard", "true");
             _class.Set.Add("HideMouse", "true");
-            IsEnableMouse = true;
+            //IsEnableMouse = true;
             IsStayOnTop = true;
             IsAutoSetCaptureResolution = true;
             EnableGcmapi = true;

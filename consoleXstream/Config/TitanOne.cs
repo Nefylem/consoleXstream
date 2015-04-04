@@ -23,8 +23,6 @@
 
             if (_class.System.UseTitanOne)
                 _class.TitanOne.Initialize();
-            else
-                _class.TitanOne.Close();
         }
 
         public void Change(bool set)

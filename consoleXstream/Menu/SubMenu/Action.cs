@@ -198,8 +198,9 @@ namespace consoleXstream.Menu.SubMenu
                 ListAllTitanOne();
             else
             {
-                _class.Form1.SetTitanOneMode("Single");
                 _class.System.ChangeTitanOne();
+                //_class.Form1.InitTitanOne();
+                //_class.Form1.SetTitanOneDevice();
             }
         }
 
@@ -267,7 +268,8 @@ namespace consoleXstream.Menu.SubMenu
 
         private void ChangeRemapScreen(string command)
         {
-            //_class.SubRemap.ChangeRemapScreen(command);
+            _class.RemapNav._moveOkWait = 5;
+            _class.RemapMenu.ChangeRemapScreen(command);
         }
 
         private void ListCaptureResolution()

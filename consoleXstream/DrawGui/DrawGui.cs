@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Globalization;
 
 namespace consoleXstream.DrawGui
 {
@@ -9,6 +9,9 @@ namespace consoleXstream.DrawGui
     {
         private Bitmap _imgDisplay;
         private Graphics _graph;
+
+        private Color _penColor = Color.Black;
+        private int _penWidth = 1;
 
         private readonly Color _colorFont = Color.White;
         private readonly Color _colorFontMinor = Color.White;
@@ -41,12 +44,12 @@ namespace consoleXstream.DrawGui
             _graph = Graphics.FromImage(imgBitmap);
         }
 
-        public void drawImage(int intX, int intY, Bitmap bmpDraw)
+        public void DrawImage(int intX, int intY, Bitmap bmpDraw)
         {
             _graph.DrawImage(bmpDraw, new Point(intX, intY));
         }
 
-        private void drawImage(int intX, int intY, int intZoom, Bitmap bmpIcon)
+        private void DrawImage(int intX, int intY, int intZoom, Bitmap bmpIcon)
         {
             double dblSizeX = bmpIcon.Width;
             dblSizeX /= 100;
@@ -56,13 +59,13 @@ namespace consoleXstream.DrawGui
             dblSizeY /= 100;
             dblSizeY *= intZoom;
 
-            int intNewX = (int)dblSizeX - bmpIcon.Width;
-            int intNewY = (int)dblSizeY - bmpIcon.Height;
+            var intNewX = (int)dblSizeX - bmpIcon.Width;
+            var intNewY = (int)dblSizeY - bmpIcon.Height;
 
             _graph.DrawImage(bmpIcon, new Rectangle(intX - (intNewX / 2), intY - (intNewY / 2), (int)dblSizeX, (int)dblSizeY));
         }
 
-        public void drawImage(int intX, int intY, int intZoomX, int intZoomY, Bitmap bmpIcon)
+        public void DrawImage(int intX, int intY, int intZoomX, int intZoomY, Bitmap bmpIcon)
         {
             double dblSizeX = bmpIcon.Width;
             dblSizeX /= 100;
@@ -72,35 +75,26 @@ namespace consoleXstream.DrawGui
             dblSizeY /= 100;
             dblSizeY *= intZoomY;
 
-            int intNewX = (int)dblSizeX - bmpIcon.Width;
-            int intNewY = (int)dblSizeY - bmpIcon.Height;
-
             _graph.DrawImage(bmpIcon, new Rectangle(intX, intY, (int)dblSizeX, (int)dblSizeY));
         }
 
-        public void drawImage(Rectangle newRect, Bitmap bmpIcon)
+        public void DrawImage(Rectangle newRect, Bitmap bmpIcon)
         {
             _graph.DrawImage(bmpIcon, newRect);
         }
 
-        public void centerText(Rectangle newRect, int intWrite) { centerText(newRect, intWrite.ToString()); }
-        public void centerText(Rectangle newRect, float floatWrite) { centerText(newRect, floatWrite.ToString()); }
-        public void centerText(Rectangle newRect, bool boolWrite) 
-        {
-            if (boolWrite)
-                centerText(newRect, "true"); 
-            else
-                centerText(newRect, "false");
-        }
+        public void CenterText(Rectangle newRect, int intWrite) { CenterText(newRect, intWrite.ToString()); }
+        public void CenterText(Rectangle newRect, float floatWrite) { CenterText(newRect, floatWrite.ToString(CultureInfo.InvariantCulture)); }
+        public void CenterText(Rectangle newRect, bool boolWrite)  { CenterText(newRect, boolWrite.ToString()); }
 
-        public void centerText(Rectangle newRect, string strWrite)
+        public void CenterText(Rectangle newRect, string strWrite)
         {
             strWrite = strWrite.Trim();
-            Font fontSet = new Font(FontName, _floatFontSize, FontStyle.Bold, GraphicsUnit.Pixel);
-            SizeF textSize = _graph.MeasureString(strWrite, fontSet);
+            var fontSet = new Font(FontName, _floatFontSize, FontStyle.Bold, GraphicsUnit.Pixel);
+            var textSize = _graph.MeasureString(strWrite, fontSet);
 
-            int intX = (int)(newRect.Left + (newRect.Width / 2) - (textSize.Width / 3));
-            int intY = (int)(newRect.Top + (newRect.Height / 2) - (textSize.Height / 2));
+            var intX = (int)(newRect.Left + (newRect.Width / 2) - (textSize.Width / 3));
+            var intY = (int)(newRect.Top + (newRect.Height / 2) - (textSize.Height / 2));
 
             if (_boolTextCenterVerticalUpper)
                 intY = (int)(newRect.Top - textSize.Height);
@@ -156,7 +150,7 @@ namespace consoleXstream.DrawGui
 
                     if (boolFound)
                     {
-                        drawImage(intX, intY, _listOutline[intCount].bmpImage);
+                        DrawImage(intX, intY, _listOutline[intCount].bmpImage);
                         return;
                     }
                 }
@@ -201,7 +195,7 @@ namespace consoleXstream.DrawGui
             fontSet.Dispose();
             strFormat.Dispose();
 
-            drawImage(intX, intY, bmpFontoutline);
+            DrawImage(intX, intY, bmpFontoutline);
 
             //Store the image
             _listOutline.Add(new OutlineText());
@@ -313,29 +307,23 @@ namespace consoleXstream.DrawGui
             _graph.DrawImage(bmpIcon, newRect);
         }
 
-        public void centerText(Bitmap bmpSource, Rectangle newRect, int intWrite) { centerText(bmpSource, newRect, intWrite.ToString()); }
-        public void centerText(Bitmap bmpSource, Rectangle newRect, float floatWrite) { centerText(bmpSource, newRect, floatWrite.ToString()); }
-        public void centerText(Bitmap bmpSource, Rectangle newRect, bool boolWrite)
-        {
-            if (boolWrite)
-                centerText(bmpSource, newRect, "true");
-            else
-                centerText(bmpSource, newRect, "false");
-        }
+        public void CenterText(Bitmap bmpSource, Rectangle newRect, int intWrite) { CenterText(bmpSource, newRect, intWrite.ToString()); }
+        public void CenterText(Bitmap bmpSource, Rectangle newRect, float floatWrite) { CenterText(bmpSource, newRect, floatWrite.ToString(CultureInfo.InvariantCulture)); }
+        public void CenterText(Bitmap bmpSource, Rectangle newRect, bool boolWrite) { CenterText(bmpSource, newRect, boolWrite.ToString()); }
 
-        public void centerText(Bitmap bmpSource, Rectangle newRect, string strWrite)
+        public void CenterText(Bitmap bmpSource, Rectangle newRect, string strWrite)
         {
             strWrite = strWrite.Trim();
-            Font fontSet = new Font(FontName, _floatFontSize, FontStyle.Bold, GraphicsUnit.Pixel);
-            SizeF textSize = _graph.MeasureString(strWrite, fontSet);
+            var fontSet = new Font(FontName, _floatFontSize, FontStyle.Bold, GraphicsUnit.Pixel);
+            var textSize = _graph.MeasureString(strWrite, fontSet);
             if (textSize.Width > newRect.Width)
             {
                 drawTextJustify(bmpSource, newRect, strWrite);
             }
             else
             {
-                int intX = (int)(newRect.Left + (newRect.Width / 2) - (textSize.Width / 2));
-                int intY = (int)(newRect.Top + (newRect.Height / 2) - (textSize.Height / 2));
+                var intX = (int)(newRect.Left + (newRect.Width / 2) - (textSize.Width / 2));
+                var intY = (int)(newRect.Top + (newRect.Height / 2) - (textSize.Height / 2));
 
                 if (_boolTextCenterVerticalUpper)
                     intY = (int)(newRect.Top - textSize.Height);
@@ -343,23 +331,17 @@ namespace consoleXstream.DrawGui
                 if (_boolTextCenterVerticalLower)
                     intY = (int)(newRect.Bottom - textSize.Height);
 
-                drawText(bmpSource, intX, intY, strWrite);
+                DrawText(bmpSource, intX, intY, strWrite);
             }
         }
 
-        public void drawText(Bitmap bmpSource, int intX, int intY, int intWrite) { drawText(bmpSource, intX, intY, intWrite.ToString()); }
-        public void drawText(Bitmap bmpSource, int intX, int intY, float floatWrite) { drawText(bmpSource, intX, intY, floatWrite.ToString()); }
-        public void drawText(Bitmap bmpSource, int intX, int intY, bool boolWrite)
-        {
-            if (boolWrite)
-                drawText(bmpSource, intX, intY, "true");
-            else
-                drawText(bmpSource, intX, intY, "false");
-        }
+        public void DrawText(Bitmap bmpSource, int intX, int intY, int intWrite) { DrawText(bmpSource, intX, intY, intWrite.ToString()); }
+        public void DrawText(Bitmap bmpSource, int intX, int intY, float floatWrite) { DrawText(bmpSource, intX, intY, floatWrite.ToString()); }
+        public void DrawText(Bitmap bmpSource, int intX, int intY, bool boolWrite) { DrawText(bmpSource, intX, intY, boolWrite.ToString()); }
 
-        public void drawText(Bitmap bmpSource, int intX, int intY, string strWrite)
+        public void DrawText(Bitmap bmpSource, int intX, int intY, string strWrite)
         {
-            Graphics _graph = Graphics.FromImage(bmpSource);
+            var _graph = Graphics.FromImage(bmpSource);
 
             if (_boolOutline)
             {
@@ -371,12 +353,12 @@ namespace consoleXstream.DrawGui
             _graph.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
             _graph.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
 
-            SizeF textSize = _graph.MeasureString(strWrite, new Font(FontName, _floatFontSize));
+            var textSize = _graph.MeasureString(strWrite, new Font(FontName, _floatFontSize));
 
-            StringFormat setFormat = new StringFormat();
+            var setFormat = new StringFormat();
             setFormat.Alignment = StringAlignment.Center;
 
-            RectangleF textRect = new RectangleF(intX, intY, intX + textSize.Width, intY + textSize.Height);
+            var textRect = new RectangleF(intX, intY, intX + textSize.Width, intY + textSize.Height);
 
             _graph.DrawString(strWrite, new Font(FontName, _floatFontSize), _fontBrush, textRect);
         }
@@ -532,6 +514,40 @@ namespace consoleXstream.DrawGui
             strFormat.Dispose();
 
             drawImage(bmpSource, newRect.Left + 10, newRect.Top, bmpFontoutline);
+        }
+
+        public void SetColor(Color col)
+        {
+            _penColor = col;
+        }
+
+        public void SetPenWidth(int width)
+        {
+            _penWidth = width;
+        }
+
+        public void SetPen(Color col, int width)
+        {
+            _penColor = col;
+            _penWidth = width;
+        }
+
+        public void DrawLine(int startX, int startY, int endX, int endY)
+        {
+            var blackPen = new Pen(_penColor, _penWidth);
+
+            var point1 = new Point(startX, startY);
+            var point2 = new Point(endX, endY);
+
+            _graph.DrawLine(blackPen, point1, point2);
+        }
+
+        public void DrawRectangle(Rectangle rect)
+        {
+            DrawLine(rect.Left, rect.Top, rect.Right, rect.Top);
+            DrawLine(rect.Left, rect.Top, rect.Left, rect.Bottom);
+            DrawLine(rect.Left, rect.Bottom, rect.Right, rect.Bottom);
+            DrawLine(rect.Right, rect.Bottom, rect.Right, rect.Top);
         }
     }
 }

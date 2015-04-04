@@ -38,11 +38,11 @@ namespace consoleXstream.Menu.MainMenu
                         _class.Button.Create(displayRect, t1.Command, false);       //Add to the inactive list incase its needed - mainly by mouse move
 
                     if (_class.User.Selected == t1.Command)
-                        _class.DrawGui.drawImage(intX - 6, intY - 7, 108, 115, Properties.Resources.imgSubGlow);
+                        _class.DrawGui.DrawImage(intX - 6, intY - 7, 108, 115, Properties.Resources.imgSubGlow);
                     else
-                        _class.DrawGui.drawImage(intX, intY, Properties.Resources.imgTileLow);
+                        _class.DrawGui.DrawImage(intX, intY, Properties.Resources.imgTileLow);
 
-                    _class.DrawGui.centerText(displayRect, t1.Display);
+                    _class.DrawGui.CenterText(displayRect, t1.Display);
 
                     intX += _class.Var.CellWidth + 5;
                 }

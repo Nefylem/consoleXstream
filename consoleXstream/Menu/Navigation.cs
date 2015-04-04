@@ -22,7 +22,8 @@ namespace consoleXstream.Menu
         {
             command = command.ToLower();
             if (_class.Var.ShowSubSelection) { _class.SubNav.GetCommand(command); return; }
-            
+            if (_class.Var.SetupGamepad) { _class.RemapNav.GetCommand(command); return; }
+
             if (_class.System.CheckLog("Menu")) _class.System.Debug("menu.log", command);   
             
             if (command == "back") { if (_menuBackWait == 0) MenuBack(); else _menuBackWait = 5; }

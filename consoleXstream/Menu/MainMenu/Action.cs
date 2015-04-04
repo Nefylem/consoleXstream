@@ -222,7 +222,7 @@ namespace consoleXstream.Menu.MainMenu
             _class.Shutter.SetActive(currentRow - 1);
         }
 
-        private void Remap(string command, int currentRow)
+        public void Remap(string command, int currentRow)
         {
             SetMenu(command);
             ClearSub();

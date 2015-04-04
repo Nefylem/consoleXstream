@@ -310,6 +310,7 @@ namespace consoleXstream.VideoCapture
         public string GetAudioDevice() { return _class.Var.AudioDevice; }
         public string GetCrossbarSetting(string type) { return _class.Crossbar.GetActive(type); }
         public int GetCrossbarId(string type) { return _class.Crossbar.GetActiveId(type); }
+        public void SetDisplay(string res) { _class.Var.CurrentResByName = res; }
     }
 
 }

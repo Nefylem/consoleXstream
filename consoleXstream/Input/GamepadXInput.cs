@@ -32,13 +32,13 @@ namespace consoleXstream.Input
         LeftX = 11,
         [Description("LeftThumb Y")]
         LeftY = 12,
-        [Description("Up")]
+        [Description("D-Pad Up")]
         Up = 13,
-        [Description("Down")]
+        [Description("D-Pad Down")]
         Down = 14,
-        [Description("Left")]
+        [Description("D-Pad Left")]
         Left = 15,
-        [Description("Right")]
+        [Description("D-Pad Right")]
         Right = 16,
         [Description("Y")]
         Y = 17,

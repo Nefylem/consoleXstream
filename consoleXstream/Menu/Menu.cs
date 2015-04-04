@@ -10,7 +10,7 @@ namespace consoleXstream.Menu
 {
     public partial class ShowMenu : Form
     {
-        public ShowMenu(Form1 form1, Configuration system, KeyboardHook keyHook, VideoCapture.VideoCapture inVideo, Remapping inMap, Keymap keymap)
+        public ShowMenu(Form1 form1, Configuration system, KeyboardHook keyHook, VideoCapture.VideoCapture inVideo, Remapping inMap, Keymap keymap, Gamepad _gamepad)
         {
             _class = new Classes(this);
             _class.DeclareClasses();
@@ -104,6 +104,8 @@ namespace consoleXstream.Menu
         private void tmrMenu_Tick(object sender, EventArgs e)
         {
             _class.Nav.CheckDelays();
+            if (_class.Var.SetupGamepad) _class.RemapNav.CheckDelays();
+
             _class.Fps.CheckFps();
             _class.Shutter.CheckDisplay();
 
@@ -122,10 +124,8 @@ namespace consoleXstream.Menu
             
             if (_class.Var.Setup)
             {
-                /*
-                if (_var.SetupGamepad)
-                    DrawGamepadRemap();
-                 */
+                if (_class.Var.SetupGamepad)
+                    _class.RemapGamepad.Draw();
             }
             else
             {

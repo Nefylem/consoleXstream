@@ -13,10 +13,20 @@ namespace consoleXstream.Output.TitanOne.GCMAPI
         private int _activeDevice;
         private bool _isConnected;
 
+        public void SetDevice()
+        {
+            _class.System.Debug("titanone.log", "connecting to default: 0");
+            _activeDevice = 0;
+            _class.System.SetTitanOneDevice(_listDevices[0]);
+            _class.System.Debug("titanone.log", "setting connect method to : " + _class.Write.DevId);
+            if (_class.MDefine.GcmapiConnect != null) 
+                _class.MDefine.GcmapiConnect((ushort)_class.Write.DevId);
+        }
+
         public void SetDevice(string device)
         {
             int index = _listDevices.IndexOf(device);
-
+            _class.System.Debug("titanone.log", "connecting to: " + device);
             if (index > -1)
             {
                 _activeDevice = index;
@@ -32,6 +42,7 @@ namespace consoleXstream.Output.TitanOne.GCMAPI
                 }
                 _class.System.DisableTitanOneRetry = true;
             }
+            _class.System.Debug("titanone.log", "set device to: " + _activeDevice);
         }
 
         public void AddDevice(string serial)
@@ -50,8 +61,7 @@ namespace consoleXstream.Output.TitanOne.GCMAPI
             //_class.System.Debug("TOCheck.log", _activeDevice + " / " + _listDevices[_activeDevice]);
             if (!_isConnected)
             {
-                if (_class.MDefine.GcmapiConnect != null)
-                    _class.MDefine.GcmapiConnect((ushort) _class.Write.DevId);
+                if (_class.MDefine.GcmapiConnect != null) _class.MDefine.GcmapiConnect((ushort) _class.Write.DevId);
                 _isConnected = true;
             }
 
@@ -65,6 +75,10 @@ namespace consoleXstream.Output.TitanOne.GCMAPI
 
                 if (_class.MDefine.GcmapiRead(_activeDevice, ref report) != IntPtr.Zero)
                     GamePad.SetState(PlayerIndex.One, report.Rumble[0], report.Rumble[1]);
+            }
+            else
+            {
+                _class.System.Debug("titanone.log", "not connected to " + _activeDevice);
             }
         }
     }

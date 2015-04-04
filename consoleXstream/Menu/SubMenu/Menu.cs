@@ -64,19 +64,19 @@ namespace consoleXstream.Menu.SubMenu
                             _class.DrawGui.drawImage(bmpShutter, intX + _class.Var.CellWidth - 50, 90, 60, 60, Properties.Resources.ThreeDots);
                             var displayRectTextOption = new Rectangle(intX, 2, _class.Var.CellWidth, _class.Var.CellHeight - 60);
                             var displayRectTextDisplay = new Rectangle(intX, 2, _class.Var.CellWidth, _class.Var.CellHeight - 34);
-                            _class.DrawGui.centerText(bmpShutter, displayRectTextOption, _class.Data.SubItems[intCount].DisplayOption);
-                            _class.DrawGui.centerText(bmpShutter, displayRectTextDisplay, _class.Data.SubItems[intCount].Display);
+                            _class.DrawGui.CenterText(bmpShutter, displayRectTextOption, _class.Data.SubItems[intCount].DisplayOption);
+                            _class.DrawGui.CenterText(bmpShutter, displayRectTextDisplay, _class.Data.SubItems[intCount].Display);
                         }
                         else
                         {
                             if (_class.Data.SubItems[intCount].DisplayOption.Length == 0)
-                                _class.DrawGui.centerText(bmpShutter, displayRectText, _class.Data.SubItems[intCount].Display);
+                                _class.DrawGui.CenterText(bmpShutter, displayRectText, _class.Data.SubItems[intCount].Display);
                             else
                             {
                                 var displayRectTextOption = new Rectangle(intX, 2, _class.Var.CellWidth, _class.Var.CellHeight - 60);
                                 //var displayRectTextDisplay = new Rectangle(intX, 2, _class.Var.CellWidth, _class.Var.CellHeight - 34);
-                                _class.DrawGui.centerText(bmpShutter, displayRectText, _class.Data.SubItems[intCount].Display);
-                                _class.DrawGui.centerText(bmpShutter, displayRectTextOption, _class.Data.SubItems[intCount].DisplayOption);
+                                _class.DrawGui.CenterText(bmpShutter, displayRectText, _class.Data.SubItems[intCount].Display);
+                                _class.DrawGui.CenterText(bmpShutter, displayRectTextOption, _class.Data.SubItems[intCount].DisplayOption);
                             }
                         }
                         //Check for changing information
@@ -90,16 +90,16 @@ namespace consoleXstream.Menu.SubMenu
                 {
                     _class.DrawGui.setCenter();
                     _class.DrawGui.setFontSize(24f);
-                    _class.DrawGui.centerText(bmpShutter, new Rectangle(0, 0, Properties.Resources.imgSubMenu.Width - 20, _class.Shutter.Height), _class.Shutter.Error);
+                    _class.DrawGui.CenterText(bmpShutter, new Rectangle(0, 0, Properties.Resources.imgSubMenu.Width - 20, _class.Shutter.Height), _class.Shutter.Error);
                     if (_class.Shutter.Explain.Length > 0)
                     {
                         _class.DrawGui.setFontSize(14f);
                         _class.DrawGui.setCenterBottom(true);
-                        _class.DrawGui.centerText(bmpShutter, new Rectangle(0, 0, Properties.Resources.imgSubMenu.Width - 20, _class.Shutter.Height - 20), _class.Shutter.Explain);
+                        _class.DrawGui.CenterText(bmpShutter, new Rectangle(0, 0, Properties.Resources.imgSubMenu.Width - 20, _class.Shutter.Height - 20), _class.Shutter.Explain);
                     }
                 }
 
-                _class.DrawGui.drawImage(new Rectangle(8, _class.Shutter.Start, 581, _class.Shutter.Height), bmpShutter);
+                _class.DrawGui.DrawImage(new Rectangle(8, _class.Shutter.Start, 581, _class.Shutter.Height), bmpShutter);
             }
             _class.DrawGui.setFontSize(12f);
         }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Runtime.Remoting.Messaging;
+using System.Windows.Forms;
 using DirectShowLib;
 
 namespace consoleXstream.VideoCapture.Analyse
@@ -70,25 +71,18 @@ namespace consoleXstream.VideoCapture.Analyse
 
         public void Check()
         {
+            var lineCount = 0; 
             if (_class.System.IsAutoSetCaptureResolution)
-                CheckCaptureResolution();
+                lineCount = CheckCaptureResolution();
 
-            if (_class.System.IsAutoSetDisplayResolution)
-                CheckDisplayResolution();
+            if (_class.System.IsAutoSetDisplayResolution && lineCount > 0)
+                CheckDisplayResolution(lineCount);
         }
 
-        private void CheckDisplayResolution()
+        private void CheckDisplayResolution(int intLineCount)
         {
-            var intLineCount = 0;
-
-            if (_class.Graph.IamAvd != null)
-                _class.Graph.IamAvd.get_NumberOfLines(out intLineCount);
-
-            if (intLineCount == 0) return;
-
             if (_class.Var.CurrentResByName != _checkCaptureRes)
             {
-                //_class.System.Debug("VideoResolution.Log", "Comparing: " + _class.Var.CurrentResByName + " to " + intLineCount);
                 _checkCaptureRes = _class.Var.CurrentResByName;
                 if (_checkCaptureRes.IndexOf('x') > -1)
                 {
@@ -99,25 +93,23 @@ namespace consoleXstream.VideoCapture.Analyse
             }
 
             if (_checkCaptureHeight == intLineCount.ToString() && _rerunGraphCount == 0) return;
-            
+
             _class.System.AutoChangeRes(intLineCount);
-            //system.autoChangeRes(intLineCount);
         }
 
-        private void CheckCaptureResolution()
+        private int CheckCaptureResolution()
         {
-            if (_class.Var.IsBuildingGraph) return;
+            if (_class.Var.IsBuildingGraph) return 0;
 
             var intLineCount = 0;
 
             if (_class.Graph.IamAvd != null)
                 _class.Graph.IamAvd.get_NumberOfLines(out intLineCount);
 
-            if (intLineCount == 0) return;
+            if (intLineCount == 0) return intLineCount;
 
             if (_class.Var.CurrentResByName != _checkCaptureRes)
             {
-                //_class.System.Debug("VideoResolution.Log", "Comparing: " + _class.Var.CurrentResByName + " to " + intLineCount);
                 _checkCaptureRes = _class.Var.CurrentResByName;
                 if (_checkCaptureRes.IndexOf('x') > -1)
                 {
@@ -127,7 +119,7 @@ namespace consoleXstream.VideoCapture.Analyse
                 }
             }
 
-            if (_checkCaptureHeight == intLineCount.ToString() && _rerunGraphCount == 0) return;
+            if (_checkCaptureHeight == intLineCount.ToString() && _rerunGraphCount == 0) return intLineCount;
 
 
             //Forces a second graph build
@@ -136,39 +128,34 @@ namespace consoleXstream.VideoCapture.Analyse
                 if (_rerunWait > 0)
                 {
                     _rerunWait--;
-                    return;
+                    return intLineCount;
                 }
                 else
                 {
                     _rerunGraphCount--;
-                    //_class.System.Debug("VideoResolution.log", "Rerun capture resolution: " + _rerunGraphCount);
-                    
+
                     _class.Graph.MediaControl.Stop();
                     _class.Graph.ClearGraph();
                     _class.VideoCapture.RunGraph();
-                    return;                    
+                    return intLineCount;
                 }
             }
 
-            //_class.System.Debug("VideoResolution.log", "Capture Resolution Mismatch");
-            //_class.System.Debug("VideoResolution.log", "Current Output: " + intLineCount);
-            //_class.System.Debug("VideoResolution.log", "Expected Output: " + _checkCaptureHeight);
             if (intLineCount == 720)
             {
-                //_class.System.Debug("VideoResolution.log", "Setting 720p refresh mode");
                 _rerunWait = 25;
                 _rerunGraphCount = 2;
             }
             else
             {
                 _rerunWait = 0;
-                _rerunGraphCount = 0;                
+                _rerunGraphCount = 0;
             }
-            //_class.System.Debug("VideoResolution.log", "Running graph");
 
             _class.Graph.MediaControl.Stop();
             _class.Graph.ClearGraph();
             _class.VideoCapture.RunGraph();
+            return 0;
         }
 
         public void ForceRebuildAfterResolution()

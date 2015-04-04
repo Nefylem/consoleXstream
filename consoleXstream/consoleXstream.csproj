@@ -82,11 +82,15 @@
     <Compile Include="Menu\Mouse.cs" />
     <Compile Include="Menu\Navigation.cs" />
     <Compile Include="Menu\PreviewVideo.cs" />
+    <Compile Include="Menu\Remap\Gamepad.cs" />
+    <Compile Include="Menu\Remap\Keyboard.cs" />
+    <Compile Include="Menu\Remap\Mouse.cs" />
+    <Compile Include="Menu\Remap\Navigation.cs" />
     <Compile Include="Menu\SubMenuOptions\CaptureDevice.cs" />
     <Compile Include="Menu\SubMenuOptions\Crossbar.cs" />
     <Compile Include="Menu\SubMenuOptions\Display.cs" />
     <Compile Include="Menu\SubMenuOptions\Profiles.cs" />
-    <Compile Include="Menu\SubMenuOptions\Remap.cs" />
+    <Compile Include="Menu\Remap\Remap.cs" />
     <Compile Include="Menu\SubMenu\Action.cs" />
     <Compile Include="Menu\SubMenu\Menu.cs" />
     <Compile Include="Menu\SubMenu\Shutter.cs" />

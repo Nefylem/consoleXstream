@@ -27,8 +27,6 @@
 
             if (_class.System.UseControllerMax)
                 _class.ControllerMax.initControllerMax();
-            else
-                _class.ControllerMax.closeControllerMaxInterface();
         }
 
         public void changeControllerMax_TOAPI()

@@ -35,8 +35,8 @@ namespace consoleXstream.Menu.SubSelectMenu
             _class.DrawGui.drawImage(bmpMenu, 0, 0, Properties.Resources.imgSubMenu);
             _class.DrawGui.drawImage(bmpSerial, 0, 0, Properties.Resources.imgSubMenu);
 
-            _class.DrawGui.drawText(bmpMenu, 0, 0, ">" + _class.SubSelectVar.TitanSerial);
-            _class.DrawGui.drawText(bmpMenu, 0, 15, ">" + _class.System.TitanOneDevice);
+            _class.DrawGui.DrawText(bmpMenu, 0, 0, ">" + _class.SubSelectVar.TitanSerial);
+            _class.DrawGui.DrawText(bmpMenu, 0, 15, ">" + _class.System.TitanOneDevice);
             
             var intX = 0;
             if (_class.SubSelectVar.ListData.Count < 4)
@@ -57,8 +57,8 @@ namespace consoleXstream.Menu.SubSelectMenu
                     _class.DrawGui.drawImage(bmpMenu, displayRect, Properties.Resources.imgSubGlow);
 
                 var displayRectTextOption = new Rectangle(intX, 2, _class.Var.CellWidth, _class.Var.CellHeight - 60);
-                _class.DrawGui.centerText(bmpMenu, displayRectText, "Unnamed");
-                _class.DrawGui.centerText(bmpMenu, displayRectTextOption, "TitanOne");
+                _class.DrawGui.CenterText(bmpMenu, displayRectText, "Unnamed");
+                _class.DrawGui.CenterText(bmpMenu, displayRectTextOption, "TitanOne");
 
                 if (_class.Data.Checked.IndexOf("TitanOne") > -1)
                 {
@@ -72,10 +72,10 @@ namespace consoleXstream.Menu.SubSelectMenu
             }
 
             if (_class.SubSelectVar.Selected < _class.SubSelectVar.ListData.Count)
-                _class.DrawGui.centerText(bmpSerial, new Rectangle(0, bmpSerial.Height - 25, bmpSerial.Width, 20), "SN# " + _class.SubSelectVar.ListData[_class.SubSelectVar.Selected]);
+                _class.DrawGui.CenterText(bmpSerial, new Rectangle(0, bmpSerial.Height - 25, bmpSerial.Width, 20), "SN# " + _class.SubSelectVar.ListData[_class.SubSelectVar.Selected]);
 
-            _class.DrawGui.drawImage(new Rectangle(8, 275, Properties.Resources.imgSubMenu.Width + 6, Properties.Resources.imgSubMenu.Height), bmpSerial);
-            _class.DrawGui.drawImage(new Rectangle(8, 250, Properties.Resources.imgSubMenu.Width + 6, Properties.Resources.imgSubMenu.Height), bmpMenu);
+            _class.DrawGui.DrawImage(new Rectangle(8, 275, Properties.Resources.imgSubMenu.Width + 6, Properties.Resources.imgSubMenu.Height), bmpSerial);
+            _class.DrawGui.DrawImage(new Rectangle(8, 250, Properties.Resources.imgSubMenu.Width + 6, Properties.Resources.imgSubMenu.Height), bmpMenu);
         }
     }
 }

@@ -124,7 +124,7 @@ namespace consoleXstream
             _mouse = new Hook(this, _gamepad);
             _videoCapture = new VideoCapture.VideoCapture(this, _system);
 
-            formMenu = new ShowMenu(this, _system, _keyboard, _videoCapture, _remap, _keymap);
+            formMenu = new ShowMenu(this, _system, _keyboard, _videoCapture, _remap, _keymap, _gamepad);
 
             //Pass to subforms as needed
             _system.GetClassHandles(_videoCapture, _controllerMax, _titanOne, _videoResolution);
@@ -294,11 +294,8 @@ namespace consoleXstream
                 _keyboard.enableKeyboardHook();
             }
 
-            if (_system.IsEnableMouse)
-            {
-                _system.Debug("[3] Init mouse event hook");
-                _mouse.enableMouseHook();
-            }
+            _system.Debug("[3] Init mouse event hook");
+            _mouse.enableMouseHook();
 
             if (_system.UseInternalCapture)
             {
@@ -740,10 +737,26 @@ namespace consoleXstream
             _controllerMax.initControllerMax();
         }
 
+        public void InitTitanOne()
+        {
+            _system.Debug("titanone.log", "InitializeTitanOne");
+            _titanOne.Initialize();
+        }
+
+        public void SetTitanOneDevice()
+        {
+            _titanOne.SetTitanOneDevice();   
+        }
+
         public void FocusWindow()
         {
             imgDisplay.BringToFront();
             imgDisplay.Focus();
+        }
+
+        public void SetDisplayRecord(string res)
+        {
+            _videoCapture.SetDisplay(res);
         }
     }
 }

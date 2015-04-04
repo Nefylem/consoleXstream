@@ -36,16 +36,18 @@ namespace consoleXstream.Menu
         public Configuration System { get; set; }
         public VideoCapture.VideoCapture VideoCapture { get; set; }
         public Display Display { get; set; }
-        public SubMenuOptions.Remap SubRemap { get; set; }
         public SubSelectMenu.Navigation SubNav { get; set; }
         public Remapping Remap { get; set; }
         public CaptureDevice VideoDevice { get; set; }
         public DrawGraph DrawGui { get; set; }
         public Profiles Profiles { get; set; }
-        
+        public Output.Gamepad GamepadOutput { get; set; }
         public SubSelectMenu.Menu SubSelectMenu { get; set; }
         public SubSelectMenu.Var SubSelectVar { get; set; }
 
+        public Remap.Remap RemapMenu { get; set; }
+        public Remap.Gamepad RemapGamepad { get; set; }
+        public Remap.Navigation RemapNav { get; set; }
 
         public void DeclareClasses()
         {
@@ -73,6 +75,12 @@ namespace consoleXstream.Menu
             Display = new Display(this);
             VideoDevice = new CaptureDevice(this);
             Profiles = new Profiles(this);
+
+            GamepadOutput = new Output.Gamepad();
+
+            RemapMenu = new Remap.Remap(this);
+            RemapGamepad = new Remap.Gamepad(this);
+            RemapNav = new Remap.Navigation(this);
         }
     }
 }

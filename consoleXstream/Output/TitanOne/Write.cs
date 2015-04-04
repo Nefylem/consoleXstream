@@ -104,6 +104,7 @@ namespace consoleXstream.Output.TitanOne
         public int CheckDevices() { return _class.MDevices.Check(); }
 
         public void SetTitanOneDevice(string serial) { _class.MWrite.SetDevice(serial); }
-        public string GetTitanOneDevice() { return _class.MWrite.ReturnActiveDevice();  }
+        public void SetTitanOneDevice() { _class.MWrite.SetDevice(); }
+        public string GetTitanOneDevice() { return _class.MWrite.ReturnActiveDevice(); }
     }
 }
