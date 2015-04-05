@@ -61,7 +61,7 @@
     <Compile Include="Config\Settings.cs" />
     <Compile Include="Config\TitanOne.cs" />
     <Compile Include="Config\Var.cs" />
-    <Compile Include="Config\VRMode.cs" />
+    <Compile Include="Config\Vr.cs" />
     <Compile Include="Config\XmlData.cs" />
     <Compile Include="Input\Mouse\MouseHook.cs" />
     <Compile Include="Input\Mouse\MouseCircularMovement.cs" />
@@ -98,6 +98,9 @@
     <Compile Include="Menu\SubSelectMenu\Menu.cs" />
     <Compile Include="Menu\SubSelectMenu\Navigation.cs" />
     <Compile Include="Menu\SubSelectMenu\Var.cs" />
+    <Compile Include="Menu\VR\Config.cs" />
+    <Compile Include="Menu\VR\Reposition.cs" />
+    <Compile Include="Menu\VR\Resize.cs" />
     <Compile Include="Output\Classes.cs" />
     <Compile Include="Output\ControllerMax.cs" />
     <Compile Include="Output\Gamepad.cs" />

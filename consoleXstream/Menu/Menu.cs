@@ -2,29 +2,14 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
-using consoleXstream.Config;
-using consoleXstream.Input;
-using consoleXstream.Remap;
 
 namespace consoleXstream.Menu
 {
     public partial class ShowMenu : Form
     {
-        //public ShowMenu(Form1 form1, Configuration system, KeyboardHook keyHook, VideoCapture.VideoCapture inVideo, Remapping inMap, Keymap keymap, Output.Gamepad _gamepad)
         public ShowMenu(BaseClass baseClass)
         {
-            _class = new Classes(this);
-            _class.DeclareClasses(baseClass);
-
-            //_class.Form1 = baseClass.Home;
-            //_class.System = baseClass.System;
-            //_class.KeyboardHook = baseClass.Keyboard;
-            //_class.VideoCapture = baseClass._videoCapture;
-            //_class.Remap = baseClass.Remap;
-            //_class.Keymap = baseClass.Keymap;
-
-            //_class.GamepadOutput = baseClass.Gamepad; 
-
+            _class = new Classes(baseClass, this);
             InitializeComponent();
         }
         private readonly Classes _class;
@@ -49,7 +34,6 @@ namespace consoleXstream.Menu
 
         public void ShowPanel()
         {
-            if (_class.Base.Home == null) { _class.Base.Home = (Form1)Application.OpenForms["Form1"]; }
             _class.Nav.ListHistory = new List<string>();
 
             _class.CreateMain.Menu();
@@ -106,6 +90,12 @@ namespace consoleXstream.Menu
 
         private void tmrMenu_Tick(object sender, EventArgs e)
         {
+            if (_class.Var.IsResizeVr)
+            {
+                CheckControls();
+                return;
+            }
+
             _class.Nav.CheckDelays();
             if (_class.Var.SetupGamepad) _class.RemapNav.CheckDelays();
 

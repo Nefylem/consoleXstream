@@ -13,6 +13,9 @@ namespace consoleXstream.Menu.Data
         public bool SetupGamepad;
         public bool ShowSubSelection;
 
+        public bool IsResizeVr;
+        public bool IsRepositionVr;
+
         public int CellWidth;
         public int CellHeight;
 

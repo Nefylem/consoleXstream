@@ -50,7 +50,6 @@ namespace consoleXstream
         private void Form1_Load(object sender, EventArgs e)
         {
             _class = new BaseClass(this);
-            _class.Declare();
 
             //captureImage = new Bitmap(Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height);
 
@@ -414,7 +413,7 @@ namespace consoleXstream
         #region Video capture links to main form
         private void CheckRunningGraph()
         {
-            if (_class.VideoCapture.boolActiveVideo)
+            if (_class.VideoCapture.BoolActiveVideo)
                 _class.VideoCapture.checkVideoOutput();
         }
 
@@ -630,13 +629,13 @@ namespace consoleXstream
                 imgDisplay.BackColor = Color.Black;
 
                 imgDisplay.Left = 0;
-                imgDisplay.Top = 50;
+                imgDisplay.Top = 0;
                 imgDisplay.Width = Screen.PrimaryScreen.Bounds.Width / 2;
-                imgDisplay.Height = Screen.PrimaryScreen.Bounds.Height - 100;
+                imgDisplay.Height = Screen.PrimaryScreen.Bounds.Height;
 
                 imgDisplayVr.Left = Screen.PrimaryScreen.Bounds.Width / 2;
-                imgDisplayVr.Top = 50;
-                imgDisplayVr.Height = Screen.PrimaryScreen.Bounds.Height - 100;
+                imgDisplayVr.Top = 0;
+                imgDisplayVr.Height = Screen.PrimaryScreen.Bounds.Height;
                 imgDisplayVr.Width = Screen.PrimaryScreen.Bounds.Width / 2;
             }
             else
@@ -684,6 +683,15 @@ namespace consoleXstream
         public void SetDisplayRecord(string res)
         {
             _class.VideoCapture.SetDisplay(res);
+        }
+
+        public void MoveVrDisplay()
+        {
+            var centerWidth = (Screen.PrimaryScreen.Bounds.Width/2);
+            imgDisplay.Top = _class.System.Class.Vr.VideoHeightOffset;
+            imgDisplayVr.Top = _class.System.Class.Vr.VideoHeightOffset;
+            imgDisplay.Left = _class.System.Class.Vr.VideoWidthOffset;
+            imgDisplayVr.Left = centerWidth + _class.System.Class.Vr.VideoWidthOffset;
         }
     }
 }

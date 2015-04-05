@@ -1,58 +1,55 @@
-﻿using consoleXstream.Config;
-using consoleXstream.DrawGui;
-using consoleXstream.Input;
+﻿using consoleXstream.DrawGui;
 using consoleXstream.Menu.Data;
 using consoleXstream.Menu.MainMenu;
 using consoleXstream.Menu.SubMenu;
 using consoleXstream.Menu.SubMenuOptions;
-using consoleXstream.Remap;
-using Display = consoleXstream.Menu.SubMenuOptions.Display;
+using consoleXstream.Menu.VR;
 
 namespace consoleXstream.Menu
 {
     public class Classes
     {
-        public Classes(ShowMenu men) { DisplayMenu = men; }
-
-        public BaseClass Base { get; set; }
-        //public Form1 Form1 { get; set; }
-        public ShowMenu DisplayMenu { get; set; }
-        public MainMenu.Action Action { get; set; }
-        public SubMenu.Action SubAction { get; set; }
-        public ButtonItem Button { get; set; }
-        public Create CreateMain { get; set; }
-        public MainMenu.Menu MainMenu { get; set; }
-        public SubMenu.Menu SubMenu { get; set; }
-        public Navigation Nav { get; set; }
-        public Variables Var { get; set; }
-        public Interaction Data { get; set; }
-        public FrameCount Fps { get; set; }
-        public Mouse Mouse { get; set; }
-        public Shutter Shutter { get; set; }
-        public Gamepad Gamepad { get; set; }
-        public Keyboard Keyboard { get; set; }
-        //public KeyboardHook KeyboardHook { get; set; }
-        //public Keymap Keymap { get; set; }
-        public User User { get; set; }
-        //public Configuration System { get; set; }
-        //public VideoCapture.VideoCapture VideoCapture { get; set; }
-        public Display Display { get; set; }
-        public SubSelectMenu.Navigation SubNav { get; set; }
-        //public Remapping Remap { get; set; }
-        public CaptureDevice VideoDevice { get; set; }
-        public DrawGraph DrawGui { get; set; }
-        public Profiles Profiles { get; set; }
-        //public Output.Gamepad GamepadOutput { get; set; }
-        public SubSelectMenu.Menu SubSelectMenu { get; set; }
-        public SubSelectMenu.Var SubSelectVar { get; set; }
-
-        public Remap.Remap RemapMenu { get; set; }
-        public Remap.Gamepad RemapGamepad { get; set; }
-        public Remap.Navigation RemapNav { get; set; }
-        
-        public void DeclareClasses(BaseClass baseClass)
+        public Classes(BaseClass baseClass, ShowMenu main)
         {
+            DisplayMenu = main;
             Base = baseClass;
+            Declare();
+        }
+
+        public BaseClass Base { get; private set; }
+        public ShowMenu DisplayMenu { get; private set; }
+        public MainMenu.Action Action { get; private set; }
+        public SubMenu.Action SubAction { get; private set; }
+        public ButtonItem Button { get; private set; }
+        public Create CreateMain { get; private set; }
+        public MainMenu.Menu MainMenu { get; private set; }
+        public SubMenu.Menu SubMenu { get; private set; }
+        public Navigation Nav { get; private set; }
+        public Variables Var { get; private set; }
+        public Interaction Data { get; private set; }
+        public FrameCount Fps { get; private set; }
+        public Mouse Mouse { get; private set; }
+        public Shutter Shutter { get; private set; }
+        public Gamepad Gamepad { get; private set; }
+        public Keyboard Keyboard { get; private set; }
+        public User User { get; private set; }
+        public Display Display { get; private set; }
+        public SubSelectMenu.Navigation SubNav { get; private set; }
+        public CaptureDevice VideoDevice { get; private set; }
+        public DrawGraph DrawGui { get; private set; }
+        public Profiles Profiles { get; private set; }
+        public SubSelectMenu.Menu SubSelectMenu { get; private set; }
+        public SubSelectMenu.Var SubSelectVar { get; private set; }
+        public Remap.Remap RemapMenu { get; private set; }
+        public Remap.Gamepad RemapGamepad { get; private set; }
+        public Remap.Navigation RemapNav { get; private set; }
+        
+        public VR.Config ConfigVr { get; private set; }
+        public Resize ResizeVr { get; private set; }
+        public Reposition RepositionVr { get; private set; }
+
+        private void Declare()
+        {
             Action = new MainMenu.Action(this);
             Button = new ButtonItem(this);
             CreateMain = new Create(this);
@@ -81,6 +78,10 @@ namespace consoleXstream.Menu
             RemapMenu = new Remap.Remap(this);
             RemapGamepad = new Remap.Gamepad(this);
             RemapNav = new Remap.Navigation(this);
+
+            ConfigVr = new VR.Config(this);
+            ResizeVr = new Resize(this);
+            RepositionVr = new Reposition(this);
         }
     }
 }

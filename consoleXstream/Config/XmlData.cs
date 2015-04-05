@@ -53,6 +53,10 @@ namespace consoleXstream.Config
 
             strSave += "<VR_Mode>";
             strSave += _class.Set.CheckData("VR_Video");
+            strSave += _class.Set.CheckData("VR_Width");
+            strSave += _class.Set.CheckData("VR_Height");
+            strSave += _class.Set.CheckData("VR_OffsetWidth");
+            strSave += _class.Set.CheckData("VR_OffsetHeight");
             strSave += "</VR_Mode>";
 
             strSave += "<DisplaySettings>";

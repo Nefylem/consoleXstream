@@ -7,31 +7,32 @@ namespace consoleXstream
 {
     public class BaseClass
     {
-        public BaseClass(Form1 form ) { Home = form; }
+        public BaseClass(Form1 form)
+        {
+            Home = form;
+            Declare();
+        }
 
-        public Form1 Home { get; set; }
-        public Configuration System { get; set; }
-        public Remapping Remap { get; set; }
-        public VideoResolution VideoResolution { get; set; }
-        public Keymap Keymap { get; set; }
-        public Menu.ShowMenu Menu { get; set; }
+        public Form1 Home                                               { get; private set; }
+        public Configuration System                                     { get; private set; }
+        public Remapping Remap                                          { get; private set; }
+        public VideoResolution VideoResolution                          { get; private set; }
+        public Keymap Keymap                                            { get; private set; }
+        public Menu.ShowMenu Menu                                       { get; private set; }
+
+        public Output.ControllerMax ControllerMax                       { get; private set; }
+        public Output.TitanOne.Write TitanOne                           { get; private set; }
+        public Output.Gamepad Gamepad                                   { get; private set; }
+        private Gimx Gimx                                               { get; set; }
+
+        public Input.KeyboardHook Keyboard                              { get; private set; }
+        public Input.KeyboardInterface KeyboardInterface                { get; private set; }
+        public Input.Mouse.Hook Mouse                                   { get; private set; }
+        private ExternalScript External                                 { get; set; }
+        public VideoCapture.VideoCapture VideoCapture                   { get; private set; }
 
 
-        public Output.ControllerMax ControllerMax { get; set; }
-        public Output.TitanOne.Write TitanOne { get; set; }
-        public Output.Gamepad Gamepad { get; set; }
-        private Gimx Gimx { get; set; }
-
-        public Input.KeyboardHook Keyboard { get; set; }
-        public Input.KeyboardInterface KeyboardInterface { get; set; }
-        public Input.Mouse.Hook Mouse { get; set; }
-
-        private ExternalScript External { get; set; }
-
-        public VideoCapture.VideoCapture VideoCapture;
-
-
-        public void Declare()
+        private void Declare()
         {
             ControllerMax = new Output.ControllerMax(this);
             Gamepad = new Output.Gamepad(this);

@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-
-namespace consoleXstream.Config
+﻿namespace consoleXstream.Config
 {
     public class Classes
     {
@@ -29,6 +22,7 @@ namespace consoleXstream.Config
         public TitanOne TitanOneConfig { get; set; }
         public ControllerMax ControllerMaxConfig { get; set; }
         public BaseClass BaseClass { get; set; }
+        public Vr Vr { get; private set; }
 
         public void DeclareClasses(BaseClass baseClass)
         {
@@ -46,6 +40,7 @@ namespace consoleXstream.Config
             Display = new Display(this);
             TitanOneConfig = new TitanOne(this);
             ControllerMaxConfig = new ControllerMax(this);
+            Vr = new Vr(this);
         }
     }
 }

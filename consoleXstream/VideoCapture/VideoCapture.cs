@@ -2,98 +2,96 @@
 using System.Collections.Generic;
 using DirectShowLib;
 using System.Drawing;
-using System.Windows.Forms;
 using consoleXstream.Config;
-using consoleXstream.Menu.SubMenuOptions;
 
 namespace consoleXstream.VideoCapture
 {
     public class VideoCapture
     {
-        private readonly Classes _class;
+        public VideoCapture(Form1 mainForm, Configuration system)
+        {
+            Class = new Classes(this, mainForm, system);
+            Class.DeclareClasses();
+        }
+        public readonly Classes Class;
 
-        public bool boolActiveVideo { get; private set; }
+        public bool BoolActiveVideo { get; private set; }
 
 
         public IMediaEvent MediaEvent
         {
-            get { return _class.Graph.MediaEvent; }
-            set { _class.Graph.MediaEvent = value; }
+            get { return Class.Graph.MediaEvent; }
+            set { Class.Graph.MediaEvent = value; }
         }
 
-        private int _intRestartGraph = 0;
+        private int _intRestartGraph;
         
-        public VideoCapture(Form1 mainForm, Configuration System)
-        {
-            _class = new Classes(this, mainForm, System);
-            _class.DeclareClasses();
-        }
-
         public void InitialzeCapture()
         {
-            _class.Var.CrossbarAudio = "none";
-            _class.Var.CrossbarVideo = "none";
+            Class.Var.CrossbarAudio = "none";
+            Class.Var.CrossbarVideo = "none";
 
             //Caches build information
-            _class.Capture.Find();
-            _class.Audio.Find();
+            Class.Capture.Find();
+            Class.Audio.Find();
 
-            _class.User.LoadSettings();
-            _class.Resolution.Find();
+            Class.User.LoadSettings();
+            Class.Resolution.Find();
 
-            _class.Var.IsInitializeGraph = true;
-            _class.Var.IsRestartGraph = true;
+            Class.Var.IsInitializeGraph = true;
+            Class.Var.IsRestartGraph = true;
         }
 
-        public void LoadUserSettings() { _class.User.LoadSettings(); }
+        public void LoadUserSettings() { Class.User.LoadSettings(); }
 
         public void RunGraph()
         {
-            _class.Debug.Log("[0] Build capture graph");
-            if (_class.Capture.CurrentDevice > -1 && _class.Capture.CurrentDevice < _class.Var.VideoCaptureDevice.Count)
+            Class.Debug.Log("[0] Build capture graph");
+            if (Class.Capture.CurrentDevice > -1 && Class.Capture.CurrentDevice < Class.Var.VideoCaptureDevice.Count)
             {
-                int hr = 0;
+                Class.Var.IsBuildingGraph = true;
+                Class.Debug.Log("Using : " + Class.Var.VideoCaptureDevice[Class.Capture.CurrentDevice]);
+                Class.Debug.Log("");
 
-                _class.Var.IsBuildingGraph = true;
-                _class.Debug.Log("Using : " + _class.Var.VideoCaptureDevice[_class.Capture.CurrentDevice]);
-                _class.Debug.Log("");
+                if (Class.Graph.MediaControl != null) Class.Graph.MediaControl.StopWhenReady();
+                if (Class.Resolution.Type.Count == 0) { Class.Resolution.Find();  }
 
-                if (_class.Graph.MediaControl != null) _class.Graph.MediaControl.StopWhenReady();
-                if (_class.Resolution.Type.Count == 0) { _class.Resolution.Find();  }
+                Class.Graph.ClearGraph();
 
-                _class.Graph.ClearGraph();
+                Class.Graph.CaptureGraph = new FilterGraph() as IGraphBuilder;
 
-                _class.Graph.CaptureGraph = new FilterGraph() as IGraphBuilder;
-
-                if (_class.GraphBuild.BuildGraph())
+                if (Class.GraphBuild.BuildGraph())
                 {
-                    if (!_class.Var.ShowPreviewWindow)
-                        _class.Display.Setup();
+                    if (!Class.Var.ShowPreviewWindow)
+                        Class.Display.Setup();
                     else
                         setupPreviewWindow();
 
-                    _class.Graph.MediaControl = _class.Graph.CaptureGraph as IMediaControl;
-                    _class.Graph.MediaEvent = _class.Graph.CaptureGraph as IMediaEvent;
+                    Class.Graph.MediaControl = Class.Graph.CaptureGraph as IMediaControl;
+                    Class.Graph.MediaEvent = Class.Graph.CaptureGraph as IMediaEvent;
 
-                    _class.Debug.Log("");
-                    _class.Debug.Log("Run compiled graph");
-                    hr = _class.Graph.MediaControl.Run();
-                    _class.Debug.Log("[2] " + DsError.GetErrorText(hr));
+                    Class.Debug.Log("");
+                    Class.Debug.Log("Run compiled graph");
+                    if (Class.Graph.MediaControl != null)
+                    {
+                        int hr = Class.Graph.MediaControl.Run();
+                        Class.Debug.Log("[2] " + DsError.GetErrorText(hr));
+                    }
 
-                    boolActiveVideo = true;
+                    BoolActiveVideo = true;
                 }
 
-                _class.Var.IsBuildingGraph = false;
+                Class.Var.IsBuildingGraph = false;
 
-                if (_class.Graph.XBar != null)
-                    if (_class.Var.CrossbarInput.Count == 0)
-                        _class.Crossbar.Output();
+                if (Class.Graph.XBar != null)
+                    if (Class.Var.CrossbarInput.Count == 0)
+                        Class.Crossbar.Output();
 
-                if (_class.Var.IsRestartGraph)
+                if (Class.Var.IsRestartGraph)
                     _intRestartGraph = 3;
             }
             else
-                _class.Debug.Log("[ERR] Unknown capture device");
+                Class.Debug.Log("[ERR] Unknown capture device");
         }
 
         public void ChangeResolution()
@@ -257,25 +255,25 @@ namespace consoleXstream.VideoCapture
         public void checkVideoOutput()
         {
             //Reruns the graph once, find this needs to happen after quick resolution changes (PS3)
-            if (_class.Var.IsRestartGraph && !_class.Var.IsVideoFail)           
+            if (Class.Var.IsRestartGraph && !Class.Var.IsVideoFail)           
             {
-                _class.Var.IsRestartGraph = false;
-                _class.Debug.Log("[3] Update graph");
+                Class.Var.IsRestartGraph = false;
+                Class.Debug.Log("[3] Update graph");
                 RunGraph();
             }
 
-            if (!_class.Var.IsVideoFail && _class.System.IsAutoSetCaptureResolution)
-                _class.Resolution.Check();
+            if (!Class.Var.IsVideoFail && Class.System.IsAutoSetCaptureResolution)
+                Class.Resolution.Check();
 
-            if (_class.Var.IsRestartGraph)
+            if (Class.Var.IsRestartGraph)
             {
                 if (_intRestartGraph > 0) 
                     _intRestartGraph--; 
                 else 
                 { 
-                    _class.Debug.Log("[3] Restart graph");
-                    _class.Var.IsRestartGraph = false;
-                    _class.Var.IsVideoFail = false; 
+                    Class.Debug.Log("[3] Restart graph");
+                    Class.Var.IsRestartGraph = false;
+                    Class.Var.IsVideoFail = false; 
                     RunGraph(); 
                 }
             }
@@ -283,34 +281,34 @@ namespace consoleXstream.VideoCapture
 
         public List<string> GetVideoCaptureDevices()
         {
-            if (_class.Var.VideoCaptureDevice == null || _class.Var.VideoCaptureDevice.Count == 0)
+            if (Class.Var.VideoCaptureDevice == null || Class.Var.VideoCaptureDevice.Count == 0)
             {
                 //relist
             }
-            return _class.Var.VideoCaptureDevice;
+            return Class.Var.VideoCaptureDevice;
         }
 
         public List<string> GetVideoCaptureByName()
         {
-            if (_class.Var.VideoCaptureDevice == null || _class.Var.VideoCaptureDevice.Count == 0)
-                _class.Capture.Find();
+            if (Class.Var.VideoCaptureDevice == null || Class.Var.VideoCaptureDevice.Count == 0)
+                Class.Capture.Find();
 
-            return _class.Var.VideoCaptureDevice;            
+            return Class.Var.VideoCaptureDevice;            
         }
-        public void SetVideoCaptureDevice(string device) { _class.Capture.Set(device); }
-        public void SetPreviewWindow(bool set) { _class.Var.ShowPreviewWindow = set; }
-        public List<string> GetVideoResolution() { return _class.Resolution.List; }
-        public int GetVideoResolutionCurrent() { return _class.Var.CurrentResolution; }
-        public void SetVideoResolution(int setRes) { _class.Var.VideoResolutionIndex = setRes; _class.Var.SetResolution = setRes; }
-        public List<string> GetCrossbarList() { return _class.Var.CrossbarInput; }
-        public string GetCrossbarOutput(int id, string type) { return _class.Crossbar.List(id, type); }
-        public void SetCrossbar(string cross) { _class.GraphCrossbar.setCrossbar(cross); }
-        public void CloseGraph() { _class.Close.CloseGraph(); }
-        public string GetVideoDevice() { return _class.Var.VideoDevice; }
-        public string GetAudioDevice() { return _class.Var.AudioDevice; }
-        public string GetCrossbarSetting(string type) { return _class.Crossbar.GetActive(type); }
-        public int GetCrossbarId(string type) { return _class.Crossbar.GetActiveId(type); }
-        public void SetDisplay(string res) { _class.Var.CurrentResByName = res; }
+        public void SetVideoCaptureDevice(string device) { Class.Capture.Set(device); }
+        public void SetPreviewWindow(bool set) { Class.Var.ShowPreviewWindow = set; }
+        public List<string> GetVideoResolution() { return Class.Resolution.List; }
+        public int GetVideoResolutionCurrent() { return Class.Var.CurrentResolution; }
+        public void SetVideoResolution(int setRes) { Class.Var.VideoResolutionIndex = setRes; Class.Var.SetResolution = setRes; }
+        public List<string> GetCrossbarList() { return Class.Var.CrossbarInput; }
+        public string GetCrossbarOutput(int id, string type) { return Class.Crossbar.List(id, type); }
+        public void SetCrossbar(string cross) { Class.GraphCrossbar.setCrossbar(cross); }
+        public void CloseGraph() { Class.Close.CloseGraph(); }
+        public string GetVideoDevice() { return Class.Var.VideoDevice; }
+        public string GetAudioDevice() { return Class.Var.AudioDevice; }
+        public string GetCrossbarSetting(string type) { return Class.Crossbar.GetActive(type); }
+        public int GetCrossbarId(string type) { return Class.Crossbar.GetActiveId(type); }
+        public void SetDisplay(string res) { Class.Var.CurrentResByName = res; }
     }
 
 }

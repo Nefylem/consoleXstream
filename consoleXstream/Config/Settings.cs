@@ -23,8 +23,14 @@
 
             if (_class.Set.Check("checkcaptureres").ToLower() == "true") _class.System.IsAutoSetCaptureResolution = true;
             if (_class.Set.Check("AutoResolution").ToLower() == "true") _class.System.IsAutoSetDisplayResolution = true;
+
             if (_class.Set.Check("VR_Video").ToLower() == "true") _class.System.IsVr = true;
-            
+
+            if (_class.Set.Check("VR_Width").Length > 0) _class.Vr.SetWidth(_class.Set.Check("VR_Width"));
+            if (_class.Set.Check("VR_Height").Length > 0) _class.Vr.SetHeight(_class.Set.Check("VR_Height"));
+            if (_class.Set.Check("VR_OffsetWidth").Length > 0) _class.Vr.SetOffsetWidth(_class.Set.Check("VR_OffsetWidth"));
+            if (_class.Set.Check("VR_OffsetHeight").Length > 0) _class.Vr.SetOffsetHeight(_class.Set.Check("VR_OffsetHeight"));
+
             if (_class.Set.Check("MenuLog").ToLower() == "true") _class.Log.SetValue("Menu", true);
 
             if (_class.Set.Check("controllermax").ToLower() == "true") _class.System.UseControllerMax = true;

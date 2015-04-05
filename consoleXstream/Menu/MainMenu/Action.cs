@@ -61,7 +61,7 @@ namespace consoleXstream.Menu.MainMenu
             _class.Nav.ListHistory.Add(command);            
         }
 
-        private void ClearSub()
+        public void ClearSub()
         {
             _class.Var.IsMainMenu = false;
 
@@ -123,7 +123,7 @@ namespace consoleXstream.Menu.MainMenu
             SetMenu(command);
             ClearSub();
 
-            _class.SubAction.AddSubItem("VrVideo", "VR Mode\nVideo", _class.Base.System.IsVr);
+            _class.ConfigVr.AddVrMenuOptions();
 
             SelectSubItem();
             _class.Shutter.SetActive(currentRow + 1);            

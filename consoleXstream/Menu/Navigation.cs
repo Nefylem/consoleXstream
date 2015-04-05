@@ -15,7 +15,7 @@ namespace consoleXstream.Menu
         private int _moveDownWait;
         private int _moveLeftWait;
         private int _moveRightWait;
-        private int _moveOkWait;
+        public int _moveOkWait;
         private int _menuBackWait;
 
         public void CheckCommand(string command)
@@ -23,6 +23,8 @@ namespace consoleXstream.Menu
             command = command.ToLower();
             if (_class.Var.ShowSubSelection) { _class.SubNav.GetCommand(command); return; }
             if (_class.Var.SetupGamepad) { _class.RemapNav.GetCommand(command); return; }
+            if (_class.Var.IsResizeVr) { _class.ResizeVr.GetCommand(command); return; }
+            if (_class.Var.IsRepositionVr) { _class.RepositionVr.GetCommand(command); return; }
 
             if (_class.Base.System.CheckLog("Menu")) _class.Base.System.Debug("menu.log", command);   
             
@@ -217,5 +219,6 @@ namespace consoleXstream.Menu
         }
 
         public void SetBackWait(int wait) { _menuBackWait = wait; }
+        public void SetOkWait(int wait) { _moveOkWait = wait; }
     }
 }

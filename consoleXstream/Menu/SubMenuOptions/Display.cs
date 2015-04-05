@@ -110,7 +110,7 @@
             else
                 _class.Data.Checked.Add("Auto Set");
 
-            _class.Base.System.SetAutoChangeDisplay();
+            _class.Base.System.Class.Display.SetAutoChangeDisplay();
         }
 
         private void ChangeStayOnTop()
@@ -120,7 +120,7 @@
             else
                 _class.Data.Checked.Add("Stay On Top");
 
-            _class.Base.System.SetStayOnTop();
+            _class.Base.System.Class.Display.SetStayOnTop();
         }
 
         public void ChangeVideoDisplay(string command)

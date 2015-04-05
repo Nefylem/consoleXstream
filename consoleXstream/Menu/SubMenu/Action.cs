@@ -19,7 +19,7 @@ namespace consoleXstream.Menu.SubMenu
             {
                 case "console select": LoadProfile(command); break;
                 case "save profile": SaveProfile(command); break;
-                case "vr": SetVrMode(command); break;
+                case "vr": _class.ConfigVr.SetVrOptions(command); break;
                 case "video input": ChangeCrossbar(command); break;
                 case "video device": ChangeVideoDevice(command); break;
                 case "controller output": ChangeSetting(command); break;
@@ -139,13 +139,6 @@ namespace consoleXstream.Menu.SubMenu
             _class.Profiles.Load(command);
         }
 
-        private void SetVrMode(string command)
-        {
-            if (command == "VrVideo") _class.Base.System.ChangeVrVideo();
-            _class.Action.CheckDisplaySettings();
-            _class.DisplayMenu.PositionMenu();
-        }
-
         private void ChangeCrossbar(string command)
         {
             var crossbar = new SubMenuOptions.Crossbar();
@@ -180,7 +173,7 @@ namespace consoleXstream.Menu.SubMenu
             command = command.ToLower();
             if (command == "ds4 emulation") _class.Base.System.ChangeDs4Emulation();
             if (command == "normalize") _class.Base.System.ChangeNormalizeGamepad();
-            if (command == "rumble") _class.Base.System.ChangeRumble();
+            if (command == "rumble") _class.Base.System.Class.Gamepad.ChangeRumble();
             if (command == "controllermax") _class.Base.System.ChangeControllerMax();
             if (command == "titanone") ChangeTitanOne();
             if (command == "resolution") ListCaptureResolution();
