@@ -17,7 +17,7 @@ namespace consoleXstream.Output.TitanOne.GCMAPI
         {
             //if (_class.System.)
             //_class.System.Debug("listAll.log", "MWrite.listing devices");
-            _class.System.ChangeTitanOne(true);
+            _class.BaseClass.System.ChangeTitanOne(true);
 
             _class.Write.SetApiMethod(TitanOne.Define.ApiMethod.Multi);
             _class.Write.SetToInterface(TitanOne.Define.DevPid.TitanOne);
@@ -81,16 +81,16 @@ namespace consoleXstream.Output.TitanOne.GCMAPI
                 //Load config on each of these devices
                 _class.MWrite.AddDevice(disp);
                 
-                if (_class.FrmMain.ListToDevices == null)
-                    _class.FrmMain.ListToDevices = new List<string>();
+                if (_class.BaseClass.HomeClass.Var.ListToDevices == null)
+                    _class.BaseClass.HomeClass.Var.ListToDevices = new List<string>();
 
-                _class.FrmMain.ListToDevices.Add(disp);
+                _class.BaseClass.HomeClass.Var.ListToDevices.Add(disp);
             }
 
-            if (_class.FrmMain.RetrySetTitanOne == null) return;
-            if (_class.FrmMain.RetrySetTitanOne.Length <= 0) return;
-            _class.MWrite.SetDevice(_class.FrmMain.RetrySetTitanOne);
-            _class.FrmMain.RetrySetTitanOne = "";
+            if (_class.BaseClass.HomeClass.Var.RetrySetTitanOne == null) return;
+            if (_class.BaseClass.HomeClass.Var.RetrySetTitanOne.Length <= 0) return;
+            _class.MWrite.SetDevice(_class.BaseClass.HomeClass.Var.RetrySetTitanOne);
+            _class.BaseClass.HomeClass.Var.RetrySetTitanOne = "";
         }
     }
 }

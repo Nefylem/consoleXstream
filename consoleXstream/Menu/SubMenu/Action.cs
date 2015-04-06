@@ -200,13 +200,13 @@ namespace consoleXstream.Menu.SubMenu
 
         private void ListAllTitanOne()
         {
-            if (_class.Base.Home.ListToDevices == null)
-                _class.Base.Home.ListToDevices = new List<string>();
+            if (_class.Base.HomeClass.Var.ListToDevices == null)
+                _class.Base.HomeClass.Var.ListToDevices = new List<string>();
 
-            if (_class.Base.Home.ListToDevices.Count > 0)
+            if (_class.Base.HomeClass.Var.ListToDevices.Count > 0)
             {
                 _class.SubSelectVar.TitanSerial = _class.Base.System.TitanOneDevice;
-                _class.SubSelectVar.ListData = _class.Base.Home.ListToDevices;
+                _class.SubSelectVar.ListData = _class.Base.HomeClass.Var.ListToDevices;
                 _class.Base.Home.SetTitanOneMode("Multi");
 
                 _class.SubNav.SetMenuOkWait();
@@ -221,7 +221,7 @@ namespace consoleXstream.Menu.SubMenu
                 _class.SubSelectVar.TitanSerial = _class.Base.System.TitanOneDevice;
 
                 _class.Base.Home.SetTitanOneMode("Multi");
-                _class.Base.Home.ListTitanOneDevices();
+                _class.Base.HomeClass.CheckTitanDevices.List();
 
                 if (_class.Base.Home.GetTitanOne().Length > 0)
                     _class.Data.Checked.Add("TitanOne");
@@ -239,7 +239,7 @@ namespace consoleXstream.Menu.SubMenu
         private void Exit(string command)
         {
             command = command.ToLower();
-            if (command == "exit") _class.Base.Home.CloseSystem();
+            if (command == "exit") _class.Base.HomeClass.System.Exit();
             if (command == "back") _class.Nav.MenuBack();
         }
 

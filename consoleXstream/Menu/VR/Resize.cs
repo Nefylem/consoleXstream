@@ -9,7 +9,8 @@ namespace consoleXstream.Menu.VR
 
         public void SetResizeMode()
         {
-            _class.Nav.SetOkWait(3);
+            _class.Nav.SetOkWait(5);
+
             _class.Var.IsResizeVr = true;
             _class.Base.Menu.Visible = false;
         }

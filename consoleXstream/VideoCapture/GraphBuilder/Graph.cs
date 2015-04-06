@@ -10,6 +10,8 @@ namespace consoleXstream.VideoCapture.GraphBuilder
         public GraphMap(Classes classes) { _class = classes; }
         private readonly Classes _class;
 
+        private bool UseInfiniteTee = true;
+
         public bool BuildGraph()
         {
             if (_class.Capture.CurrentDevice <= -1 ||
@@ -112,18 +114,33 @@ namespace consoleXstream.VideoCapture.GraphBuilder
 
             //if (_class.Var.UseSampleGrabber)
             //    _class.SampleGrabber.createSampleGrabber(ref strPreviewIn, ref strPreviewOut, ref strDevice, ref strPinOut, ref pRen);
-
-            if (_class.Var.CreateSmartTee)
-            {
-                _class.SmartTee.createSmartTee(ref strPreviewIn, ref strPreviewOut, ref strDevice, ref strPinOut, ref pRen);
-
-                _class.Graph.CaptureFeed = pRen;
-                _class.Graph.CaptureFeedIn = strPreviewIn;                    
-            }
-
             IBaseFilter smartTeeBase = null;
+
             if (_class.System.IsVr)
-                smartTeeBase = pRen;
+            {
+                if (UseInfiniteTee)
+                {
+                    _class.Debug.Log("");
+                    _class.Debug.Log("[0]***   Create Graph Pin Splitter");
+                    _class.InfiniteTee.CreateInfiniteTee(ref strPreviewIn, ref strPreviewOut, ref strDevice, ref strPinOut, ref pRen);
+
+                    _class.Graph.CaptureFeed = pRen;
+                    _class.Graph.CaptureFeedIn = strPreviewIn;
+                    strPinOut = "Output1";
+                    smartTeeBase = pRen;
+                }
+            }
+            else
+            {
+                if (_class.Var.CreateSmartTee)
+                {
+                    _class.SmartTee.createSmartTee(ref strPreviewIn, ref strPreviewOut, ref strDevice, ref strPinOut, ref pRen);
+
+                    _class.Graph.CaptureFeed = pRen;
+                    _class.Graph.CaptureFeedIn = strPreviewIn;
+                }
+                if (_class.System.IsVr) smartTeeBase = pRen;
+            }
 
             if (_class.Var.CreateAviRender)
                 _class.AviRender.Create(ref strAvIin, ref strAvIout, ref strDevice, ref strPinOut, ref pRen);
@@ -166,12 +183,15 @@ namespace consoleXstream.VideoCapture.GraphBuilder
                 _class.Debug.Log("Create VR View");
 
                 pRen = smartTeeBase;
+                _class.Debug.Log("[0]***   Listing Infinitee Output Pins");
+                _class.GraphPin.ListPin(pRen);
                 strPinOut = "Capture";
+                if (UseInfiniteTee) strPinOut = "Output2";
 
                 IBaseFilter pAVIDecompressor2 = (IBaseFilter)new AVIDec();
                 hr = _class.Graph.CaptureGraph.AddFilter(pAVIDecompressor2, "AVI Decompressor VR");
                 _class.Debug.Log("-> " + DsError.GetErrorText(hr));
-
+                _class.Debug.Log("[0]***   Connecting (Infinite Tee) " + strPinOut + " to AVIDecompressor2 XForm In");
                 hr = _class.Graph.CaptureGraph.ConnectDirect(_class.GraphPin.GetPin(pRen, strPinOut), _class.GraphPin.GetPin(pAVIDecompressor2, "XForm In"), null);
                 _class.Debug.Log("-> " + DsError.GetErrorText(hr));
 

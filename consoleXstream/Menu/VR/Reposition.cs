@@ -36,20 +36,28 @@
 
         private void ResetDisplay()
         {
-            _class.Base.System.Class.Vr.VideoHeightOffset = 0;
-            _class.Base.System.Class.Vr.VideoWidthOffset = 0;
-            _class.Base.System.Class.Set.Add("VR_OffsetWidth", _class.Base.System.Class.Vr.VideoWidthOffset.ToString());
-            _class.Base.System.Class.Set.Add("VR_OffsetHeight", _class.Base.System.Class.Vr.HeightOffset.ToString());
+            var vr = _class.Base.System.Class.Vr;
+            var set = _class.Base.System.Class.Set;
+            var home = _class.Base.Home;
+            
+            vr.VideoHeightOffset = 0;
+            vr.VideoWidthOffset = 0;
 
-            _class.Base.Home.MoveVrDisplay();            
+            set.Add("VR_OffsetWidth", _class.Base.System.Class.Vr.VideoWidthOffset.ToString());
+            set.Add("VR_OffsetHeight", _class.Base.System.Class.Vr.VideoHeightOffset.ToString());
+
+            home.MoveVrDisplay();            
         }
 
         private void MoveDisplayRight()
         {
-            _class.Base.System.Class.Vr.VideoWidthOffset += 5;
-            _class.Base.System.Class.Set.Add("VR_OffsetWidth", _class.Base.System.Class.Vr.VideoWidthOffset.ToString());
+            var vr = _class.Base.System.Class.Vr;
+            var set = _class.Base.System.Class.Set;
+            var home = _class.Base.Home;
 
-            _class.Base.Home.MoveVrDisplay();            
+            vr.VideoWidthOffset += 5;
+            set.Add("VR_OffsetWidth", vr.VideoWidthOffset.ToString());
+            home.MoveVrDisplay();            
         }
 
         private void MoveDisplayLeft()

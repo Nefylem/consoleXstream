@@ -1,4 +1,5 @@
 ﻿using System;
+using consoleXstream.Home;
 using consoleXstream.Input;
 
 namespace consoleXstream.Output
@@ -148,11 +149,11 @@ namespace consoleXstream.Output
             }
             */
             //Dont think that needs to be here
-            if (_class.KeyboardInterface == null || _class.KeyboardInterface.output == null) return;
+            if (_class.KeyboardInterface == null || _class.KeyboardInterface.Output == null) return;
             for (var intCount = 0; intCount < _XboxCount; intCount++)
             {
-                if (_class.KeyboardInterface.output[intCount] != 0)
-                    Output[intCount] = _class.KeyboardInterface.output[intCount];
+                if (_class.KeyboardInterface.Output[intCount] != 0)
+                    Output[intCount] = _class.KeyboardInterface.Output[intCount];
             }
         }
 
@@ -189,7 +190,7 @@ namespace consoleXstream.Output
             _boolHoldBack = false;
             _MenuWait = 0;
 
-            _class.Home.OpenMenu();
+            _class.HomeClass.Menu.Open();
         }
     }
 }

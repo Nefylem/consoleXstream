@@ -1,106 +1,90 @@
 ﻿using System;
-using consoleXstream.Remap;
-using DirectShowLib.BDA;
+using consoleXstream.Home;
 
 namespace consoleXstream.Input
 {
     public class KeyboardInterface
     {
-        /*
-        public KeyboardInterface(BaseClass classes)
-        {
-            _class = classes;
-            system = _class.System;
-            keyboard = _class.Keyboard;
-            _remap = _class.Remap;
-            _keymap = _class._keymap;
-        }
-        private BaseClass _class;
-        */
+        public KeyboardInterface(BaseClass baseClass) { _class = baseClass; }
+        private readonly BaseClass _class;
 
-        private Form1 frmMain;
-        private Config.Configuration system;
-        private KeyboardHook keyboard;
-        private Remapping _remap;
-        private Keymap _keymap;
-
-        public byte[] output;
-        public bool boolLeftMouse;
-        public bool boolRightMouse;
+        public byte[] Output;
+        public bool BoolLeftMouse;
+        public bool BoolRightMouse;
 
         private int _intXboxCount;
 
-
-        public KeyboardInterface(Form1 mainForm) { frmMain = mainForm; }
-        public void getSystemHandle(Config.Configuration inSystem) { system = inSystem; }
-        public void getKeyboardHandle(KeyboardHook inKey) { keyboard = inKey; }
-        public void getRemapHangle(Remapping remap) { _remap = remap; }
-        public void getKeymapHandle(Keymap keymap) { _keymap = keymap; }
-
-        public void checkKeys()
+        public void Check()
         {
             
             if (_intXboxCount == 0) { _intXboxCount = Enum.GetNames(typeof(Xbox)).Length; }
-            output = new byte[_intXboxCount];
-            if (keyboard.GetKey(_keymap.KeyDef.DpadDown)) output[_remap.RemapGamepad.Down] = Convert.ToByte(100);
-            if (keyboard.GetKey(_keymap.KeyDef.DpadUp)) output[_remap.RemapGamepad.Up] = Convert.ToByte(100);
-            if (keyboard.GetKey(_keymap.KeyDef.DpadLeft)) output[_remap.RemapGamepad.Left] = Convert.ToByte(100);
-            if (keyboard.GetKey(_keymap.KeyDef.DpadRight)) output[_remap.RemapGamepad.Right] = Convert.ToByte(100);
+            Output = new byte[_intXboxCount];
 
-            if (keyboard.GetKey(_keymap.KeyAltDef.DpadDown)) output[_remap.RemapGamepad.Down] = Convert.ToByte(100);
-            if (keyboard.GetKey(_keymap.KeyAltDef.DpadUp)) output[_remap.RemapGamepad.Up] = Convert.ToByte(100);
-            if (keyboard.GetKey(_keymap.KeyAltDef.DpadLeft)) output[_remap.RemapGamepad.Left] = Convert.ToByte(100);
-            if (keyboard.GetKey(_keymap.KeyAltDef.DpadRight)) output[_remap.RemapGamepad.Right] = Convert.ToByte(100);
+            CheckKeyMap();
+            CheckAlternateKeyMap();           
 
-            if (keyboard.GetKey(_keymap.KeyDef.ButtonA)) output[_remap.RemapGamepad.A] = Convert.ToByte(100);
-            if (keyboard.GetKey(_keymap.KeyDef.ButtonB)) output[_remap.RemapGamepad.B] = Convert.ToByte(100);
-            if (keyboard.GetKey(_keymap.KeyDef.ButtonX)) output[_remap.RemapGamepad.X] = Convert.ToByte(100);
-            if (keyboard.GetKey(_keymap.KeyDef.ButtonY)) output[_remap.RemapGamepad.Y] = Convert.ToByte(100);
+            var intModified = 100;
 
-            if (keyboard.GetKey(_keymap.KeyAltDef.ButtonA)) output[_remap.RemapGamepad.A] = Convert.ToByte(100);
-            if (keyboard.GetKey(_keymap.KeyAltDef.ButtonB)) output[_remap.RemapGamepad.B] = Convert.ToByte(100);
-            if (keyboard.GetKey(_keymap.KeyAltDef.ButtonX)) output[_remap.RemapGamepad.X] = Convert.ToByte(100);
-            if (keyboard.GetKey(_keymap.KeyAltDef.ButtonY)) output[_remap.RemapGamepad.Y] = Convert.ToByte(100);
+            if (_class.Keyboard.GetKey(_class.Keymap.KeyDef.Modifier)) intModified = 50;
 
-            int intModified = 100;
+            if (_class.Keyboard.GetKey(_class.Keymap.KeyDef.LXleft)) Output[_class.Remap.RemapGamepad.LeftX] = (byte)Convert.ToSByte(-intModified);
+            if (_class.Keyboard.GetKey(_class.Keymap.KeyDef.LXright)) Output[_class.Remap.RemapGamepad.LeftX] = (byte)Convert.ToSByte(intModified);
+            if (_class.Keyboard.GetKey(_class.Keymap.KeyDef.LYup)) Output[_class.Remap.RemapGamepad.LeftY] = (byte)Convert.ToSByte(-intModified);
+            if (_class.Keyboard.GetKey(_class.Keymap.KeyDef.LYdown)) Output[_class.Remap.RemapGamepad.LeftY] = (byte)Convert.ToSByte(intModified);
 
-            if (keyboard.GetKey(_keymap.KeyDef.Modifier)) intModified = 50;
+            if (_class.Keyboard.GetKey(_class.Keymap.KeyDef.RXleft)) Output[_class.Remap.RemapGamepad.RightX] = (byte)Convert.ToSByte(-intModified);
+            if (_class.Keyboard.GetKey(_class.Keymap.KeyDef.RXright)) Output[_class.Remap.RemapGamepad.RightX] = (byte)Convert.ToSByte(intModified);
+            if (_class.Keyboard.GetKey(_class.Keymap.KeyDef.RYup)) Output[_class.Remap.RemapGamepad.RightY] = (byte)Convert.ToSByte(-intModified);
+            if (_class.Keyboard.GetKey(_class.Keymap.KeyDef.RYdown)) Output[_class.Remap.RemapGamepad.RightY] = (byte)Convert.ToSByte(intModified);
 
-            if (keyboard.GetKey(_keymap.KeyDef.LXleft)) output[_remap.RemapGamepad.LeftX] = (byte)Convert.ToSByte((int)(-intModified));
-            if (keyboard.GetKey(_keymap.KeyDef.LXright)) output[_remap.RemapGamepad.LeftX] = (byte)Convert.ToSByte((int)(intModified));
-            if (keyboard.GetKey(_keymap.KeyDef.LYup)) output[_remap.RemapGamepad.LeftY] = (byte)Convert.ToSByte((int)(-intModified));
-            if (keyboard.GetKey(_keymap.KeyDef.LYdown)) output[_remap.RemapGamepad.LeftY] = (byte)Convert.ToSByte((int)(intModified));
+            if (_class.Keyboard.GetKey(_class.Keymap.KeyDef.ButtonBack)) Output[_class.Remap.RemapGamepad.Back] = Convert.ToByte(100);
+            if (_class.Keyboard.GetKey(_class.Keymap.KeyDef.ButtonStart)) Output[_class.Remap.RemapGamepad.Start] = Convert.ToByte(100);
+            if (_class.Keyboard.GetKey(_class.Keymap.KeyDef.ButtonHome)) Output[_class.Remap.RemapGamepad.Home] = Convert.ToByte(100);
 
-            if (keyboard.GetKey(_keymap.KeyDef.RXleft)) output[_remap.RemapGamepad.RightX] = (byte)Convert.ToSByte((int)(-intModified));
-            if (keyboard.GetKey(_keymap.KeyDef.RXright)) output[_remap.RemapGamepad.RightX] = (byte)Convert.ToSByte((int)(intModified));
-            if (keyboard.GetKey(_keymap.KeyDef.RYup)) output[_remap.RemapGamepad.RightY] = (byte)Convert.ToSByte((int)(-intModified));
-            if (keyboard.GetKey(_keymap.KeyDef.RYdown)) output[_remap.RemapGamepad.RightY] = (byte)Convert.ToSByte((int)(intModified));
+            if (!_class.System.IsEnableMouse) return;
+            var intReplaceX = _class.HomeClass.Var.MouseX;
+            var intReplaceY = _class.HomeClass.Var.MouseY;
 
-            if (keyboard.GetKey(_keymap.KeyDef.ButtonBack)) output[_remap.RemapGamepad.Back] = Convert.ToByte(100);
-            if (keyboard.GetKey(_keymap.KeyDef.ButtonStart)) output[_remap.RemapGamepad.Start] = Convert.ToByte(100);
-            if (keyboard.GetKey(_keymap.KeyDef.ButtonHome)) output[_remap.RemapGamepad.Home] = Convert.ToByte(100);
+            //frmMain.intReplaceX = (int)(intReplaceX / 1.5);        
+            //frmMain.intReplaceY = (int)(intReplaceX / 1.5);
 
-            if (system.IsEnableMouse)
-            {
-                int intReplaceX = frmMain.intReplaceX;
-                int intReplaceY = frmMain.intReplaceY;
+            if (intReplaceX != 0)
+                Output[_class.Remap.RemapGamepad.RightX] = (byte)Convert.ToSByte(intReplaceX);
+            if (intReplaceY != 0)
+                Output[_class.Remap.RemapGamepad.RightY] = (byte)Convert.ToSByte(intReplaceY);
 
-                //frmMain.intReplaceX = (int)(intReplaceX / 1.5);        
-                //frmMain.intReplaceY = (int)(intReplaceX / 1.5);
+            if (BoolLeftMouse)
+                Output[_class.Remap.RemapGamepad.RightTrigger] = Convert.ToByte(100);
 
-                //TODO: mouse config
-                if (intReplaceX != 0)
-                    output[_remap.RemapGamepad.RightX] = (byte)Convert.ToSByte((int)(intReplaceX));
-                if (intReplaceY != 0)
-                    output[_remap.RemapGamepad.RightY] = (byte)Convert.ToSByte((int)(intReplaceY));
+            if (BoolRightMouse)
+                Output[_class.Remap.RemapGamepad.LeftTrigger] = Convert.ToByte(100);
+        }
 
-                //TODO: mouse button map
-                if (boolLeftMouse)
-                    output[_remap.RemapGamepad.RightTrigger] = Convert.ToByte(100);
+        private void CheckKeyMap()
+        {
+            if (_class.Keyboard.GetKey(_class.Keymap.KeyDef.DpadDown)) Output[_class.Remap.RemapGamepad.Down] = Convert.ToByte(100);
+            if (_class.Keyboard.GetKey(_class.Keymap.KeyDef.DpadUp)) Output[_class.Remap.RemapGamepad.Up] = Convert.ToByte(100);
+            if (_class.Keyboard.GetKey(_class.Keymap.KeyDef.DpadLeft)) Output[_class.Remap.RemapGamepad.Left] = Convert.ToByte(100);
+            if (_class.Keyboard.GetKey(_class.Keymap.KeyDef.DpadRight)) Output[_class.Remap.RemapGamepad.Right] = Convert.ToByte(100);
 
-                if (boolRightMouse)
-                    output[_remap.RemapGamepad.LeftTrigger] = Convert.ToByte(100);
-            }
+            if (_class.Keyboard.GetKey(_class.Keymap.KeyDef.ButtonA)) Output[_class.Remap.RemapGamepad.A] = Convert.ToByte(100);
+            if (_class.Keyboard.GetKey(_class.Keymap.KeyDef.ButtonB)) Output[_class.Remap.RemapGamepad.B] = Convert.ToByte(100);
+            if (_class.Keyboard.GetKey(_class.Keymap.KeyDef.ButtonX)) Output[_class.Remap.RemapGamepad.X] = Convert.ToByte(100);
+            if (_class.Keyboard.GetKey(_class.Keymap.KeyDef.ButtonY)) Output[_class.Remap.RemapGamepad.Y] = Convert.ToByte(100);
+
+        }
+
+        private void CheckAlternateKeyMap()
+        {
+            if (_class.Keyboard.GetKey(_class.Keymap.KeyAltDef.DpadDown)) Output[_class.Remap.RemapGamepad.Down] = Convert.ToByte(100);
+            if (_class.Keyboard.GetKey(_class.Keymap.KeyAltDef.DpadUp)) Output[_class.Remap.RemapGamepad.Up] = Convert.ToByte(100);
+            if (_class.Keyboard.GetKey(_class.Keymap.KeyAltDef.DpadLeft)) Output[_class.Remap.RemapGamepad.Left] = Convert.ToByte(100);
+            if (_class.Keyboard.GetKey(_class.Keymap.KeyAltDef.DpadRight)) Output[_class.Remap.RemapGamepad.Right] = Convert.ToByte(100);
+
+            if (_class.Keyboard.GetKey(_class.Keymap.KeyAltDef.ButtonA)) Output[_class.Remap.RemapGamepad.A] = Convert.ToByte(100);
+            if (_class.Keyboard.GetKey(_class.Keymap.KeyAltDef.ButtonB)) Output[_class.Remap.RemapGamepad.B] = Convert.ToByte(100);
+            if (_class.Keyboard.GetKey(_class.Keymap.KeyAltDef.ButtonX)) Output[_class.Remap.RemapGamepad.X] = Convert.ToByte(100);
+            if (_class.Keyboard.GetKey(_class.Keymap.KeyAltDef.ButtonY)) Output[_class.Remap.RemapGamepad.Y] = Convert.ToByte(100);            
         }
     }
 }

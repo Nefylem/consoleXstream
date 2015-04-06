@@ -26,12 +26,12 @@
             _class.Set.Add("ControllerMax", _class.System.UseControllerMax.ToString());
 
             if (_class.System.UseControllerMax)
-                _class.ControllerMax.initControllerMax();
+                _class.BaseClass.ControllerMax.initControllerMax();
         }
 
         public void changeControllerMax_TOAPI()
         {
-            _class.TitanOne.Close();
+            _class.BaseClass.TitanOne.Close();
 
             _class.System.UseControllerMax = !_class.System.UseControllerMax;
             _class.Set.Add("ControllerMax", _class.System.UseControllerMax.ToString());
@@ -43,8 +43,8 @@
             }
 
             if (!_class.System.UseControllerMax) return;
-            _class.TitanOne.SetToInterface(Output.TitanOne.Define.DevPid.ControllerMax);
-            _class.TitanOne.Initialize();
+            _class.BaseClass.TitanOne.SetToInterface(Output.TitanOne.Define.DevPid.ControllerMax);
+            _class.BaseClass.TitanOne.Initialize();
         }
     }
 }

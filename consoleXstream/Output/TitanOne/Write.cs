@@ -1,19 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using consoleXstream.Config;
+using consoleXstream.Home;
 using consoleXstream.Input;
 
 namespace consoleXstream.Output.TitanOne
 {
     public class Write
     {
-        private readonly Classes _class;
-
-        public Write(Form1 mainForm, Configuration system, Gamepad gamepad)
+        public Write(BaseClass baseClass)
         {
-            _class = new Classes(this, mainForm, system, gamepad);
+            _class = new Classes(this, baseClass);
             _class.Create();
         }
+        private readonly Classes _class;
 
         public Define.DevPid DevId = Define.DevPid.Any;
         public Define.ApiMethod ApiMethod = Define.ApiMethod.Single;
@@ -23,16 +21,16 @@ namespace consoleXstream.Output.TitanOne
         public void SetToInterface(Define.DevPid devId)
         {
             DevId = devId;
-            _class.System.Debug("titanOne.log", "[0] using DevID: " + DevId);
-            _class.System.Debug("titanOne.log", "");
+            _class.BaseClass.System.Debug("titanOne.log", "[0] using DevID: " + DevId);
+            _class.BaseClass.System.Debug("titanOne.log", "");
         }
 
         public void SetApiMethod(Define.ApiMethod setType)
         {
             setType = Define.ApiMethod.Multi; 
             ApiMethod = setType;
-            _class.System.Debug("titanOne.log", "[0] using API: " + setType);
-            _class.System.Debug("titanOne.log", "");
+            _class.BaseClass.System.Debug("titanOne.log", "[0] using API: " + setType);
+            _class.BaseClass.System.Debug("titanOne.log", "");
         }
 
         public void Initialize() { _class.Init.Open(); }
@@ -48,7 +46,7 @@ namespace consoleXstream.Output.TitanOne
 
             if (_class.Define.Write == null) return;
 
-            var boolOverride = _class.FrmMain.boolIDE;
+            var boolOverride = _class.BaseClass.HomeClass.Var.IsIde;
 
             if ((_class.Define.IsConnected() == 1) || boolOverride)
             {
@@ -75,9 +73,9 @@ namespace consoleXstream.Output.TitanOne
                 _gcapi_WriteEx(output);
                  */
 
-                _class.Define.Write(_class.Gamepad.Output);
+                _class.Define.Write(_class.BaseClass.Gamepad.Output);
 
-                if (!_class.System.UseRumble) return;
+                if (!_class.BaseClass.System.UseRumble) return;
                 if (DevId == Define.DevPid.TitanOne)
                 {
                     var report = new Define.GcapiReportTitanone();
@@ -94,7 +92,7 @@ namespace consoleXstream.Output.TitanOne
             else
             {
                 if (_isToDisconnected) return;
-                _class.System.Debug("titanOne.log", "[NOTE] TitanOne is disconnected");
+                _class.BaseClass.System.Debug("titanOne.log", "[NOTE] TitanOne is disconnected");
                 _isToDisconnected = true;
             }
         }

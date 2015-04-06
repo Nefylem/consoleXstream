@@ -11,7 +11,7 @@ namespace consoleXstream.Output.TitanOne.GCMAPI
 
         public void Open()
         {
-            _class.System.Debug("titanOne.log", "[0] Opening TitanOne GCMAPI");
+            _class.BaseClass.System.Debug("titanOne.log", "[0] Opening TitanOne GCMAPI");
             var homeDir = Directory.GetCurrentDirectory() + @"\";
 
             var api = "titanOne_gcdapi.dll";
@@ -20,39 +20,39 @@ namespace consoleXstream.Output.TitanOne.GCMAPI
 
             if (File.Exists(homeDir + api) == false)
             {
-                _class.System.Debug("titanOne.log", "[0] [FAIL] Unable to find TitanOne GCMAPI (gcdapi.dll)");
+                _class.BaseClass.System.Debug("titanOne.log", "[0] [FAIL] Unable to find TitanOne GCMAPI (gcdapi.dll)");
                 return;
             }
 
-            _class.System.Debug("titanOne.log", "[TRY] Attempting to open TitanOne Device Interface");
+            _class.BaseClass.System.Debug("titanOne.log", "[TRY] Attempting to open TitanOne Device Interface");
 
             var ptrDll = Define.LoadLibrary(homeDir + api);
             if (ptrDll == IntPtr.Zero)
             {
-                _class.System.Debug("titanOne.log", "[0] [FAIL] Unable to allocate Device API");
+                _class.BaseClass.System.Debug("titanOne.log", "[0] [FAIL] Unable to allocate Device API");
                 return;
             }
 
             var ptrMLoad = LoadExternalFunction(ptrDll, "gcmapi_Load");
-            if (ptrMLoad == IntPtr.Zero) { _class.System.Debug("titanOne.log", "[0] [FAIL] gcMapi_Load"); return; }
+            if (ptrMLoad == IntPtr.Zero) { _class.BaseClass.System.Debug("titanOne.log", "[0] [FAIL] gcMapi_Load"); return; }
 
             var ptrMUnload = LoadExternalFunction(ptrDll, "gcmapi_Unload");
-            if (ptrMUnload == IntPtr.Zero) { _class.System.Debug("titanOne.log", "[0] [FAIL] gcMapi_Unload"); return; }
+            if (ptrMUnload == IntPtr.Zero) { _class.BaseClass.System.Debug("titanOne.log", "[0] [FAIL] gcMapi_Unload"); return; }
 
             var ptrMConnect = LoadExternalFunction(ptrDll, "gcmapi_Connect");
-            if (ptrMConnect == IntPtr.Zero) { _class.System.Debug("titanOne.log", "[0] [FAIL] gcmapi_Connect"); return; }
+            if (ptrMConnect == IntPtr.Zero) { _class.BaseClass.System.Debug("titanOne.log", "[0] [FAIL] gcmapi_Connect"); return; }
 
             var ptrMConnected = LoadExternalFunction(ptrDll, "gcmapi_IsConnected");
-            if (ptrMConnected == IntPtr.Zero) { _class.System.Debug("titanOne.log", "[0] [FAIL] gcmapi_IsConnected"); return; }
+            if (ptrMConnected == IntPtr.Zero) { _class.BaseClass.System.Debug("titanOne.log", "[0] [FAIL] gcmapi_IsConnected"); return; }
 
             var ptrSerial = LoadExternalFunction(ptrDll, "gcmapi_GetSerialNumber");
-            if (ptrSerial == IntPtr.Zero) { _class.System.Debug("titanOne.log", "[0] [FAIL] gcmapi_GetSerialNumber"); return; }
+            if (ptrSerial == IntPtr.Zero) { _class.BaseClass.System.Debug("titanOne.log", "[0] [FAIL] gcmapi_GetSerialNumber"); return; }
 
             var ptrWrite = LoadExternalFunction(ptrDll, "gcmapi_Write");
-            if (ptrWrite == IntPtr.Zero) { _class.System.Debug("titanOne.log", "[0] [FAIL] gcmapi_Write"); return; }
+            if (ptrWrite == IntPtr.Zero) { _class.BaseClass.System.Debug("titanOne.log", "[0] [FAIL] gcmapi_Write"); return; }
 
             var ptrRead = LoadExternalFunction(ptrDll, "gcmapi_Read");
-            if (ptrRead == IntPtr.Zero) { _class.System.Debug("titanOne.log", "[0] [FAIL] gcmapi_Read"); return; }
+            if (ptrRead == IntPtr.Zero) { _class.BaseClass.System.Debug("titanOne.log", "[0] [FAIL] gcmapi_Read"); return; }
 
             try
             {
@@ -66,21 +66,21 @@ namespace consoleXstream.Output.TitanOne.GCMAPI
             }
             catch (Exception ex)
             {
-                _class.System.Debug("titanOne.log", "[0] Fail -> " + ex);
-                _class.System.Debug("titanOne.log", "[0] [ERR] Critical failure loading TitanOne API.");
+                _class.BaseClass.System.Debug("titanOne.log", "[0] Fail -> " + ex);
+                _class.BaseClass.System.Debug("titanOne.log", "[0] [ERR] Critical failure loading TitanOne API.");
                 return;
             }
 
-            _class.System.Debug("titanOne.log", "");
+            _class.BaseClass.System.Debug("titanOne.log", "");
         }
 
         private IntPtr LoadExternalFunction(IntPtr ptrDll, string strFunction)
         {
             var ptrFunction = Define.GetProcAddress(ptrDll, strFunction);
             if (ptrFunction == IntPtr.Zero)
-                _class.System.Debug("titanOne.log", "[0] [NG] " + strFunction + " alloc fail");
+                _class.BaseClass.System.Debug("titanOne.log", "[0] [NG] " + strFunction + " alloc fail");
             else
-                _class.System.Debug("titanOne.log", "[5] [OK] " + strFunction);
+                _class.BaseClass.System.Debug("titanOne.log", "[5] [OK] " + strFunction);
 
             return ptrFunction;
         }
@@ -95,7 +95,7 @@ namespace consoleXstream.Output.TitanOne.GCMAPI
             _class.MDefine.GcmapiLoad = null;
             _class.MDefine.GcmapiUnload = null;
             _class.MDefine.GcmapiRead = null;
-            _class.System.Debug("titanOne.log", "[OK] Closed TitanOne GCMAPI");
+            _class.BaseClass.System.Debug("titanOne.log", "[OK] Closed TitanOne GCMAPI");
         }
 
     }

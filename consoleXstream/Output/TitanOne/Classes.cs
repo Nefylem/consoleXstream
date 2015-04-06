@@ -1,22 +1,18 @@
 ﻿using consoleXstream.Config;
+using consoleXstream.Home;
 using consoleXstream.Input;
 
 namespace consoleXstream.Output.TitanOne
 {
     class Classes
     {
-        public Classes(Write home, Form1 frmHome, Configuration system, Gamepad gamepad)
+        public Classes(Write write, BaseClass baseClass)
         {
-            Write = home; 
-            FrmMain = frmHome; 
-            System = system;
-            Gamepad = gamepad;
+            Write = write;
+            BaseClass = baseClass;
         }
 
-        public Form1 FrmMain;
-        public Configuration System;
-        public KeyboardInterface KeyboardInterface;
-        public Gamepad Gamepad;
+        public BaseClass BaseClass;
 
         public Init Init;
         public Define Define;

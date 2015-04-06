@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Windows.Forms;
-using consoleXstream.Menu.Data;
 
 namespace consoleXstream.Menu
 {
@@ -13,9 +12,6 @@ namespace consoleXstream.Menu
 
         public string Hover;
         public bool Enable { get; private set; }
-
-        private int _menuHeight;
-        private int _menuWidth;
 
         public void MouseMove(MouseEventArgs e)
         {
@@ -32,8 +28,8 @@ namespace consoleXstream.Menu
             //TODO: Check if mouse is inside display box, otherwise jump out of menu
             if (!Enable) return;
 
-            var intMouseX = Cursor.Position.X - _menuWidth;
-            var intMouseY = Cursor.Position.Y - _menuHeight;
+            var intMouseX = Cursor.Position.X;
+            var intMouseY = Cursor.Position.Y;
 
             if (_class.Var.IsMainMenu)
             {

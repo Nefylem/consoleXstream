@@ -1,19 +1,22 @@
-﻿namespace consoleXstream.Config
+﻿using consoleXstream.Home;
+
+namespace consoleXstream.Config
 {
     public class Classes
     {
-        public Classes(Configuration sys) { System = sys; }
+        public Classes(Configuration sys, BaseClass home)
+        {
+            System = sys;
+            BaseClass = home;
+
+            DeclareClasses();
+        }
 
         public Debug Debug { get; set; }
-        public Form1 Main { get; set; }
         public Profile Profile { get; set; }
         public Var Var { get; set; }
         public Set Set { get; set; }
         public Configuration System { get; set; }
-        public VideoCapture.VideoCapture VideoCapture { get; set; }
-        public Output.ControllerMax ControllerMax { get; set; }
-        public Output.TitanOne.Write TitanOne { get; set; }
-        public VideoResolution VideoResolution { get; set; }
         public XmlData Xml { get; set; }
         public Log Log { get; set; }
         public Settings Settings { get; set; }
@@ -24,11 +27,8 @@
         public BaseClass BaseClass { get; set; }
         public Vr Vr { get; private set; }
 
-        public void DeclareClasses(BaseClass baseClass)
+        public void DeclareClasses()
         {
-            BaseClass = baseClass;
-            Main = baseClass.Home;
-
             Debug = new Debug();
             Profile = new Profile(this);
             Set = new Set(this);

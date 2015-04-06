@@ -11,12 +11,12 @@ namespace consoleXstream.Config
         public void SetRefresh(string refresh)
         {
             if (string.IsNullOrEmpty(_class.System.DisplayResolution))
-                _class.System.DisplayResolution = _class.VideoResolution.GetDisplayResolution(_class.System.GraphicsCardId);
+                _class.System.DisplayResolution = _class.BaseClass.VideoResolution.GetDisplayResolution(_class.System.GraphicsCardId);
 
             string set = _class.System.DisplayResolution + " - " + refresh;
 
-            _class.VideoResolution.SetDisplayResolution(_class.System.GraphicsCardId, set);
-            _class.Main.ChangeDisplayRes();
+            _class.BaseClass.VideoResolution.SetDisplayResolution(_class.System.GraphicsCardId, set);
+            //_class.BaseClass.Home.ChangeDisplayRes();
 
             _class.Set.Add("RefreshRate", refresh);
 
@@ -26,11 +26,11 @@ namespace consoleXstream.Config
         public void SetResolution(string video)
         {
             if (string.IsNullOrEmpty(_class.System.RefreshRate))
-                _class.System.RefreshRate = _class.VideoResolution.GetRefreshRate(_class.System.GraphicsCardId);
+                _class.System.RefreshRate = _class.BaseClass.VideoResolution.GetRefreshRate(_class.System.GraphicsCardId);
 
             string set = video + " - " + _class.System.RefreshRate;
 
-            _class.VideoResolution.SetDisplayResolution(_class.System.GraphicsCardId, set);
+            _class.BaseClass.VideoResolution.SetDisplayResolution(_class.System.GraphicsCardId, set);
 
             _class.Set.Add("Resolution", video);
 
@@ -40,7 +40,7 @@ namespace consoleXstream.Config
         public string GetGraphicsCard()
         {
             if (string.IsNullOrEmpty(_class.System.GraphicsCard))
-                _class.System.GraphicsCard = _class.VideoResolution.GetVideoCard(_class.System.GraphicsCardId);
+                _class.System.GraphicsCard = _class.BaseClass.VideoResolution.GetVideoCard(_class.System.GraphicsCardId);
 
             return _class.System.GraphicsCard;
         }
@@ -48,7 +48,7 @@ namespace consoleXstream.Config
         public string GetRefreshRate()
         {
             if (string.IsNullOrEmpty(_class.System.RefreshRate))
-                _class.System.RefreshRate = _class.VideoResolution.GetRefreshRate(_class.System.GraphicsCardId);
+                _class.System.RefreshRate = _class.BaseClass.VideoResolution.GetRefreshRate(_class.System.GraphicsCardId);
 
             return _class.System.RefreshRate;
         }
@@ -56,7 +56,7 @@ namespace consoleXstream.Config
         public string GetResolution()
         {
             if (string.IsNullOrEmpty(_class.System.DisplayResolution))
-                _class.System.DisplayResolution = _class.VideoResolution.GetDisplayResolution(_class.System.GraphicsCardId);
+                _class.System.DisplayResolution = _class.BaseClass.VideoResolution.GetDisplayResolution(_class.System.GraphicsCardId);
 
             return _class.System.DisplayResolution;
         }
@@ -68,14 +68,14 @@ namespace consoleXstream.Config
 
         public List<string> GetDisplayResolutionList()
         {
-            List<string> listRes = _class.VideoResolution.ListDisplayResolutions(_class.System.GraphicsCardId);
+            List<string> listRes = _class.BaseClass.VideoResolution.ListDisplayResolutions(_class.System.GraphicsCardId);
 
             return listRes;
         }
 
         public List<string> GetDisplayRefresh()
         {
-            List<string> listRefresh = _class.VideoResolution.ListDisplayRefresh(_class.System.GraphicsCardId);
+            List<string> listRefresh = _class.BaseClass.VideoResolution.ListDisplayRefresh(_class.System.GraphicsCardId);
 
             return listRefresh;
         }
@@ -98,7 +98,7 @@ namespace consoleXstream.Config
             //_class.System.Debug("VideoSetResolution.log", "AutoSetResolution: " + IsAutoSetDisplayResolution);
 
             if (!_class.System.IsAutoSetDisplayResolution) return;
-            List<string> listRes = _class.VideoResolution.ListDisplayResolutions(_class.System.GraphicsCardId);
+            List<string> listRes = _class.BaseClass.VideoResolution.ListDisplayResolutions(_class.System.GraphicsCardId);
 
             var set = "";
 
@@ -127,7 +127,7 @@ namespace consoleXstream.Config
         }
 
         public void GetInitialDisplay() { _class.System._initialDisplay = GetResolution(); }
-        public void SetInitialDisplay() { _class.VideoResolution.SetDisplayResolution(_class.System.GraphicsCardId, _class.System._initialDisplay); }
+        public void SetInitialDisplay() { _class.BaseClass.VideoResolution.SetDisplayResolution(_class.System.GraphicsCardId, _class.System._initialDisplay); }
 
         public void SetAutoChangeDisplay()
         {

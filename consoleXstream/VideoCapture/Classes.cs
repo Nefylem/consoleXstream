@@ -29,6 +29,7 @@ namespace consoleXstream.VideoCapture
         public GraphCrossbar GraphCrossbar { get; set; }
         public SampleGrabber SampleGrabber { get; set; }
         public GraphSmartTee SmartTee { get; set; }
+        public InfiniteTee InfiniteTee { get; set; }
         public GraphResolution GraphResolution { get; set; }
         public Close Close { get; set; }
         public Display Display { get; set; }
@@ -49,6 +50,7 @@ namespace consoleXstream.VideoCapture
             AviRender = new AviRender(this);
             SampleGrabber = new SampleGrabber(this);
             SmartTee = new GraphSmartTee(this);
+            InfiniteTee = new InfiniteTee(this);
             GraphCrossbar = new GraphCrossbar(this);
             Close = new Close(this);
             Display = new Display(this);

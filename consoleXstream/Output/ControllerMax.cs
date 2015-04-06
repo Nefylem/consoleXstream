@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Runtime.InteropServices;
+using consoleXstream.Home;
 using consoleXstream.Input;
 
 namespace consoleXstream.Output
@@ -234,7 +235,7 @@ namespace consoleXstream.Output
             if (!_boolGCAPILoaded)
                 return;
 
-            var boolOverride = _class.Home.boolIDE;
+            var boolOverride = _class.HomeClass.Var.IsIde;
 
             if ((_gcapi_IsConnected() == 1) || boolOverride)
             {
@@ -355,8 +356,8 @@ namespace consoleXstream.Output
                 {
                     for (var intCount = 0; intCount < _intXboxCount; intCount++)
                     {
-                        if (_class.KeyboardInterface.output[intCount] != 0)
-                            output[intCount] = _class.KeyboardInterface.output[intCount];
+                        if (_class.KeyboardInterface.Output[intCount] != 0)
+                            output[intCount] = _class.KeyboardInterface.Output[intCount];
                     }
                 }
 

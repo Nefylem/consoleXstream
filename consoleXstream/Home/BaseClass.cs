@@ -3,7 +3,7 @@ using consoleXstream.Output;
 using consoleXstream.Remap;
 using consoleXstream.Scripting;
 
-namespace consoleXstream
+namespace consoleXstream.Home
 {
     public class BaseClass
     {
@@ -19,7 +19,7 @@ namespace consoleXstream
         public VideoResolution VideoResolution                          { get; private set; }
         public Keymap Keymap                                            { get; private set; }
         public Menu.ShowMenu Menu                                       { get; private set; }
-
+        public Home.Classes HomeClass                                   { get; set; }
         public Output.ControllerMax ControllerMax                       { get; private set; }
         public Output.TitanOne.Write TitanOne                           { get; private set; }
         public Output.Gamepad Gamepad                                   { get; private set; }
@@ -38,27 +38,18 @@ namespace consoleXstream
             Gamepad = new Output.Gamepad(this);
             Gimx = new Gimx(this);
             Keyboard = new Input.KeyboardHook(this);
+            KeyboardInterface = new Input.KeyboardInterface(this);
             Keymap = new Keymap(this);
-            Menu = new Menu.ShowMenu(this);
+            Menu = new MenuHandler.ShowMenu(this);
             Mouse = new Input.Mouse.Hook(this);
             Remap = new Remapping();
             System = new Configuration(this);
+            TitanOne = new Output.TitanOne.Write(this);
             VideoResolution = new VideoResolution(this);
 
-            //Fix these later
-            KeyboardInterface = new Input.KeyboardInterface(Home);
-            KeyboardInterface.getSystemHandle(System);
-            KeyboardInterface.getRemapHangle(Remap);
-            KeyboardInterface.getKeymapHandle(Keymap);
-            
-
-            TitanOne = new Output.TitanOne.Write(Home, System, Gamepad);
             External = new ExternalScript(Home);
 
-
             VideoCapture = new VideoCapture.VideoCapture(Home, System);
-
-            System.GetClassHandles(VideoCapture, ControllerMax, TitanOne, VideoResolution);
         }
     }
 }

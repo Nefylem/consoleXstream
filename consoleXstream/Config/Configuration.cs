@@ -1,10 +1,19 @@
 ﻿using System.Collections.Generic;
+using consoleXstream.Home;
 using consoleXstream.Remap;
 
 namespace consoleXstream.Config
 {
     public class Configuration
     {
+        public Configuration(BaseClass home)
+        {
+            Class = new Classes(this, home);
+
+            Class.Set.Title = new List<string>();
+            Class.Set.Data = new List<string>();
+        }
+
         public readonly Classes Class;
         
         public bool IsHideMouse { get; set; }
@@ -59,16 +68,7 @@ namespace consoleXstream.Config
         public string _initialDisplay;
         public Keymap.KeyboardKeys KeyDef ;
         public Keymap.KeyboardKeys KeyAltDef;
-
-        public Configuration(BaseClass home)
-        {
-            Class = new Classes(this);
-            Class.DeclareClasses(home);
-
-            Class.Set.Title = new List<string>();
-            Class.Set.Data = new List<string>();
-        }
-
+        /*
         public void GetClassHandles(VideoCapture.VideoCapture inVideo, Output.ControllerMax inMax, Output.TitanOne.Write inTo, VideoResolution inVid)
         {
             Class.VideoCapture = inVideo;
@@ -76,7 +76,7 @@ namespace consoleXstream.Config
             Class.TitanOne = inTo;
             Class.VideoResolution = inVid;
         }
-
+        */
         public void loadDefaults()
         {
             Class.Var.IsReadData = true;
@@ -99,8 +99,8 @@ namespace consoleXstream.Config
         {
             var set = Class.Set.Check("Crossbar").ToLower();
             Class.Set.Add("Crossbar", set == "true" ? "false" : "true");
-            Class.VideoCapture.LoadUserSettings();
-            Class.VideoCapture.RunGraph();
+            Class.BaseClass.VideoCapture.LoadUserSettings();
+            Class.BaseClass.VideoCapture.RunGraph();
         }
 
         public void ChangeAviRender()
@@ -108,8 +108,8 @@ namespace consoleXstream.Config
             var set = Class.Set.Check("AVIRender").ToLower();
             Class.Set.Add("AVIRender", set == "true" ? "false" : "true");
 
-            Class.VideoCapture.LoadUserSettings();
-            Class.VideoCapture.RunGraph();
+            Class.BaseClass.VideoCapture.LoadUserSettings();
+            Class.BaseClass.VideoCapture.RunGraph();
         }
 
         public void changeCaptureResolution(string resolution)
@@ -118,12 +118,12 @@ namespace consoleXstream.Config
             resolution = resolution.ToLower();
             if (resolution != "resolution")
             {
-                List<string> listRes = Class.VideoCapture.GetVideoResolution();
+                List<string> listRes = Class.BaseClass.VideoCapture.GetVideoResolution();
                 for (int count = 0; count < listRes.Count; count++)
                 {
                     if (resolution == listRes[count].ToLower())
                     {
-                        Class.VideoCapture.SetVideoResolution(count);
+                        Class.BaseClass.VideoCapture.SetVideoResolution(count);
                         break;
                     }
                 }

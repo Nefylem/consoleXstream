@@ -15,8 +15,8 @@ namespace consoleXstream.Config
         public void ChangeVrVideo()
         {
             _class.System.IsVr = !_class.System.IsVr;
-            _class.Main.ChangeVr();
-            _class.VideoCapture.RunGraph();
+            _class.BaseClass.Home.ChangeVr();
+            _class.BaseClass.VideoCapture.RunGraph();
             _class.Set.Add("VR_Video", _class.System.IsVr.ToString());
         }
 

@@ -16,7 +16,9 @@ namespace consoleXstream.VideoCapture
         public readonly Classes Class;
 
         public bool BoolActiveVideo { get; private set; }
-
+        private IntPtr _previewWindow;
+        private Point _previewBounds;
+        private bool _boolPreviewFail;
 
         public IMediaEvent MediaEvent
         {
@@ -199,9 +201,6 @@ namespace consoleXstream.VideoCapture
 
         }
 
-        private IntPtr _previewWindow;
-        private Point _previewBounds;
-        private bool _boolPreviewFail;
 
         public void setPreviewWindowHandle(IntPtr previewHandle)
         {

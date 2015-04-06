@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
+using consoleXstream.Home;
 
 namespace consoleXstream.Menu
 {
@@ -90,13 +91,14 @@ namespace consoleXstream.Menu
 
         private void tmrMenu_Tick(object sender, EventArgs e)
         {
+            _class.Nav.CheckDelays();
+
             if (_class.Var.IsResizeVr)
             {
                 CheckControls();
                 return;
             }
 
-            _class.Nav.CheckDelays();
             if (_class.Var.SetupGamepad) _class.RemapNav.CheckDelays();
 
             _class.Fps.CheckFps();

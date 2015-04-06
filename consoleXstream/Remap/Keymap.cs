@@ -1,4 +1,6 @@
-﻿namespace consoleXstream.Remap
+﻿using consoleXstream.Home;
+
+namespace consoleXstream.Remap
 {
     public class Keymap
     {

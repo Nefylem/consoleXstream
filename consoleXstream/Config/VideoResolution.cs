@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using consoleXstream.Home;
 
 namespace consoleXstream.Config
 {
@@ -122,7 +123,7 @@ namespace consoleXstream.Config
             var setDev = GetDevmode(cardId, setRes);
             if (!(setDev.dmBitsPerPel != 0 & setDev.dmPelsWidth != 0 & setDev.dmPelsHeight != 0)) return;
             ChangeDisplaySettings(ref setDev, 0);
-            _class.Home.ChangeDisplayRes();
+            //_class.Home.ChangeDisplayRes();
         }
 
         public List<string> ListDisplayResolutions(int cardId)

@@ -120,7 +120,7 @@ namespace consoleXstream.Menu.SubMenuOptions
                             {
                                 if (strSetting.ToLower() == "true")
                                 {
-                                    _class.Base.Home.InitializeTitanOne();
+                                    _class.Base.HomeClass.StartupTitanOne.InitializeTitanOne();
                                     _class.Base.System.UseControllerMax = false;
                                     _class.Base.System.UseTitanOne = true;
                                 }

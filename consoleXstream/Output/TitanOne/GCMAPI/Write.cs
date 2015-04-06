@@ -15,34 +15,34 @@ namespace consoleXstream.Output.TitanOne.GCMAPI
 
         public void SetDevice()
         {
-            _class.System.Debug("titanone.log", "connecting to default: 0");
+            _class.BaseClass.System.Debug("titanone.log", "connecting to default: 0");
             _activeDevice = 0;
-            _class.System.SetTitanOneDevice(_listDevices[0]);
-            _class.System.Debug("titanone.log", "setting connect method to : " + _class.Write.DevId);
+            _class.BaseClass.System.SetTitanOneDevice(_listDevices[0]);
+            _class.BaseClass.System.Debug("titanone.log", "setting connect method to : " + _class.Write.DevId);
             if (_class.MDefine.GcmapiConnect != null) 
                 _class.MDefine.GcmapiConnect((ushort)_class.Write.DevId);
         }
 
         public void SetDevice(string device)
         {
-            int index = _listDevices.IndexOf(device);
-            _class.System.Debug("titanone.log", "connecting to: " + device);
+            var index = _listDevices.IndexOf(device);
+            _class.BaseClass.System.Debug("titanone.log", "connecting to: " + device);
             if (index > -1)
             {
                 _activeDevice = index;
-                _class.System.SetTitanOneDevice(device);
+                _class.BaseClass.System.SetTitanOneDevice(device);
             }
             else
             {
-                if (!_class.System.DisableTitanOneRetry)
+                if (!_class.BaseClass.System.DisableTitanOneRetry)
                 {
                     _class.MDevices.List();
-                    _class.FrmMain.RetrySetTitanOne = device;
-                    _class.FrmMain.RetryTimeOut = 5000;                    
+                    _class.BaseClass.HomeClass.Var.RetrySetTitanOne = device;
+                    _class.BaseClass.HomeClass.Var.RetryTimeOut = 5000;                    
                 }
-                _class.System.DisableTitanOneRetry = true;
+                _class.BaseClass.System.DisableTitanOneRetry = true;
             }
-            _class.System.Debug("titanone.log", "set device to: " + _activeDevice);
+            _class.BaseClass.System.Debug("titanone.log", "set device to: " + _activeDevice);
         }
 
         public void AddDevice(string serial)
@@ -67,9 +67,9 @@ namespace consoleXstream.Output.TitanOne.GCMAPI
 
             if (_class.MDefine.GcmapiIsConnected(_activeDevice) == 1)
             {
-                _class.MDefine.GcmapiWrite(_activeDevice, _class.Gamepad.Output);
+                _class.MDefine.GcmapiWrite(_activeDevice, _class.BaseClass.Gamepad.Output);
 
-                if (!_class.System.UseRumble) return;
+                if (!_class.BaseClass.System.UseRumble) return;
 
                 var report = new Define.GcmapiReport();
 
@@ -78,7 +78,7 @@ namespace consoleXstream.Output.TitanOne.GCMAPI
             }
             else
             {
-                _class.System.Debug("titanone.log", "not connected to " + _activeDevice);
+                _class.BaseClass.System.Debug("titanone.log", "not connected to " + _activeDevice);
             }
         }
     }

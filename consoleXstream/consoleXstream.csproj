@@ -49,7 +49,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BaseClass.cs" />
+    <Compile Include="Home\BaseClass.cs" />
     <Compile Include="Config\Classes.cs" />
     <Compile Include="Config\ControllerMax.cs" />
     <Compile Include="Config\Debug.cs" />
@@ -63,6 +63,20 @@
     <Compile Include="Config\Var.cs" />
     <Compile Include="Config\Vr.cs" />
     <Compile Include="Config\XmlData.cs" />
+    <Compile Include="Home\CheckFps.cs" />
+    <Compile Include="Home\CheckTitanDevices.cs" />
+    <Compile Include="Home\Classes.cs" />
+    <Compile Include="Home\ControllerInput.cs" />
+    <Compile Include="Home\Development.cs" />
+    <Compile Include="Home\MainLoop.cs" />
+    <Compile Include="Home\MenuHandler.cs" />
+    <Compile Include="Home\Mouse.cs" />
+    <Compile Include="Home\Startup\Declaration.cs" />
+    <Compile Include="Home\Startup\Display.cs" />
+    <Compile Include="Home\Startup\Initital.cs" />
+    <Compile Include="Home\Startup\TitanOne.cs" />
+    <Compile Include="Home\System.cs" />
+    <Compile Include="Home\Var.cs" />
     <Compile Include="Input\Mouse\MouseHook.cs" />
     <Compile Include="Input\Mouse\MouseCircularMovement.cs" />
     <Compile Include="Input\Mouse\MouseEvents.cs" />
@@ -144,6 +158,7 @@
     <Compile Include="VideoCapture\GraphBuilder\Display.cs" />
     <Compile Include="VideoCapture\GraphBuilder\Filter.cs" />
     <Compile Include="VideoCapture\GraphBuilder\Graph.cs" />
+    <Compile Include="VideoCapture\GraphBuilder\InfiniteTee.cs" />
     <Compile Include="VideoCapture\GraphBuilder\Pin.cs" />
     <Compile Include="VideoCapture\GraphBuilder\GraphResolution.cs" />
     <Compile Include="VideoCapture\GraphBuilder\SampleGrabber.cs" />

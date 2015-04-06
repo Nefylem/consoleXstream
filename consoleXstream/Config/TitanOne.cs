@@ -22,7 +22,7 @@
             _class.Set.Add("TitanOne", _class.System.UseTitanOne.ToString());
 
             if (_class.System.UseTitanOne)
-                _class.TitanOne.Initialize();
+                _class.BaseClass.TitanOne.Initialize();
         }
 
         public void Change(bool set)
@@ -42,14 +42,14 @@
             _class.Set.Add("TitanOne", _class.System.UseTitanOne.ToString());
 
             if (_class.System.UseTitanOne)
-                _class.TitanOne.Initialize();
+                _class.BaseClass.TitanOne.Initialize();
             else
-                _class.TitanOne.Close();
+                _class.BaseClass.TitanOne.Close();
         }
 
         public void changeTitanOne_TOAPI()
         {
-            _class.TitanOne.Close();
+            _class.BaseClass.TitanOne.Close();
 
             _class.System.UseTitanOne = !_class.System.UseTitanOne;
             _class.Set.Add("TitanOne", _class.System.UseTitanOne.ToString());
@@ -61,8 +61,8 @@
             }
 
             if (!_class.System.UseTitanOne) return;
-            _class.TitanOne.SetToInterface(Output.TitanOne.Define.DevPid.TitanOne);
-            _class.TitanOne.Initialize();
+            _class.BaseClass.TitanOne.SetToInterface(Output.TitanOne.Define.DevPid.TitanOne);
+            _class.BaseClass.TitanOne.Initialize();
         }
 
     }

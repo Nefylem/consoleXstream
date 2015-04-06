@@ -3,14 +3,18 @@ using System.IO;
 using System.Xml;
 using System.Reflection;
 using System.ComponentModel;
-using System.Windows.Forms;
 using consoleXstream.Input;
 
 namespace consoleXstream.Remap
 {
-
     public class Remapping
     {
+        public Remapping()
+        {
+            SetDefaultGamepad();         
+            LoadGamepadRemap();
+        }
+
         public class RemapCodes
         {
             [Description("Home")]

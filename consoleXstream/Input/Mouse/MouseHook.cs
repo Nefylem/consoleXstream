@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using consoleXstream.Home;
 
 namespace consoleXstream.Input.Mouse
 {
@@ -41,7 +42,7 @@ namespace consoleXstream.Input.Mouse
                 if (!_class.System.IsEnableMouse || _class.System.IsVr)
                     _class.Gamepad.Ps4Touchpad = true;
                 else
-                    _class.KeyboardInterface.boolLeftMouse = true;
+                    _class.KeyboardInterface.BoolLeftMouse = true;
             }
             else
             {
@@ -55,7 +56,7 @@ namespace consoleXstream.Input.Mouse
             if (!_class.System.boolMenu)
             {
                 if (_class.System.IsEnableMouse && !_class.System.IsVr)
-                    _class.KeyboardInterface.boolLeftMouse = false;
+                    _class.KeyboardInterface.BoolLeftMouse = false;
                 else
                     _class.Gamepad.Ps4Touchpad = false;
             }
@@ -66,7 +67,7 @@ namespace consoleXstream.Input.Mouse
             if (!_class.System.boolMenu)
             {
                 if (_class.System.IsEnableMouse)
-                    _class.KeyboardInterface.boolRightMouse = true;
+                    _class.KeyboardInterface.BoolRightMouse = true;
             }
         }
 
@@ -75,7 +76,7 @@ namespace consoleXstream.Input.Mouse
             if (!_class.System.boolMenu)
             {
                 if (_class.System.IsEnableMouse)
-                    _class.KeyboardInterface.boolRightMouse = false;
+                    _class.KeyboardInterface.BoolRightMouse = false;
             }
         }
 

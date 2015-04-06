@@ -38,7 +38,7 @@
             if (_class.Set.Check("UseTitanOne").Length > 0)
             {
                 _class.System.TitanOneDevice = _class.Set.Check("UseTitanOne");
-                _class.Main.SetTitanOne(_class.Set.Check("UseTitanOne"));
+                _class.BaseClass.Home.SetTitanOne(_class.Set.Check("UseTitanOne"));
             }
 
             _class.System.RefreshRate = _class.Set.Check("RefreshRate");
@@ -56,7 +56,7 @@
 
             _class.System.CaptureProfile = _class.Set.Check("CurrentProfile");
 
-            if (_class.Main.boolIDE)
+            if (_class.BaseClass.HomeClass.Var.IsIde)
                 _class.System.IsHideMouse = false;
         }
 

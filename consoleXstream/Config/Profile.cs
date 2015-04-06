@@ -51,11 +51,11 @@ namespace consoleXstream.Config
                     if (strVideoPin.Length > 0) _class.Set.Add("crossbarVideoPin", strVideoPin);
                     if (strAudio.Length > 0) _class.Set.Add("crossbarAudioPin", strAudioPin);
 
-                    _class.VideoCapture.SetVideoCaptureDevice(strDevice);
+                    _class.BaseClass.VideoCapture.SetVideoCaptureDevice(strDevice);
                     //TODO: set Audio device
-                    _class.VideoCapture.SetCrossbar(strVideoPin);
-                    _class.VideoCapture.SetCrossbar(strAudioPin);
-                    _class.VideoCapture.RunGraph();
+                    _class.BaseClass.VideoCapture.SetCrossbar(strVideoPin);
+                    _class.BaseClass.VideoCapture.SetCrossbar(strAudioPin);
+                    _class.BaseClass.VideoCapture.RunGraph();
                 }
             }
         }
