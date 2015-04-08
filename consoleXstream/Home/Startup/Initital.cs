@@ -99,8 +99,7 @@ namespace consoleXstream.Home.Startup
             if (_class.BaseClass.System.IsHideMouse)
                 Cursor.Hide();
 
-            //Spawn out three controllers. 2 for controller input, third for aditional controls
-            _class.Home.tmrSystem.Enabled = true;
+            //EndBuild();
         }
 
         //Loads a background - if present in the resource file
@@ -125,6 +124,11 @@ namespace consoleXstream.Home.Startup
 
             system.LoadSetup();
             system.CheckUserSettings();
+        }
+
+        public void EndBuild()
+        {
+            _class.Timers.Create();
         }
     }
 }

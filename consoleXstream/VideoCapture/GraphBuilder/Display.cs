@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows.Forms;
 using DirectShowLib;
 
 namespace consoleXstream.VideoCapture.GraphBuilder
@@ -21,7 +22,27 @@ namespace consoleXstream.VideoCapture.GraphBuilder
 
             try
             {
-                var videoHandle = _class.FrmMain.imgDisplay.Handle;
+                var videoHandle = IntPtr.Zero;
+                _class.FrmMain.Invoke(new MethodInvoker(delegate
+                {
+                    videoHandle = _class.FrmMain.imgDisplay.Handle;
+                }
+                ));
+                /*
+                videoHandle.Invoke(new MethodInvoker(delegate
+                {
+                    videoHandle = _class.FrmMain.imgDisplay.Handle;
+                }));
+                */
+                /*
+                _class.FrmMain.Invoke(new MethodInvoker(delegate
+                {
+                    _class.Home.Text = WatchFps.ToString();
+                    //_class.Home.label1.Visible = true;
+                    //_class.Home.label1.BackColor = Color.Azure;
+                }));
+                */
+                //var videoHandle = _class.FrmMain.imgDisplay.Handle;
                 _class.Graph.VideoWindow.put_Owner(videoHandle);
                     _class.Graph.VideoWindow.put_WindowStyle(WindowStyle.Child | WindowStyle.ClipChildren);
 
@@ -35,8 +56,9 @@ namespace consoleXstream.VideoCapture.GraphBuilder
                 _class.Graph.VideoWindow.put_Visible(OABool.True);
                 _class.FrmMain.FocusWindow();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                _class.System.Debug("video_window.log", ex.Message.ToString());
                 // ignored
             }
         }

@@ -40,7 +40,7 @@ namespace consoleXstream.Home
             Keyboard = new Input.KeyboardHook(this);
             KeyboardInterface = new Input.KeyboardInterface(this);
             Keymap = new Keymap(this);
-            Menu = new MenuHandler.ShowMenu(this);
+            Menu = new Menu.ShowMenu(this);
             Mouse = new Input.Mouse.Hook(this);
             Remap = new Remapping();
             System = new Configuration(this);
@@ -49,7 +49,7 @@ namespace consoleXstream.Home
 
             External = new ExternalScript(Home);
 
-            VideoCapture = new VideoCapture.VideoCapture(Home, System);
+            VideoCapture = new VideoCapture.VideoCapture(this);
         }
     }
 }

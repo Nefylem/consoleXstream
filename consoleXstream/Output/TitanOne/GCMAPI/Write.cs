@@ -56,9 +56,8 @@ namespace consoleXstream.Output.TitanOne.GCMAPI
             return _listDevices.Count > 0 ? _listDevices[_activeDevice] : "";
         }
 
-        public void Send()
+        public void Send(byte[] output)
         {
-            //_class.System.Debug("TOCheck.log", _activeDevice + " / " + _listDevices[_activeDevice]);
             if (!_isConnected)
             {
                 if (_class.MDefine.GcmapiConnect != null) _class.MDefine.GcmapiConnect((ushort) _class.Write.DevId);
@@ -67,7 +66,7 @@ namespace consoleXstream.Output.TitanOne.GCMAPI
 
             if (_class.MDefine.GcmapiIsConnected(_activeDevice) == 1)
             {
-                _class.MDefine.GcmapiWrite(_activeDevice, _class.BaseClass.Gamepad.Output);
+                _class.MDefine.GcmapiWrite(_activeDevice, output);
 
                 if (!_class.BaseClass.System.UseRumble) return;
 
@@ -78,7 +77,7 @@ namespace consoleXstream.Output.TitanOne.GCMAPI
             }
             else
             {
-                _class.BaseClass.System.Debug("titanone.log", "not connected to " + _activeDevice);
+                //_class.BaseClass.System.Debug("titanone.log", "not connected to " + _activeDevice);
             }
         }
     }

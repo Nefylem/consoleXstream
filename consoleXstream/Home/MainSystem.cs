@@ -2,9 +2,9 @@
 
 namespace consoleXstream.Home
 {
-    public class System
+    public class MainSystem
     {
-        public System(Classes classes) { _class = classes; }
+        public MainSystem(Classes classes) { _class = classes; }
         private readonly Classes _class;
 
         public void Exit()
@@ -12,6 +12,9 @@ namespace consoleXstream.Home
             var system = _class.BaseClass.System;
             var controllerMax = _class.BaseClass.ControllerMax;
             var videoCapture = _class.BaseClass.VideoCapture;
+            
+            if (_class.BaseClass.System.MainThreads > 1)
+                _class.Timers.StopAll();
 
             if (system != null)
             {

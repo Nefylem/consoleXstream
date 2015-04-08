@@ -77,7 +77,7 @@ namespace consoleXstream.Config
             strSave += _class.Set.CheckData("TitanOne");
             strSave += _class.Set.CheckData("UseTitanOne");
             strSave += _class.Set.CheckData("MenuLog");
-
+            strSave += _class.Set.CheckData("ControlThreads");
             strSave += "</Configuration>";
 
             // Create the XmlDocument.

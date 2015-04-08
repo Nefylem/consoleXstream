@@ -387,7 +387,7 @@ namespace consoleXstream.Output
                         if (!_class.System.boolMenu)
                         {
                             if (_intMenuWait >= _intMenuShow + 20)
-                                _class.Home.OpenMenu();
+                                _class.HomeClass.Menu.Open();
                         }
                     }
                 }
@@ -511,7 +511,7 @@ namespace consoleXstream.Output
             _boolHoldBack = false;
             _intMenuWait = 0;
 
-            _class.Home.OpenMenu();
+            _class.HomeClass.Menu.Open();
         }
 
     }

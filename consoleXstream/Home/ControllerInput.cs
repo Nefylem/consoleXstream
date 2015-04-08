@@ -12,16 +12,16 @@
             var titanOne = _class.BaseClass.TitanOne;
             var system = _class.BaseClass.System;
             
-            gamepad.Check();
+            var output = gamepad.Check();
 
-            if (system.UseTitanOneApi) titanOne.Send();
+            if (system.UseTitanOneApi) titanOne.Send(output);
             else
             {
                 if (system.UseControllerMax)
                     controllerMax.CheckControllerInput();
 
                 if (system.UseTitanOne)
-                    titanOne.Send();
+                    titanOne.Send(output);
             }
         }
     }

@@ -179,7 +179,7 @@ namespace consoleXstream.Menu
         {
             tmrMenu.Enabled = false;
             Hide();
-            _class.Base.Home.CloseMenuForm();
+            _class.Base.HomeClass.Menu.Close();
         }
     }
 }

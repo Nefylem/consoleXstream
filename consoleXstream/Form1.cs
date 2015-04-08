@@ -23,6 +23,15 @@ namespace consoleXstream
         {
             Startup();
             _homeClass.Startup.Run();
+            tmrSystem.Enabled = true;
+
+            if (_class.System.MainThreads > 1)
+            {
+                _homeClass.Timers.Create();
+                _homeClass.Timers.StartAll();
+            }
+            //if (_class.System.MainThreads >= 2) tmrController1.Enabled = true;
+            //if (_class.System.MainThreads >= 3) tmrController2.Enabled = true;
         }
 
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
@@ -39,18 +48,6 @@ namespace consoleXstream
 
             _class.HomeClass = _homeClass;
         }
-
-        private void tmrSystem_Tick(object sender, EventArgs e)
-        {
-            if (_homeClass.Var.RetrySetTitanOne != null) _homeClass.CheckTitanDevices.Confirm();
-
-            _homeClass.MainLoop.Run();
-
-            if (_class.System.CheckFps) _homeClass.CheckFps.Read();
-        }
-
-
-
 
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
@@ -147,6 +144,21 @@ namespace consoleXstream
             imgDisplayVr.Top = _class.System.Class.Vr.VideoHeightOffset;
             imgDisplay.Left = _class.System.Class.Vr.VideoWidthOffset;
             imgDisplayVr.Left = centerWidth + _class.System.Class.Vr.VideoWidthOffset;
+        }
+
+        private void tmrSystem_Tick(object sender, EventArgs e)
+        {
+            _homeClass.LoopController.RunSystemLoop();
+        }
+
+        private void tmrController1_Tick(object sender, EventArgs e)
+        {
+            _homeClass.LoopController.RunControlLoop();
+        }
+
+        private void tmrController2_Tick(object sender, EventArgs e)
+        {
+            _homeClass.LoopController.RunControlLoop();
         }
     }
 }

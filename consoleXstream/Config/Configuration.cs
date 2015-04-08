@@ -27,6 +27,9 @@ namespace consoleXstream.Config
         public bool IsNormalizeControls { get; set; }
 
         public bool CheckFps { get; set; }
+        public bool CheckSystemFps { get; set; }
+        public bool CheckControllerFps { get; set; }
+
         public bool IsStayOnTop { get; set; }
         public bool IsAutoSetDisplayResolution { get; set; }
         public bool IsAutoSetCaptureResolution { get; set; }
@@ -56,6 +59,7 @@ namespace consoleXstream.Config
         
         public int MouseMode { get; set; }
 
+        public int MainThreads { get; set; }
 
         public string strCurrentResolution { get; set; }
         public string strSetResolution { get; set; }
@@ -93,6 +97,8 @@ namespace consoleXstream.Config
             IsAutoSetCaptureResolution = true;
             EnableGcmapi = true;
             Class.Var.IsReadData = false;
+            MainThreads = 4;
+            Class.Set.Add("ControlThreads", "4");
         }
 
         public void ChangeCrossbar()

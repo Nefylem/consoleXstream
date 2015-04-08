@@ -1,4 +1,5 @@
 ﻿using consoleXstream.Config;
+using consoleXstream.Home;
 using consoleXstream.VideoCapture.Analyse;
 using consoleXstream.VideoCapture.Data;
 using consoleXstream.VideoCapture.GraphBuilder;
@@ -9,8 +10,17 @@ namespace consoleXstream.VideoCapture
 {
     public class Classes
     {
-        public Classes(VideoCapture video, Form1 main, Configuration sys) { VideoCapture = video; FrmMain = main; System = sys; }
+        public Classes(BaseClass baseClass)
+        {
+            BaseClass = baseClass;
+            VideoCapture = baseClass.VideoCapture;
+            FrmMain = baseClass.Home;
+            System = baseClass.System;
 
+            DeclareClasses();
+        }
+
+        public BaseClass BaseClass { get; private set; }
         public Form1 FrmMain { get; set; }
         public Audio Audio { get; set; }
         public Capture Capture { get; set; }

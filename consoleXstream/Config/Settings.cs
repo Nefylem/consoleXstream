@@ -1,4 +1,6 @@
-﻿namespace consoleXstream.Config
+﻿using System;
+
+namespace consoleXstream.Config
 {
     public class Settings
     {
@@ -58,6 +60,18 @@
 
             if (_class.BaseClass.HomeClass.Var.IsIde)
                 _class.System.IsHideMouse = false;
+
+            if (_class.Set.Check("ControlThreads").Length > 0)
+            {
+                try
+                {
+                    _class.System.MainThreads = Convert.ToInt32(_class.Set.Check("ControlThreads"));
+                }
+                catch (Exception)
+                {
+                    //ignored
+                }
+            }
         }
 
     }

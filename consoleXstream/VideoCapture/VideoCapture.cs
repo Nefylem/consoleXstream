@@ -3,16 +3,13 @@ using System.Collections.Generic;
 using DirectShowLib;
 using System.Drawing;
 using consoleXstream.Config;
+using consoleXstream.Home;
 
 namespace consoleXstream.VideoCapture
 {
     public class VideoCapture
     {
-        public VideoCapture(Form1 mainForm, Configuration system)
-        {
-            Class = new Classes(this, mainForm, system);
-            Class.DeclareClasses();
-        }
+        public VideoCapture(BaseClass baseClass) { Class = new Classes(baseClass); }
         public readonly Classes Class;
 
         public bool BoolActiveVideo { get; private set; }
@@ -251,10 +248,10 @@ namespace consoleXstream.VideoCapture
              */
         }
 
-        public void checkVideoOutput()
+        public void CheckVideoOutput()
         {
             //Reruns the graph once, find this needs to happen after quick resolution changes (PS3)
-            if (Class.Var.IsRestartGraph && !Class.Var.IsVideoFail)           
+            if (Class.Var.IsRestartGraph && !Class.Var.IsVideoFail)
             {
                 Class.Var.IsRestartGraph = false;
                 Class.Debug.Log("[3] Update graph");
@@ -269,7 +266,7 @@ namespace consoleXstream.VideoCapture
                 if (_intRestartGraph > 0) 
                     _intRestartGraph--; 
                 else 
-                { 
+                {
                     Class.Debug.Log("[3] Restart graph");
                     Class.Var.IsRestartGraph = false;
                     Class.Var.IsVideoFail = false; 

@@ -36,11 +36,11 @@ namespace consoleXstream.Output.TitanOne
         public void Initialize() { _class.Init.Open(); }
         public void Close() { _class.Init.Close(); }
 
-        public void Send()
+        public void Send(byte[] output)
         {
             if (ApiMethod == Define.ApiMethod.Multi)
             {
-                _class.MWrite.Send();
+                _class.MWrite.Send(output);
                 return;
             }
 
@@ -73,7 +73,7 @@ namespace consoleXstream.Output.TitanOne
                 _gcapi_WriteEx(output);
                  */
 
-                _class.Define.Write(_class.BaseClass.Gamepad.Output);
+                _class.Define.Write(output);
 
                 if (!_class.BaseClass.System.UseRumble) return;
                 if (DevId == Define.DevPid.TitanOne)
@@ -92,7 +92,7 @@ namespace consoleXstream.Output.TitanOne
             else
             {
                 if (_isToDisconnected) return;
-                _class.BaseClass.System.Debug("titanOne.log", "[NOTE] TitanOne is disconnected");
+                //_class.BaseClass.System.Debug("titanOne.log", "[NOTE] TitanOne is disconnected");
                 _isToDisconnected = true;
             }
         }
