@@ -1,4 +1,5 @@
-﻿using consoleXstream.Config;
+﻿using System.Windows.Forms;
+using consoleXstream.Config;
 using consoleXstream.Input;
 
 namespace consoleXstream.Home.Loop
@@ -8,6 +9,7 @@ namespace consoleXstream.Home.Loop
         public PartialLoops(Classes classes) { _class = classes; }
         private readonly Classes _class;
 
+        /*
         private Remap.Keymap.KeyboardKeys _altKeyMap;
         private Remap.Keymap.KeyboardKeys _keymap;
 
@@ -20,13 +22,11 @@ namespace consoleXstream.Home.Loop
         private Configuration _system;
         private Var _var;
         private VideoCapture.VideoCapture _videoCapture;
-
-        private bool _setup;
+        */
 
         private void SetupClasses()
         {
-            _setup = true;
-
+            /*
             _altKeyMap = _class.BaseClass.Keymap.KeyAltDef;
             _keymap = _class.BaseClass.Keymap.KeyDef;
 
@@ -39,10 +39,14 @@ namespace consoleXstream.Home.Loop
             _system = _class.BaseClass.System;
             _var = _class.Var;
             _videoCapture = _class.BaseClass.VideoCapture;
+            
+            _setup = true;
+             */
         }
 
         public void SystemLoop()
         {
+            /*
             if (!_setup) SetupClasses();
 
             if (_class.Var.RetrySetTitanOne != null) _class.CheckTitanDevices.Confirm();
@@ -56,21 +60,33 @@ namespace consoleXstream.Home.Loop
             if (_system.UseInternalCapture && _videoCapture.BoolActiveVideo)
                 _videoCapture.CheckVideoOutput();
 
+            if (_system.ShowMenu)
+            {
+                _system.ShowMenu = false;
+                _menu.Open();
+                return;
+            }
             if (_system.boolMenu) return;
 
             if (!_system.IsEnableKeyboard) return;
 
             if (!_keyboard.GetKey(_keymap.ButtonBack) && !_keyboard.GetKey(_altKeyMap.ButtonBack)) return;
-            
-            if (_var.BlockMenuCount == 0) 
+
+            if (_var.BlockMenuCount == 0)
+                _system.ShowMenu = true;
+            /*
                 _menu.Open(); 
             else 
                 _var.BlockMenuCount = 3;
+                 */
         }
 
         public void CheckControls()
         {
+            /*
             if (!_setup) SetupClasses();
+
+            if (_system.boolMenu || _system.ShowMenu) return;
 
             if (_system.CheckControllerFps)
                 _class.CheckFps.Read();
@@ -82,11 +98,14 @@ namespace consoleXstream.Home.Loop
                 _mouse.Check();
 
             _gamepad.Check();
+             */
         }
 
         public void ControllerThread(object state)
         {
-            CheckControls();
+            if (_class.BaseClass.System.boolMenu) return;
+
+            _class.Controller.Check(false);
         }
     }
 }

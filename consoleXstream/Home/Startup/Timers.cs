@@ -40,7 +40,7 @@ namespace consoleXstream.Home.Startup
             for (int count = 0; count < _sysTimer.Count; count++)
             {
                 Stop(count);
-            }            
+            } 
         }
 
         public void Start(int timer)

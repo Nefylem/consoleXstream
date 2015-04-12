@@ -12,10 +12,14 @@ namespace consoleXstream.Output.TitanOne
         public void Open()
         {
             _class.Write.ApiMethod = Define.ApiMethod.Multi;
-            if (_class.MInit == null)
-
             _class.BaseClass.System.Debug("titanone.init.open.log", "MInit.Open");
             _class.MInit.Open();
+
+            if (_class.MDefine.GcmapiLoad == null)
+            {
+                _class.BaseClass.System.Debug("Cant load TitanOne API");
+                return;
+            }
             _class.BaseClass.System.Debug("titanone.init.open.log", "_class.MDefine.GcmapiLoad()");
             _class.MDefine.GcmapiLoad();
             /*

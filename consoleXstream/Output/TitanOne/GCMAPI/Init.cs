@@ -15,7 +15,6 @@ namespace consoleXstream.Output.TitanOne.GCMAPI
             var homeDir = Directory.GetCurrentDirectory() + @"\";
 
             var api = "titanOne_gcdapi.dll";
-
             if (File.Exists(homeDir + "gcdapi.dll")) api = "gcdapi.dll";
 
             if (File.Exists(homeDir + api) == false)

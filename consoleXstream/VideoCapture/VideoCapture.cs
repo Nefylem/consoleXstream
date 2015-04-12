@@ -30,11 +30,15 @@ namespace consoleXstream.VideoCapture
             Class.Var.CrossbarAudio = "none";
             Class.Var.CrossbarVideo = "none";
 
+            Class.Debug.Log("[0] Class.Capture.Find");
             //Caches build information
             Class.Capture.Find();
+            Class.Debug.Log("[0] Class.Audio.Find");
             Class.Audio.Find();
 
+            Class.Debug.Log("[0] Class.User.LoadSettings");
             Class.User.LoadSettings();
+            Class.Debug.Log("[0] Class.Resolution.Find");
             Class.Resolution.Find();
 
             Class.Var.IsInitializeGraph = true;

@@ -7,18 +7,23 @@
 
         public void RunSystemLoop()
         {
-            if (_class.BaseClass.System.MainThreads == 1)
-                _class.MainLoop.CheckLoop();
-            else
-                _class.PartialLoop.SystemLoop();
+            _class.MainLoop.RunSystemLoop();
+        }
+
+        public void RunMasterControlLoop()
+        {
+            if (_class.BaseClass.System.boolMenu) return;
+            _class.MainLoop.RunMasterControlLoop();
         }
 
         public void RunControlLoop()
         {
+            /*
             if (_class.BaseClass.System.boolMenu) 
                 return;
 
             _class.PartialLoop.CheckControls();
+             */
         }
     }
 }

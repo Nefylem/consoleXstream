@@ -22,6 +22,7 @@ namespace consoleXstream.Home
             if (File.Exists("VideoResolution.log")) File.Delete("VideoResolution.log");
             if (File.Exists("video.log")) File.Delete("video.log");
             if (File.Exists("menu.log")) File.Delete("Menu.log");
+            if (File.Exists("titanone.init.open.log")) File.Delete("titanone.init.open.log");
         }
 
         public void Setup()

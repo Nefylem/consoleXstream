@@ -23,15 +23,15 @@ namespace consoleXstream
         {
             Startup();
             _homeClass.Startup.Run();
-            tmrSystem.Enabled = true;
 
-            if (_class.System.MainThreads > 1)
+            tmrSystem.Enabled = true;
+            tmrMasterControl.Enabled = true;
+
+            if (_class.System.MainThreads > 0)
             {
                 _homeClass.Timers.Create();
                 _homeClass.Timers.StartAll();
             }
-            //if (_class.System.MainThreads >= 2) tmrController1.Enabled = true;
-            //if (_class.System.MainThreads >= 3) tmrController2.Enabled = true;
         }
 
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
@@ -151,14 +151,9 @@ namespace consoleXstream
             _homeClass.LoopController.RunSystemLoop();
         }
 
-        private void tmrController1_Tick(object sender, EventArgs e)
+        private void tmrMasterControl_Tick(object sender, EventArgs e)
         {
-            _homeClass.LoopController.RunControlLoop();
-        }
-
-        private void tmrController2_Tick(object sender, EventArgs e)
-        {
-            _homeClass.LoopController.RunControlLoop();
+            _homeClass.LoopController.RunMasterControlLoop();
         }
     }
 }

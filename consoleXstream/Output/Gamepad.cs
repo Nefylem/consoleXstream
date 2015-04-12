@@ -17,28 +17,30 @@ namespace consoleXstream.Output
 
         private GamePadState _controls;
 
-        public int CMHomeCount { get; set; }
+        public int CmHomeCount { get; set; }
         public bool Ps4Touchpad { get; set; }
 
-        private string _strTODevice;
+        private string _strToDevice;
 
-        private bool _boolHoldBack = false;
+        private bool _isHoldBack;
+        private int _holdBackCount;
+
         private bool _boolLoadShortcuts = false;
 
-        private int _XboxCount;
-        private int _MenuWait;
-        private int _MenuShow;
+        private int _xboxCount;
+        private int _menuWait;
+        private int _menuShow;
 
 
-        public byte[] Check()
+
+        public byte[] Check(bool isSystem)
         {
-            _MenuShow = 35;
+            _menuShow = 40;
 
-            //Update gamepad status
             _controls = GamePad.GetState(PlayerIndex.One);
 
-            if (_XboxCount == 0) { _XboxCount = Enum.GetNames(typeof(Xbox)).Length; }
-            var output = new byte[_XboxCount];
+            if (_xboxCount == 0) { _xboxCount = Enum.GetNames(typeof(Xbox)).Length; }
+            var output = new byte[_xboxCount];
 
             if (_controls.DPad.Left) { output[_class.Remap.RemapGamepad.Left] = Convert.ToByte(100); }
             if (_controls.DPad.Right) { output[_class.Remap.RemapGamepad.Right] = Convert.ToByte(100); }
@@ -52,21 +54,40 @@ namespace consoleXstream.Output
 
             if (_controls.Buttons.Start) { output[_class.Remap.RemapGamepad.Start] = Convert.ToByte(100); }
             if (_controls.Buttons.Guide) { output[_class.Remap.RemapGamepad.Home] = Convert.ToByte(100); }
+
             if (_controls.Buttons.Back)
             {
-                if (_class.System.boolBlockMenuButton == false)
+                if (_class.System.boolBlockMenuButton == false && isSystem)
                 {
-                    _MenuWait++;
+                    _isHoldBack = true;
+                    _menuWait++;
+                    _holdBackCount++;
                     if (_class.System.boolMenu == false)
-                        if (_MenuWait >= _MenuShow + 20)
+                        if (_menuWait >= _menuShow + 20)
+                        {
+                            _isHoldBack = false;
+                            _holdBackCount = 0;
                             OpenMenu();
+                        }
                 }
-
-                //_class.Remap back buton to touchpad
-                if (_class.System.IsPs4ControllerMode)
-                    output[_class.Remap.RemapGamepad.Touch] = Convert.ToByte(100);
-                else
-                    output[_class.Remap.RemapGamepad.Back] = Convert.ToByte(100);
+            }
+            else
+            {
+                if (_isHoldBack)
+                {
+                    if (_holdBackCount > 0)
+                    {
+                        _holdBackCount--;
+                        if (_class.System.IsPs4ControllerMode)
+                            output[_class.Remap.RemapGamepad.Touch] = Convert.ToByte(100);
+                        else
+                            output[_class.Remap.RemapGamepad.Back] = Convert.ToByte(100);
+                    }
+                    else
+                    {
+                        _isHoldBack = false;
+                    }
+                }
             }
 
             if (_controls.Buttons.LeftShoulder) { output[_class.Remap.RemapGamepad.LeftShoulder] = Convert.ToByte(100); }
@@ -98,10 +119,10 @@ namespace consoleXstream.Output
             if (dblRx != 0) { output[_class.Remap.RemapGamepad.RightX] = (byte)Convert.ToSByte((int)(dblRx)); }
             if (dblRy != 0) { output[_class.Remap.RemapGamepad.RightY] = (byte)Convert.ToSByte((int)(dblRy)); }
 
-            if (CMHomeCount > 0)
+            if (CmHomeCount > 0)
             {
                 output[_class.Remap.RemapGamepad.Home] = Convert.ToByte(100);
-                CMHomeCount--;
+                CmHomeCount--;
             }
 
             if (Ps4Touchpad)
@@ -151,7 +172,7 @@ namespace consoleXstream.Output
             if (_class.KeyboardInterface == null || _class.KeyboardInterface.Output == null) 
                 return output;
 
-            for (var intCount = 0; intCount < _XboxCount; intCount++)
+            for (var intCount = 0; intCount < _xboxCount; intCount++)
             {
                 if (_class.KeyboardInterface.Output[intCount] != 0)
                     output[intCount] = _class.KeyboardInterface.Output[intCount];
@@ -189,8 +210,7 @@ namespace consoleXstream.Output
 
         private void OpenMenu()
         {
-            _boolHoldBack = false;
-            _MenuWait = 0;
+            _menuWait = 0;
 
             _class.HomeClass.Menu.Open();
         }

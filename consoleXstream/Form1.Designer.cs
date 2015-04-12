@@ -37,6 +37,7 @@
             this.label5 = new System.Windows.Forms.Label();
             this.imgDisplayVr = new System.Windows.Forms.PictureBox();
             this.tmrSystem = new System.Windows.Forms.Timer(this.components);
+            this.tmrMasterControl = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.imgDisplay)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.imgDisplayVr)).BeginInit();
             this.SuspendLayout();
@@ -118,6 +119,11 @@
             this.tmrSystem.Interval = 1;
             this.tmrSystem.Tick += new System.EventHandler(this.tmrSystem_Tick);
             // 
+            // tmrMasterControl
+            // 
+            this.tmrMasterControl.Interval = 1;
+            this.tmrMasterControl.Tick += new System.EventHandler(this.tmrMasterControl_Tick);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -153,6 +159,7 @@
         private System.Windows.Forms.Label label5;
         public System.Windows.Forms.PictureBox imgDisplayVr;
         private System.Windows.Forms.Timer tmrSystem;
+        private System.Windows.Forms.Timer tmrMasterControl;
     }
 }
 

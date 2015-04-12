@@ -55,6 +55,7 @@ namespace consoleXstream.Config
         public bool DisableTitanOneRetry { get; set; }
         
         public bool boolMenu { get; set; }
+        public bool ShowMenu { get; set; }
         public bool IsOverrideOnExit { get; set; }
         
         public int MouseMode { get; set; }
@@ -83,22 +84,25 @@ namespace consoleXstream.Config
         */
         public void loadDefaults()
         {
+            ShowMenu = false;
+            boolMenu = false;
+
             Class.Var.IsReadData = true;
             Class.Set.Add("InternalCapture", "true");
             Class.Set.Add("Crossbar", "true");
             Class.Set.Add("Preview", "true");
             Class.Set.Add("AVIRender", "true");
+            Class.Set.Add("ControlThreads", "2");
 
             //_class.Set.Add("ControllerRumble", "true");
             Class.Set.Add("Keyboard", "true");
             Class.Set.Add("HideMouse", "true");
+            MainThreads = 2;
             //IsEnableMouse = true;
             IsStayOnTop = true;
             IsAutoSetCaptureResolution = true;
             EnableGcmapi = true;
             Class.Var.IsReadData = false;
-            MainThreads = 4;
-            Class.Set.Add("ControlThreads", "4");
         }
 
         public void ChangeCrossbar()

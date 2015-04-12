@@ -60,25 +60,22 @@ namespace consoleXstream.Output.TitanOne.GCMAPI
         {
             if (!_isConnected)
             {
-                if (_class.MDefine.GcmapiConnect != null) _class.MDefine.GcmapiConnect((ushort) _class.Write.DevId);
+                if (_class.MDefine.GcmapiConnect == null) return;
+                
+                _class.MDefine.GcmapiConnect((ushort) _class.Write.DevId);
                 _isConnected = true;
             }
 
-            if (_class.MDefine.GcmapiIsConnected(_activeDevice) == 1)
-            {
-                _class.MDefine.GcmapiWrite(_activeDevice, output);
+            if (_class.MDefine.GcmapiIsConnected(_activeDevice) != 1) return;
 
-                if (!_class.BaseClass.System.UseRumble) return;
+            _class.MDefine.GcmapiWrite(_activeDevice, output);
 
-                var report = new Define.GcmapiReport();
+            if (!_class.BaseClass.System.UseRumble) return;
 
-                if (_class.MDefine.GcmapiRead(_activeDevice, ref report) != IntPtr.Zero)
-                    GamePad.SetState(PlayerIndex.One, report.Rumble[0], report.Rumble[1]);
-            }
-            else
-            {
-                //_class.BaseClass.System.Debug("titanone.log", "not connected to " + _activeDevice);
-            }
+            var report = new Define.GcmapiReport();
+
+            if (_class.MDefine.GcmapiRead(_activeDevice, ref report) != IntPtr.Zero)
+                GamePad.SetState(PlayerIndex.One, report.Rumble[0], report.Rumble[1]);
         }
     }
 }

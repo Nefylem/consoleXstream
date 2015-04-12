@@ -68,7 +68,7 @@ namespace consoleXstream.VideoCapture.Analyse
         {
             _class.Debug.Log("[0] Looking for " + title);
             var index = -1;
-            _class.Debug.Log(_class.Var.VideoCaptureDevice.Count.ToString());
+            _class.Debug.Log(_class.Var.VideoCaptureDevice.Count.ToString() + " device(s) found");
             for (var count = 0; count < _class.Var.VideoCaptureDevice.Count; count++)
             {
                 _class.Debug.Log(_class.Var.VideoCaptureDevice[count] + "{}" + title);
