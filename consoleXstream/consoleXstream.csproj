@@ -116,6 +116,7 @@
     <Compile Include="Menu\SubSelectMenu\Navigation.cs" />
     <Compile Include="Menu\SubSelectMenu\Var.cs" />
     <Compile Include="Menu\VR\Config.cs" />
+    <Compile Include="Menu\VR\HeadTracking.cs" />
     <Compile Include="Menu\VR\Reposition.cs" />
     <Compile Include="Menu\VR\Resize.cs" />
     <Compile Include="Output\Classes.cs" />

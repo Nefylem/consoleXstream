@@ -57,7 +57,12 @@ namespace consoleXstream.Config
         public bool boolMenu { get; set; }
         public bool ShowMenu { get; set; }
         public bool IsOverrideOnExit { get; set; }
-        
+        public bool IsMouseDirect { get; set; }
+        public bool IsMouseSmoothing { get; set; }
+        public bool IsMouseFreeRoll { get; set; }           //Automatically move mouse to center if reaching edges
+        public bool IsCalibrateHeadMotion { get; set; }
+        public double MouseModifierX { get; set; }
+        public double MouseModifierY { get; set; }
         public int MouseMode { get; set; }
 
         public int MainThreads { get; set; }
@@ -103,6 +108,10 @@ namespace consoleXstream.Config
             IsAutoSetCaptureResolution = true;
             EnableGcmapi = true;
             Class.Var.IsReadData = false;
+            IsMouseDirect = true;
+            MouseModifierX = 35;
+            MouseModifierY = 20;
+            IsMouseFreeRoll = true;
         }
 
         public void ChangeCrossbar()
@@ -183,5 +192,6 @@ namespace consoleXstream.Config
         public void GetInitialDisplay() { Class.Display.GetInitialDisplay(); }
         public void SetInitialDisplay() { Class.Display.SetInitialDisplay(); }
         private void ChangeResolution(string resolution) { Class.Display.ChangeResolution(resolution); }
+        public void Set(string title, string set) { Class.Set.Add(title, set); }
     }
 }

@@ -27,8 +27,8 @@ namespace consoleXstream.Home.Startup
 
             _class.Home.WindowState = FormWindowState.Maximized;
 
-            _class.Var.MouseX = Cursor.Position.X;
-            _class.Var.MouseY = Cursor.Position.Y;
+            _class.Var.MouseX = 0;
+            _class.Var.MouseY = 0;
 
             LoadBackground();                           
             LoadUserConfig();

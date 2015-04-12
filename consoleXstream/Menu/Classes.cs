@@ -48,6 +48,7 @@ namespace consoleXstream.Menu
         public VR.Config ConfigVr { get; private set; }
         public Resize ResizeVr { get; private set; }
         public Reposition RepositionVr { get; private set; }
+        public HeadTracking HeadTracking { get; private set; }
 
         private void Declare()
         {
@@ -83,6 +84,7 @@ namespace consoleXstream.Menu
             ConfigVr = new VR.Config(this);
             ResizeVr = new Resize(this);
             RepositionVr = new Reposition(this);
+            HeadTracking = new HeadTracking(this);
         }
     }
 }

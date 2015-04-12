@@ -16,6 +16,8 @@ namespace consoleXstream.Menu.Data
         public bool IsResizeVr;
         public bool IsRepositionVr;
 
+        public bool ShowTrackingInstructions;
+
         public int CellWidth;
         public int CellHeight;
 

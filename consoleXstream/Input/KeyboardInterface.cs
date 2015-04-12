@@ -20,6 +20,8 @@ namespace consoleXstream.Input
             if (_intXboxCount == 0) { _intXboxCount = Enum.GetNames(typeof(Xbox)).Length; }
             Output = new byte[_intXboxCount];
 
+            if (_class.System.IsCalibrateHeadMotion) { CheckMouse(); return; }
+
             CheckKeyMap();
             CheckAlternateKeyMap();           
 
@@ -41,13 +43,25 @@ namespace consoleXstream.Input
             if (_class.Keyboard.GetKey(_class.Keymap.KeyDef.ButtonStart)) Output[_class.Remap.RemapGamepad.Start] = Convert.ToByte(100);
             if (_class.Keyboard.GetKey(_class.Keymap.KeyDef.ButtonHome)) Output[_class.Remap.RemapGamepad.Home] = Convert.ToByte(100);
 
-            if (!_class.System.IsEnableMouse) return;
+            if (_class.System.IsEnableMouse || _class.System.IsVr) CheckMouse();
+        }
+
+        public int Clamp(int value, int min, int max)
+        {
+            return (value < min) ? min : (value > max) ? max : value;
+        }
+
+        private void CheckMouse()
+        {
             var intReplaceX = _class.HomeClass.Var.MouseX;
             var intReplaceY = _class.HomeClass.Var.MouseY;
 
+            intReplaceX = Clamp(intReplaceX, -100, 100);
+            intReplaceY = Clamp(intReplaceY, -100, 100);
+
             //frmMain.intReplaceX = (int)(intReplaceX / 1.5);        
             //frmMain.intReplaceY = (int)(intReplaceX / 1.5);
-
+            
             if (intReplaceX != 0)
                 Output[_class.Remap.RemapGamepad.RightX] = (byte)Convert.ToSByte(intReplaceX);
             if (intReplaceY != 0)
@@ -57,7 +71,7 @@ namespace consoleXstream.Input
                 Output[_class.Remap.RemapGamepad.RightTrigger] = Convert.ToByte(100);
 
             if (BoolRightMouse)
-                Output[_class.Remap.RemapGamepad.LeftTrigger] = Convert.ToByte(100);
+                Output[_class.Remap.RemapGamepad.LeftTrigger] = Convert.ToByte(100);            
         }
 
         private void CheckKeyMap()

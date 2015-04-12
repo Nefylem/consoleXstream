@@ -26,12 +26,13 @@ namespace consoleXstream
 
             tmrSystem.Enabled = true;
             tmrMasterControl.Enabled = true;
-
+            /*
             if (_class.System.MainThreads > 0)
             {
                 _homeClass.Timers.Create();
                 _homeClass.Timers.StartAll();
             }
+             */
         }
 
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)

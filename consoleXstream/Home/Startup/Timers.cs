@@ -37,6 +37,8 @@ namespace consoleXstream.Home.Startup
 
         public void StopAll()
         {
+            if (_sysTimer == null) return;
+
             for (int count = 0; count < _sysTimer.Count; count++)
             {
                 Stop(count);

@@ -1,4 +1,6 @@
-﻿namespace consoleXstream.Menu.VR
+﻿using System.Globalization;
+
+namespace consoleXstream.Menu.VR
 {
     public class Config
     {
@@ -13,7 +15,7 @@
 
             _class.SubAction.AddSubItem("Resize", "Resize");
             _class.SubAction.AddSubItem("Reposition", "Reposition");
-
+            _class.SubAction.AddSubItemFolder("HeadTracking", "Head Tracking", "");
         }
 
         public void SetVrOptions(string command)
@@ -25,6 +27,7 @@
                 case "vrvideo": SwitchVrMode(); break;
                 case "resize": _class.ResizeVr.SetResizeMode(); break;
                 case "reposition": _class.RepositionVr.SetRepositionMode(); break;
+                case "headtracking": _class.HeadTracking.ShowMovementSubmenu(); break;
             }
         }
 
@@ -39,5 +42,6 @@
             _class.ConfigVr.AddVrMenuOptions();
             _class.Action.SelectSubItem();
         }
+
     }
 }

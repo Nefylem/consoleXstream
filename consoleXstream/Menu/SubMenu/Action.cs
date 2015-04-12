@@ -31,6 +31,7 @@ namespace consoleXstream.Menu.SubMenu
                 case "videoresolution": ChangeVideoResolution(command); break;      //Video display sub menu
                 case "videorefresh": ChangeVideoRefresh(command); break;
                 case "exit": Exit(command); break;
+                case "headtracking": _class.HeadTracking.SetOption(command); break;
             }
         }
 
@@ -77,7 +78,7 @@ namespace consoleXstream.Menu.SubMenu
 
             _class.Data.SubItems[id].Command = strCommand;
             _class.Data.SubItems[id].Display = strTitle;
-            _class.Data.SubItems[id].DisplayOption = "";
+            _class.Data.SubItems[id].DisplayOption = subTitle;
             _class.Data.SubItems[id].ActiveWatcher = "";
 
             if (isCheck)

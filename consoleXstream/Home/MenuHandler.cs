@@ -16,7 +16,8 @@ namespace consoleXstream.Home
             
             if (var.BlockMenuCount != 0) return;
             system.boolMenu = true;
-            Cursor.Show();
+
+            if (!_class.BaseClass.System.IsVr) Cursor.Show();
 
             if (system.IsStayOnTop)
                 home.TopMost = false;

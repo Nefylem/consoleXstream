@@ -8,21 +8,37 @@ namespace consoleXstream.Home
         public Mouse(Classes classes) { _class = classes; }
         private readonly Classes _class;
 
-        const int ModifierX = -35;
-        const int ModifierY = -25;
-
         private int _mouseX;
         private int _mouseY;
 
 
         public void Check()
         {
-            _class.Var.MouseY = Clamp((_mouseX - Cursor.Position.X) * ModifierX, -100, 100);
-            _class.Var.MouseY = Clamp((_mouseY - Cursor.Position.Y) * ModifierY, -100, 100);
+            if (_class.BaseClass.System.IsMouseDirect)
+                CheckDirectMovement();
+            else
+                CheckCircularMovement();
+        }
+
+        private void CheckDirectMovement()
+        {
+            _class.Var.MouseX = Clamp((int)((_mouseX - Cursor.Position.X) * -_class.BaseClass.System.MouseModifierX), -100, 100);
+            _class.Var.MouseY = Clamp((int)((_mouseY - Cursor.Position.Y) * -_class.BaseClass.System.MouseModifierY), -100, 100);
 
             _mouseX = Cursor.Position.X;
             _mouseY = Cursor.Position.Y;
 
+            if (_class.BaseClass.System.IsMouseFreeRoll) CheckMouseCenter();
+        }
+
+
+        private void CheckCircularMovement()
+        {
+            
+        }
+
+        private void CheckMouseCenter()
+        {
             if (Cursor.Position.Y > Screen.PrimaryScreen.Bounds.Height - _class.Var.MouseScreenBounds)
                 CenterMouseY();
 

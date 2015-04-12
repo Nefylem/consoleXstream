@@ -32,6 +32,8 @@ namespace consoleXstream.Config
             if (_class.Set.Check("VR_Height").Length > 0) _class.Vr.SetHeight(_class.Set.Check("VR_Height"));
             if (_class.Set.Check("VR_OffsetWidth").Length > 0) _class.Vr.SetOffsetWidth(_class.Set.Check("VR_OffsetWidth"));
             if (_class.Set.Check("VR_OffsetHeight").Length > 0) _class.Vr.SetOffsetHeight(_class.Set.Check("VR_OffsetHeight"));
+            if (_class.Set.Check("VR_Modifier_X").Length > 0) _class.System.MouseModifierX = ConvertToInt(_class.Set.Check("VR_Modifier_X"));
+            if (_class.Set.Check("VR_Modifier_Y").Length > 0) _class.System.MouseModifierY = ConvertToInt(_class.Set.Check("VR_Modifier_Y"));
 
             if (_class.Set.Check("MenuLog").ToLower() == "true") _class.Log.SetValue("Menu", true);
 
@@ -72,6 +74,20 @@ namespace consoleXstream.Config
                     //ignored
                 }
             }
+        }
+
+        public int ConvertToInt(string set)
+        {
+            try
+            {
+                int temp = Convert.ToInt32(set.Trim());
+                return temp;
+            }
+            catch (Exception)
+            {
+                //Ignored
+            }
+            return 1;
         }
 
     }

@@ -220,5 +220,6 @@ namespace consoleXstream.Menu
 
         public void SetBackWait(int wait) { _menuBackWait = wait; }
         public void SetOkWait(int wait) { _moveOkWait = wait; }
+        public bool CheckOk() { return _moveOkWait == 0; }
     }
 }

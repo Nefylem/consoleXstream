@@ -134,6 +134,8 @@ namespace consoleXstream.Menu
                 //drawFooter();
             }
 
+            if (_class.Var.ShowTrackingInstructions) _class.HeadTracking.DrawInstructionGuide();
+
             _class.DrawGui.setOutline(false);
 
             if (_class.Base.System.CheckFps)
@@ -160,6 +162,11 @@ namespace consoleXstream.Menu
 
         private void CheckControls()
         {
+            if (_class.Var.ShowTrackingInstructions)
+            {
+                _class.HeadTracking.CheckControls();
+                return;
+            }
             _class.Keyboard.CheckInput();
             _class.Gamepad.CheckInput();
         }
