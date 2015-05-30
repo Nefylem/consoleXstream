@@ -39,7 +39,7 @@ namespace consoleXstream.Config
 
             if (_class.Set.Check("controllermax").ToLower() == "true") _class.System.UseControllerMax = true;
             if (_class.Set.Check("titanone").ToLower() == "true") _class.System.UseTitanOne = true;
-            if (_class.Set.Check("UseTitanOne").Length > 0)
+            if (_class.Set.Check("UseTitanOne").Length > 0 && _class.System.UseTitanOne)
             {
                 _class.System.TitanOneDevice = _class.Set.Check("UseTitanOne");
                 _class.BaseClass.Home.SetTitanOne(_class.Set.Check("UseTitanOne"));

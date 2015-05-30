@@ -120,7 +120,7 @@ namespace consoleXstream.Home.Startup
             system.loadDefaults();
 
             keymap.InitializeKeyboardDefaults();
-            keymap.LoadKeyboardInputs();
+            //keymap.LoadKeyboardInputs();
 
             system.LoadSetup();
             system.CheckUserSettings();

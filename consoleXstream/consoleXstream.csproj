@@ -138,6 +138,7 @@
       <DependentUpon>MouseInterface.cs</DependentUpon>
     </Compile>
     <Compile Include="Remap\Keymap.cs" />
+    <Compile Include="Remap\Mousemap.cs" />
     <Compile Include="Scripting\ExternalScript.cs" />
     <Compile Include="Input\GamepadXInput.cs" />
     <Compile Include="Output\Gimx.cs" />

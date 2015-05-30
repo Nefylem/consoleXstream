@@ -140,25 +140,23 @@ namespace consoleXstream.Remap
 
         private void AddRemapData(string title, string setting)
         {
-            /*
             title = title.ToLower();
-            int id = findRemapName(setting);
+            int id = FindRemapName(setting);
             if (id > -1)
             {
-                Type myClassType = remapGamepad.GetType();
+                Type myClassType = RemapGamepad.GetType();
                 PropertyInfo[] properties = myClassType.GetProperties();
                 foreach (PropertyInfo property in properties)
                 {
                     if (title == property.Name.ToLower())
-                        if ((string) property.GetValue(remapGamepad, null) != id.ToString())
+                        if ((string) property.GetValue(RemapGamepad, null) != id.ToString())
                         {
-                            property.SetValue(remapGamepad, Convert.ChangeType(id, property.PropertyType), null);
+                            property.SetValue(RemapGamepad, Convert.ChangeType(id, property.PropertyType), null);
                             break;
                         }
                 }
 
             }
-             */
         }
 
         public void SaveGamepadRemap()

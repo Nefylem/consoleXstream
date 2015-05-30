@@ -29,7 +29,7 @@ namespace consoleXstream.VideoCapture
         public Resolution Resolution { get; set; }
         public Variables Var { get; set; }
         public Graph Graph { get; set; }
-        public VideoCapture VideoCapture { get; set; }
+        public VideoCapture VideoCapture { get; private set; }
         public User User { get; set; }
         public Configuration System { get; set; }
         public GraphMap GraphBuild { get; set; }

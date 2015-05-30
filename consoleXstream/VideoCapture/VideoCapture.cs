@@ -9,7 +9,11 @@ namespace consoleXstream.VideoCapture
 {
     public class VideoCapture
     {
-        public VideoCapture(BaseClass baseClass) { Class = new Classes(baseClass); }
+        public VideoCapture(BaseClass baseClass)
+        {
+            baseClass.VideoCapture = this;
+            Class = new Classes(baseClass);
+        }
         public readonly Classes Class;
 
         public bool BoolActiveVideo { get; private set; }

@@ -18,6 +18,7 @@ namespace consoleXstream.Home
         public Remapping Remap                                          { get; private set; }
         public VideoResolution VideoResolution                          { get; private set; }
         public Keymap Keymap                                            { get; private set; }
+        public Mousemap Mousemap                                        { get; private set; }
         public Menu.ShowMenu Menu                                       { get; private set; }
         public Home.Classes HomeClass                                   { get; set; }
         public Output.ControllerMax ControllerMax                       { get; private set; }
@@ -29,7 +30,7 @@ namespace consoleXstream.Home
         public Input.KeyboardInterface KeyboardInterface                { get; private set; }
         public Input.Mouse.Hook Mouse                                   { get; private set; }
         private ExternalScript External                                 { get; set; }
-        public VideoCapture.VideoCapture VideoCapture                   { get; private set; }
+        public VideoCapture.VideoCapture VideoCapture                   { get; set; }
 
 
         private void Declare()
@@ -39,6 +40,7 @@ namespace consoleXstream.Home
             Gimx = new Gimx(this);
             Keyboard = new Input.KeyboardHook(this);
             KeyboardInterface = new Input.KeyboardInterface(this);
+            Mousemap = new Mousemap(this);
             Keymap = new Keymap(this);
             Menu = new Menu.ShowMenu(this);
             Mouse = new Input.Mouse.Hook(this);

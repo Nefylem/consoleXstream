@@ -68,10 +68,10 @@ namespace consoleXstream.Input
                 Output[_class.Remap.RemapGamepad.RightY] = (byte)Convert.ToSByte(intReplaceY);
 
             if (BoolLeftMouse)
-                Output[_class.Remap.RemapGamepad.RightTrigger] = Convert.ToByte(100);
+                Output[_class.Mousemap.RemapMouse.Lmb] = Convert.ToByte(100);
 
             if (BoolRightMouse)
-                Output[_class.Remap.RemapGamepad.LeftTrigger] = Convert.ToByte(100);            
+                Output[_class.Mousemap.RemapMouse.Rmb] = Convert.ToByte(100);            
         }
 
         private void CheckKeyMap()

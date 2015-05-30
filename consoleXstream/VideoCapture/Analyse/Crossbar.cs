@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using DirectShowLib;
 
@@ -59,21 +61,44 @@ namespace consoleXstream.VideoCapture.Analyse
             else { _class.Debug.Log("No crossbar found"); }
         }
 
+        private void write(string write)
+        {
+            var txtOut = new StreamWriter("getactive.txt", true);
+            txtOut.WriteLine(write);
+            txtOut.Close();
+        }
+
         public string GetActive(string type)
         {
-            var video = "";
-            var audio = "";
-            if (_class.Graph.XBar != null)
+            try
             {
-                int intPinVideo;
-                int intPinAudio;
-                _class.Graph.XBar.get_IsRoutedTo(0, out intPinVideo);
-                _class.Graph.XBar.get_IsRoutedTo(1, out intPinAudio);
-                video = _class.VideoCapture.GetCrossbarOutput(intPinVideo, "Video");
-                audio = _class.VideoCapture.GetCrossbarOutput(intPinAudio, "Audio");
+                var video = "";
+                var audio = "";
+
+                if (_class.Graph.XBar != null)
+                {
+                    int intPinVideo;
+                    int intPinAudio;
+
+                    _class.Graph.XBar.get_IsRoutedTo(0, out intPinVideo);
+                    _class.Graph.XBar.get_IsRoutedTo(1, out intPinAudio);
+
+                    write("getcrossbaroutput ( video");
+                    write("intPinVideo>" + intPinVideo);
+                    if (_class.VideoCapture == null) write("videocapture == null");
+                    video = _class.VideoCapture.GetCrossbarOutput(intPinVideo, "Video");
+                    write("getcrossbaroutput ( audio");
+                    audio = _class.VideoCapture.GetCrossbarOutput(intPinAudio, "Audio");
+                }
+                write("> " + type);
+                return type.ToLower() == "video" ? video : audio;
+            }
+            catch (Exception ex)
+            {
+                write(ex.Message);
+                throw;
             }
 
-            return type.ToLower() == "video" ? video : audio;
         }
 
         public int GetActiveId(string type)

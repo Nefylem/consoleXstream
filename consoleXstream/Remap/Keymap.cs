@@ -1,4 +1,8 @@
-﻿using consoleXstream.Home;
+﻿using System;
+using System.IO;
+using System.Reflection;
+using System.Xml;
+using consoleXstream.Home;
 
 namespace consoleXstream.Remap
 {
@@ -81,12 +85,88 @@ namespace consoleXstream.Remap
 
             KeyAltDef.ButtonA = "RETURN";
             KeyAltDef.ButtonB = "BACK";
+
+            KeyDef = LoadKeyboardInputs(KeyDef, "keyboard");
+            KeyAltDef = LoadKeyboardInputs(KeyAltDef, "keyboardAlt");
+
+            SaveKeyboardRemap(KeyDef, "keyboard");
+            SaveKeyboardRemap(KeyAltDef, "keyboardAlt");
         }
 
-        public void LoadKeyboardInputs()
+        public KeyboardKeys LoadKeyboardInputs(KeyboardKeys target, string file)
         {
-            
+            if (!Directory.Exists("Profiles")) return target;
+            if (!File.Exists(@"Profiles\" + file + ".remap")) return target;
+
+            var setting = "";
+
+            var reader = new XmlTextReader(@"Profiles\" + file + ".remap");
+            while (reader.Read())
+            {
+                switch (reader.NodeType)
+                {
+                    case XmlNodeType.Element: // The node is an element.
+                        //MessageBox.Show("<" + reader.Name);
+                        break;
+                    case XmlNodeType.Text: //Display the text in each element.
+                        setting = reader.Value;
+                        break;
+                    case XmlNodeType.EndElement: //Display the end of the element.
+                        if (setting.Length > 0)
+                        {
+                            var title = reader.Name.ToLower();
+                            Type myClassType = target.GetType();
+                            PropertyInfo[] properties = myClassType.GetProperties();
+                            foreach (PropertyInfo property in properties)
+                            {
+                                if (title == property.Name.ToLower())
+                                    if ((string)property.GetValue(target, null) != setting)
+                                    {
+                                        property.SetValue(target, Convert.ChangeType(setting, property.PropertyType), null);
+                                        break;
+                                    }
+                            }
+                        }
+                        setting = "";
+                        break;
+                }
+            }
+            reader.Close();
+            return target;
         }
 
+        public void SaveKeyboardRemap(KeyboardKeys target, string file)
+        {
+            if (!Directory.Exists("Profiles")) Directory.CreateDirectory("Profiles");
+
+            if (File.Exists(@"Profiles\" + file + ".remap")) File.Delete(@"Profiles\" + file + ".remap");
+
+            var save = "<" + file + ">";
+            var myClassType = target.GetType();
+            var properties = myClassType.GetProperties();
+
+            foreach (var property in properties)
+            {
+                try
+                {
+                    var find = property.GetValue(target, null).ToString();
+                    save += "<" + property.Name + ">";
+                    save += find;
+                    save += "</" + property.Name + ">";
+                }
+                catch (Exception)
+                {
+                    //Ignored                    
+                }
+            }
+            save += "</" + file + ">";
+
+            var doc = new XmlDocument();
+            doc.LoadXml(save);
+            var settings = new XmlWriterSettings { Indent = true };
+            var writer = XmlWriter.Create(@"Profiles\" + file + ".remap", settings);
+            doc.Save(writer);
+            writer.Close();
+        }
     }
 }

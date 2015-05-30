@@ -106,8 +106,8 @@ namespace consoleXstream
         public void SetTitanOne(string serial)
         {
             _class.TitanOne.SetTitanOneDevice(serial); 
-            _class.System.AddData("ControllerMax", "False");
-            _class.System.AddData("TitanOne", "True");
+            //_class.System.AddData("ControllerMax", "False");
+            //_class.System.AddData("TitanOne", "True");
         }
         public string GetTitanOne() { return _class.TitanOne.GetTitanOneDevice(); }
 
