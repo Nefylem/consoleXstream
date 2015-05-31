@@ -1,6 +1,4 @@
-﻿using System.Globalization;
-
-namespace consoleXstream.Menu.VR
+﻿namespace consoleXstream.Menu.VR
 {
     public class Config
     {

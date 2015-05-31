@@ -157,14 +157,6 @@ namespace consoleXstream.Menu.SubMenu
 
         private void SaveProfile(string command)
         {
-            /*
-            var profile = new SubMenuOptions.Profiles();
-            profile.GetDataHandle(_class.Data);
-            profile.GetUserHandle(_class.User);
-            profile.GetSystemHandle(_class.System);
-            profile.GetVideoCaptureHandle(_class.VideoCapture);
-            profile.Save(command);
-             */
             _class.Profiles.Save(command);
             _class.Shutter.Close();
         }
@@ -194,8 +186,6 @@ namespace consoleXstream.Menu.SubMenu
             else
             {
                 _class.Base.System.ChangeTitanOne();
-                //_class.Form1.InitTitanOne();
-                //_class.Form1.SetTitanOneDevice();
             }
         }
 

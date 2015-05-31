@@ -1,6 +1,4 @@
 ﻿using System;
-using consoleXstream.Config;
-using consoleXstream.Menu.Data;
 using consoleXstream.Menu.SubMenuOptions;
 using consoleXstream.Output;
 
@@ -196,6 +194,7 @@ namespace consoleXstream.Menu.MainMenu
             _class.SubAction.AddSubItem("DS4 Emulation", "DS4 Emulation");
             _class.SubAction.AddSubItem("Normalize", "Normalize");
             _class.SubAction.AddSubItem("Rumble", "Rumble");
+            _class.SubAction.AddSubItem("Send Key", "Send Key");
 
             CheckDisplaySettings();
 

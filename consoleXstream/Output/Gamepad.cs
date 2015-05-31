@@ -55,41 +55,55 @@ namespace consoleXstream.Output
             if (_controls.Buttons.Start) { output[_class.Remap.RemapGamepad.Start] = Convert.ToByte(100); }
             if (_controls.Buttons.Guide) { output[_class.Remap.RemapGamepad.Home] = Convert.ToByte(100); }
 
-            if (_controls.Buttons.Back)
+            if (_controls.Buttons.Back && (_controls.Buttons.B || _controls.Buttons.Y))
             {
-                if (_class.System.boolBlockMenuButton == false && isSystem)
-                {
-                    _isHoldBack = true;
-                    _menuWait++;
-                    _holdBackCount++;
-                    if (_class.System.boolMenu == false)
-                        if (_menuWait >= _menuShow + 20)
-                        {
-                            _isHoldBack = false;
-                            _holdBackCount = 0;
-                            OpenMenu();
-                        }
-                }
+                output[_class.Remap.RemapGamepad.B] = 0;
+                output[_class.Remap.RemapGamepad.Y] = 0;
+                output[_class.Remap.RemapGamepad.Back] = 0;
+                
+                if (_controls.Buttons.B)
+                    output[_class.Remap.RemapGamepad.Home] = Convert.ToByte(100);
+                if (_controls.Buttons.Y)
+                    output[_class.Remap.RemapGamepad.Touch] = Convert.ToByte(100);
             }
             else
             {
-                if (_isHoldBack)
+
+                if (_controls.Buttons.Back)
                 {
-                    if (_holdBackCount > 0)
+                    if (_class.System.boolBlockMenuButton == false && isSystem)
                     {
-                        _holdBackCount--;
-                        if (_class.System.IsPs4ControllerMode)
-                            output[_class.Remap.RemapGamepad.Touch] = Convert.ToByte(100);
-                        else
-                            output[_class.Remap.RemapGamepad.Back] = Convert.ToByte(100);
+                        _isHoldBack = true;
+                        _menuWait++;
+                        _holdBackCount++;
+                        if (_class.System.boolMenu == false)
+                            if (_menuWait >= _menuShow + 20)
+                            {
+                                _isHoldBack = false;
+                                _holdBackCount = 0;
+                                OpenMenu();
+                            }
                     }
-                    else
+                }
+                else
+                {
+                    if (_isHoldBack)
                     {
-                        _isHoldBack = false;
+                        if (_holdBackCount > 0)
+                        {
+                            _holdBackCount--;
+                            if (_class.System.IsPs4ControllerMode)
+                                output[_class.Remap.RemapGamepad.Touch] = Convert.ToByte(100);
+                            else
+                                output[_class.Remap.RemapGamepad.Back] = Convert.ToByte(100);
+                        }
+                        else
+                        {
+                            _isHoldBack = false;
+                        }
                     }
                 }
             }
-
             if (_controls.Buttons.LeftShoulder) { output[_class.Remap.RemapGamepad.LeftShoulder] = Convert.ToByte(100); }
             if (_controls.Buttons.RightShoulder) { output[_class.Remap.RemapGamepad.RightShoulder] = Convert.ToByte(100); }
             if (_controls.Buttons.LeftStick) { output[_class.Remap.RemapGamepad.LeftStick] = Convert.ToByte(100); }
@@ -134,40 +148,7 @@ namespace consoleXstream.Output
 
             var intTarget = -1;
             intTarget = _class.System.IsPs4ControllerMode == false ? _class.Remap.RemapGamepad.Back : _class.Remap.RemapGamepad.Touch;
-            /*
-            //Back button. Wait until released as its also the menu button
-            if (intTarget > -1)
-            {
-                if (system.boolBlockMenuButton)
-                {
-                    if (output[intTarget] == 100)
-                    {
-                        _boolHoldBack = true;
-                        output[intTarget] = Convert.ToByte(0);
-                        _MenuWait++;
-                        if (!system.boolMenu)
-                        {
-                            if (_MenuWait >= _MenuShow)
-                            {
-                                _boolHoldBack = false;
-                                openMenu();
-                            }
-                        }
-                    }
-                    else
-                    {
-                        if (_boolHoldBack == true)
-                        {
-                            _boolHoldBack = false;
-                            output[intTarget] = Convert.ToByte(100);
-                            _MenuWait = 0;
-                        }
-                        else
-                            _MenuWait = 0;
-                    }
-                }
-            }
-            */
+
             //Dont think that needs to be here
             if (_class.KeyboardInterface == null || _class.KeyboardInterface.Output == null) 
                 return output;
