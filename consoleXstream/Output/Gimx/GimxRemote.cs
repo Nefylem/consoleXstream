@@ -15,6 +15,7 @@ namespace consoleXstream.Output.Gimx
         private BaseClass _class;
         private Input.GamePadState _controls;
         private GimxMaps gimxMap;
+        private byte[] keepAlivePacket;
         
         // Sockets & endpoints
         private Socket gimxSocket;
@@ -30,15 +31,23 @@ namespace consoleXstream.Output.Gimx
             IPAddress serverAddr;
 
             gimxMap = new GimxMaps();
+            keepAlivePacket = new byte[4];
 
-            // TODO Get addresses & ports from the config file
+            // Setup Gimx Server Address
+            _class.System.Debug("[3] Using GimxRemote server: " + _class.System.GimxAddress);
+            _class.System.Debug("[3] GimxRemote KeepAlive: " + _class.System.GimxKeepAlive);
             gimxSocket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
-            serverAddr = IPAddress.Parse("192.168.11.251");
+            serverAddr = IPAddress.Parse(_class.System.GimxAddress);
             wakeEndPoint = new IPEndPoint(serverAddr, 51913);
             controllerEndPoint = new IPEndPoint(serverAddr, 51914);
 
-            // TODO send wakeup packet to the control daemon
-            // Must code a C daemon to start & stop the gimx binary on the remote box
+            // Setup the wakeup/keepalive packet & send it
+            keepAlivePacket[0] = 0xDE;
+            keepAlivePacket[1] = 0xAD;
+            keepAlivePacket[2] = 0xBE;
+            keepAlivePacket[3] = 0xEF;
+            gimxSocket.SendTo(keepAlivePacket, wakeEndPoint);
+
         }
 
         public void CheckControllerInput()
@@ -52,6 +61,11 @@ namespace consoleXstream.Output.Gimx
 
 
             gimxSocket.SendTo(gimxMap.buffer, controllerEndPoint);
+
+            // Check for reconnect cmd
+            if (_controls.Buttons.Back && _controls.Buttons.Y)
+                gimxSocket.SendTo(keepAlivePacket, wakeEndPoint);
+            
         }
     }
 }

@@ -41,6 +41,9 @@
                 _class.Main.SetTitanOne(_class.Set.Check("UseTitanOne"));
             }
 
+            if (_class.Set.Check("UseGimxRemote").ToLower() == "true") _class.System.UseGimxRemote = true;
+            if (_class.Set.Check("GimxAddress").Length > 0) _class.System.GimxAddress = _class.Set.Check("GimxAddress");
+
             _class.System.RefreshRate = _class.Set.Check("RefreshRate");
             _class.System.DisplayResolution = _class.Set.Check("Resolution");
 
