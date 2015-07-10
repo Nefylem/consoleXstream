@@ -320,7 +320,7 @@ namespace consoleXstream.Input
 
     public struct GamePadState
     {
-        internal struct RawState
+        public struct RawState
         {
             public uint dwPacketNumber;
             public GamePad Gamepad;
@@ -343,6 +343,7 @@ namespace consoleXstream.Input
         GamePadDPad dPad;
         GamePadThumbSticks thumbSticks;
         GamePadTriggers triggers;
+        RawState currentRawState;
 
         enum ButtonsConstants
         {
@@ -366,6 +367,7 @@ namespace consoleXstream.Input
         internal GamePadState(bool isConnected, RawState rawState, GamePadDeadZone deadZone)
         {
             this.isConnected = isConnected;
+            currentRawState = rawState;
 
             if (!isConnected)
             {
@@ -456,6 +458,11 @@ namespace consoleXstream.Input
         public GamePadThumbSticks ThumbSticks
         {
             get { return thumbSticks; }
+        }
+
+        public RawState RawSate
+        {
+            get { return currentRawState; }
         }
     }
 

@@ -23,7 +23,8 @@ namespace consoleXstream
         public Output.ControllerMax ControllerMax                       { get; private set; }
         public Output.TitanOne.Write TitanOne                           { get; private set; }
         public Output.Gamepad Gamepad                                   { get; private set; }
-        private Gimx Gimx                                               { get; set; }
+        public Output.Gimx.Gimx Gimx                                    { get; private set; }
+        public Output.Gimx.GimxRemote GimxRemote                        { get; private set; }
 
         public Input.KeyboardHook Keyboard                              { get; private set; }
         public Input.KeyboardInterface KeyboardInterface                { get; private set; }
@@ -36,7 +37,8 @@ namespace consoleXstream
         {
             ControllerMax = new Output.ControllerMax(this);
             Gamepad = new Output.Gamepad(this);
-            Gimx = new Gimx(this);
+            Gimx = new Output.Gimx.Gimx(this);
+            GimxRemote = new Output.Gimx.GimxRemote(this);
             Keyboard = new Input.KeyboardHook(this);
             Keymap = new Keymap(this);
             Menu = new Menu.ShowMenu(this);

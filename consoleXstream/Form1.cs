@@ -254,6 +254,9 @@ namespace consoleXstream
                 }
             }
 
+            // Always init Gimx
+            _class.GimxRemote.initGimxRemote();
+
             if (_class.System.UseTitanOne) InitializeTitanOne();
 
             if (_class.System.CheckFps)
@@ -408,6 +411,9 @@ namespace consoleXstream
                 if (_class.System.UseTitanOne)
                     _class.TitanOne.Send();
             }
+
+            // Always check GIMX
+            _class.GimxRemote.CheckControllerInput();
         }
 
         #region Video capture links to main form

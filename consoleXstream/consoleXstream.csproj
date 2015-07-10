@@ -104,6 +104,8 @@
     <Compile Include="Output\Classes.cs" />
     <Compile Include="Output\ControllerMax.cs" />
     <Compile Include="Output\Gamepad.cs" />
+    <Compile Include="Output\Gimx\GimxMaps.cs" />
+    <Compile Include="Output\Gimx\GimxRemote.cs" />
     <Compile Include="Output\Shortcut.cs" />
     <Compile Include="Output\TitanOne\Classes.cs" />
     <Compile Include="Output\TitanOne\Define.cs" />
@@ -122,7 +124,7 @@
     <Compile Include="Remap\Keymap.cs" />
     <Compile Include="Scripting\ExternalScript.cs" />
     <Compile Include="Input\GamepadXInput.cs" />
-    <Compile Include="Output\Gimx.cs" />
+    <Compile Include="Output\Gimx\Gimx.cs" />
     <Compile Include="DrawGui\DrawGui.cs" />
     <Compile Include="Input\KeyboardHook.cs" />
     <Compile Include="Input\KeyboardInterface.cs" />
