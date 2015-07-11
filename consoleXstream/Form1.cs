@@ -401,18 +401,24 @@ namespace consoleXstream
         private void CheckControllerInput()
         {
             _class.Gamepad.Check();
-            if (_class.System.UseTitanOneApi) _class.TitanOne.Send();
-            else
+
+            if (_class.System.UseTitanOne)
             {
-                if (_class.System.UseControllerMax)
-                    _class.ControllerMax.CheckControllerInput();
-
-                if (_class.System.UseTitanOne)
-                    _class.TitanOne.Send();
-
-                if (_class.System.UseGimxRemote)
-                    _class.GimxRemote.CheckControllerInput();
+                _class.TitanOne.Send();
+                return;
             }
+
+            if (_class.System.UseControllerMax)
+            {
+                if (_class.System.UseTitanOneApi)
+                    _class.TitanOne.Send();
+                else
+                    _class.ControllerMax.Send();
+                return;
+            }
+
+            if (_class.System.UseGimxRemote)
+                _class.GimxRemote.CheckControllerInput();
         }
 
         #region Video capture links to main form

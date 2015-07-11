@@ -1,6 +1,4 @@
 ﻿using System;
-using consoleXstream.Config;
-using consoleXstream.Menu.Data;
 using consoleXstream.Menu.SubMenuOptions;
 using consoleXstream.Output;
 
@@ -212,12 +210,22 @@ namespace consoleXstream.Menu.MainMenu
 
             _class.SubAction.AddSubItem("TitanOne", "TitanOne", _listTo.GetToCount("TitanOne").ToString());
             RegisterWatcher("TitanOne");
-
-            _class.SubAction.AddSubItem("GIMX", "GIMX");
             _class.SubAction.AddSubItem("Remote GIMX", "Remote GIMX");
-            _class.SubAction.AddSubItem("McShield", "McShield");
-            _class.SubAction.AddSubItem("Control VJOY", "Control VJOY");
 
+            /*
+            //Todo: re-enable these options once / if anyone is bothered to implement them
+            _class.SubAction.AddSubItem("GIMX", "GIMX");
+            _class.SubAction.AddSubItem("McShield", "McShield");
+             * 
+             /*
+             * This switch used to tell CXS if it's allowed to disable vjoy on exit. Some games when streamed dont like 
+             * VJOY running (battlefield 3 / 4). If this is enabled, it should run devcon (or implement its own - that would be cool)
+             * and disable the vjoy HID.
+             * This probably shouldnt be in this menu. 
+             */
+            /*
+            _class.SubAction.AddSubItem("Control VJOY", "Control VJOY");        
+            */
             CheckDisplaySettings();
             SelectSubItem();
             _class.Shutter.SetActive(currentRow - 1);
@@ -297,11 +305,12 @@ namespace consoleXstream.Menu.MainMenu
                 if (t.Command.ToLower() == "titanone")
                     if (_class.Base.System.UseTitanOne) _class.Data.Checked.Add("TitanOne");
 
+                if (t.Command.ToLower() == "remote gimx")
+                    if (_class.Base.System.UseGimxRemote) _class.Data.Checked.Add("Remote GIMX");
+
                 if (t.Command.ToLower() == "gimx")
                     if (_class.Base.System.boolGIMX) _class.Data.Checked.Add("GIMX");
 
-                if (t.Command.ToLower() == "remote gimx")
-                    if (_class.Base.System.boolRemoteGIMX) _class.Data.Checked.Add("remote gimx");
 
                 if (t.Command.ToLower() == "McShield")
                     if (_class.Base.System.boolMcShield) _class.Data.Checked.Add("McShield");

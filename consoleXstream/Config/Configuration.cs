@@ -36,7 +36,6 @@ namespace consoleXstream.Config
         public string CaptureProfile { get; set; }
 
         public bool boolGIMX { get; private set; }
-        public bool boolRemoteGIMX { get; private set; }
         public bool boolMcShield { get; private set; }
         public bool boolControlVJOY { get; private set; }
 

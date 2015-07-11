@@ -7,6 +7,7 @@
 
         public void Change()
         {
+            _class.System.UseGimxRemote = false;
             if (_class.System.UseTitanOneApi)
             {
                 changeTitanOne_TOAPI();
@@ -27,6 +28,7 @@
 
         public void Change(bool set)
         {
+            _class.System.UseGimxRemote = false;
             if (_class.System.UseTitanOneApi)
             {
                 changeTitanOne_TOAPI();

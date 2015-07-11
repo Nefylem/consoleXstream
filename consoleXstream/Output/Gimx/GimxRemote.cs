@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using consoleXstream.Input;
+﻿using consoleXstream.Input;
 using System.Net.Sockets;
 using System.Net;
 
@@ -34,8 +29,8 @@ namespace consoleXstream.Output.Gimx
             keepAlivePacket = new byte[4];
 
             // Setup Gimx Server Address
-            _class.System.Debug("[3] Using GimxRemote server: " + _class.System.GimxAddress);
-            _class.System.Debug("[3] GimxRemote KeepAlive: " + _class.System.GimxKeepAlive);
+            _class.System.Debug("Gimx.log", "[3] Using GimxRemote server: " + _class.System.GimxAddress);
+            _class.System.Debug("Gimx.log", "[3] GimxRemote KeepAlive: " + _class.System.GimxKeepAlive);
             gimxSocket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
             serverAddr = IPAddress.Parse(_class.System.GimxAddress);
             wakeEndPoint = new IPEndPoint(serverAddr, 51913);
@@ -63,9 +58,8 @@ namespace consoleXstream.Output.Gimx
             gimxSocket.SendTo(gimxMap.buffer, controllerEndPoint);
 
             // Check for reconnect cmd
-            if (_controls.Buttons.Back && _controls.Buttons.Y)
+            if (_controls.Buttons.Back && _controls.Buttons.X)
                 gimxSocket.SendTo(keepAlivePacket, wakeEndPoint);
-            
         }
     }
 }

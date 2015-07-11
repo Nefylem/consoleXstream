@@ -7,6 +7,8 @@
 
         public void Change()
         {
+            _class.System.UseGimxRemote = false;
+
             if (_class.System.UseTitanOneApi)
             {
                 if (_class.Log.CheckLog("TitanOne")) _class.Debug.debug("TitanOne.Log", "Connecting ControllerMax using TO API");

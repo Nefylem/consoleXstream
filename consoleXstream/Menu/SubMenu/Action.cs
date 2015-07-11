@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using consoleXstream.Menu.Data;
 using consoleXstream.Output;
@@ -174,12 +175,17 @@ namespace consoleXstream.Menu.SubMenu
             if (command == "ds4 emulation") _class.Base.System.ChangeDs4Emulation();
             if (command == "normalize") _class.Base.System.ChangeNormalizeGamepad();
             if (command == "rumble") _class.Base.System.Class.Gamepad.ChangeRumble();
-            if (command == "controllermax") _class.Base.System.ChangeControllerMax();
-            if (command == "titanone") ChangeTitanOne();
             if (command == "resolution") ListCaptureResolution();
             if (command == "crossbar") _class.Base.System.ChangeCrossbar();
             if (command == "avirender") _class.Base.System.ChangeAviRender();
             if (command == "checkcaptureres") _class.Base.System.ChangeCaptureAutoRes();
+
+            if (command == "controllermax") _class.Base.System.ChangeControllerMax();
+            if (command == "titanone") ChangeTitanOne();
+
+            //Todo: add submenu for udp annouce / manual config 
+            if (string.Equals(command, "Remote GIMX", StringComparison.CurrentCultureIgnoreCase))
+                _class.Base.System.Class.RemoteGimxConfig.Change();
 
             _class.Action.CheckDisplaySettings();
         }

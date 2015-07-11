@@ -72,7 +72,6 @@ namespace consoleXstream.Output.TitanOne
     [Block Rumble Command (0,1) : 1 byte]
     [Turn Off Controller Command (0,1) : 1 byte]
     [Button States : 36 bytes - same format as gcapi_Write]
-                _gcapi_WriteEx(output);
                  */
 
                 _class.Define.Write(_class.Gamepad.Output);

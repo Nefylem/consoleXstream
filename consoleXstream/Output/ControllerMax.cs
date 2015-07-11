@@ -229,7 +229,7 @@ namespace consoleXstream.Output
             _class.System.Debug("ControllerMax.log", "[OK] Closed " + strDevice + " (" + strRef + ")");
         }
 
-        public void CheckControllerInput()
+        public void Send()
         {
             if (!_boolGCAPILoaded)
                 return;
@@ -238,129 +238,7 @@ namespace consoleXstream.Output
 
             if ((_gcapi_IsConnected() == 1) || boolOverride)
             {
-                //Update gamepad status
-                _controls = GamePad.GetState(PlayerIndex.One);
-                
-                if (_intXboxCount == 0) { _intXboxCount = Enum.GetNames(typeof(Xbox)).Length; }
-                byte[] output = new byte[_intXboxCount];
-
-                if (_controls.DPad.Left) { output[(int)Xbox.Left] = Convert.ToByte(100); }
-                if (_controls.DPad.Right) { output[(int)Xbox.Right] = Convert.ToByte(100); }
-                if (_controls.DPad.Up) { output[(int)Xbox.Up] = Convert.ToByte(100); }
-                if (_controls.DPad.Down) { output[(int)Xbox.Down] = Convert.ToByte(100); }
-
-                if (_controls.Buttons.A) { output[(int)Xbox.A] = Convert.ToByte(100); }
-                if (_controls.Buttons.B) { output[(int)Xbox.B] = Convert.ToByte(100); }
-                if (_controls.Buttons.X) { output[(int)Xbox.X] = Convert.ToByte(100); }
-                if (_controls.Buttons.Y) { output[(int)Xbox.Y] = Convert.ToByte(100); }
-
-                if (_controls.Buttons.Start) { output[(int)Xbox.Start] = Convert.ToByte(100); }
-                if (_controls.Buttons.Guide) { output[(int)Xbox.Home] = Convert.ToByte(100); }
-                if (_controls.Buttons.Back)
-                {
-                    if (_class.System.boolBlockMenuButton == false)
-                    {
-                        _intMenuWait++;
-                        if (_class.System.boolMenu == false)
-                            if (_intMenuWait >= _intMenuShow + 20)
-                                openMenu();
-                    }
-
-                    //Remap back buton to touchpad
-                    if (_class.System.IsPs4ControllerMode)
-                        output[(int)Xbox.Touch] = Convert.ToByte(100);
-                    else
-                        output[(int)Xbox.Back] = Convert.ToByte(100);
-                }
-
-                if (_controls.Buttons.LeftShoulder) { output[(int)Xbox.LeftShoulder] = Convert.ToByte(100); }
-                if (_controls.Buttons.RightShoulder) { output[(int)Xbox.RightShoulder] = Convert.ToByte(100); }
-                if (_controls.Buttons.LeftStick) { output[(int)Xbox.LeftStick] = Convert.ToByte(100); }
-                if (_controls.Buttons.RightStick) { output[(int)Xbox.RightStick] = Convert.ToByte(100); }
-
-                if (_controls.Triggers.Left > 0) { output[(int)Xbox.LeftTrigger] = Convert.ToByte(_controls.Triggers.Left * 100); }
-                if (_controls.Triggers.Right > 0) { output[(int)Xbox.RightTrigger] = Convert.ToByte(_controls.Triggers.Right * 100); }
-
-                double dblLX = _controls.ThumbSticks.Left.X * 100;
-                double dblLY = _controls.ThumbSticks.Left.Y * 100;
-                double dblRX = _controls.ThumbSticks.Right.X * 100;
-                double dblRY = _controls.ThumbSticks.Right.Y * 100;
-
-                if (_class.System.IsNormalizeControls == true)
-                {
-                    normalGamepad(ref dblLX, ref dblLY);
-                    normalGamepad(ref dblRX, ref dblRY);
-                }
-                else
-                {
-                    dblLY = -dblLY;
-                    dblRY = -dblRY;
-                }
-
-                if (dblLX != 0) { output[(int)Xbox.LeftX] = (byte)Convert.ToSByte((int)(dblLX)); }
-                if (dblLY != 0) { output[(int)Xbox.LeftY] = (byte)Convert.ToSByte((int)(dblLY)); }
-                if (dblRX != 0) { output[(int)Xbox.RightX] = (byte)Convert.ToSByte((int)(dblRX)); }
-                if (dblRY != 0) { output[(int)Xbox.RightY] = (byte)Convert.ToSByte((int)(dblRY)); }
-
-                if (intCMHomeCount > 0)
-                {
-                    output[(int)Xbox.Home] = Convert.ToByte(100);
-                    intCMHomeCount--;
-                }
-
-                if (boolPs4Touchpad == true)
-                    output[(int)Xbox.Touch] = Convert.ToByte(100);
-
-
-                if (_boolLoadShortcuts)
-                    output = checkKeys(output);
-
-                int intTarget = -1;
-                if (_class.System.IsPs4ControllerMode == false) { intTarget = (int)Xbox.Back; } else { intTarget = (int)Xbox.Touch; }
-
-                //Back button. Wait until released as its also the menu button
-                if (intTarget > -1)
-                {
-                    if (_class.System.boolBlockMenuButton)
-                    {
-                        if (output[intTarget] == 100)
-                        {
-                            _boolHoldBack = true;
-                            output[intTarget] = Convert.ToByte(0);
-                            _intMenuWait++;
-                            if (!_class.System.boolMenu)
-                            {
-                                if (_intMenuWait >= _intMenuShow)
-                                {
-                                    _boolHoldBack = false;
-                                    openMenu();
-                                }
-                            }
-                        }
-                        else
-                        {
-                            if (_boolHoldBack)
-                            {
-                                _boolHoldBack = false;
-                                output[intTarget] = Convert.ToByte(100);
-                                _intMenuWait = 0;
-                            }
-                            else
-                                _intMenuWait = 0;
-                        }
-                    }
-                }
-                
-                if (_class.KeyboardInterface != null)
-                {
-                    for (var intCount = 0; intCount < _intXboxCount; intCount++)
-                    {
-                        if (_class.KeyboardInterface.output[intCount] != 0)
-                            output[intCount] = _class.KeyboardInterface.output[intCount];
-                    }
-                }
-
-                _gcapi_Write(output);
+                _gcapi_Write(_class.Gamepad.Output);
 
                 if (_class.System.UseRumble != true) return;
                 var report = new GCAPI_REPORT_CONTROLLERMAX();

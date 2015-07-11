@@ -57,6 +57,7 @@
     <Compile Include="Config\Gamepad.cs" />
     <Compile Include="Config\Log.cs" />
     <Compile Include="Config\Profile.cs" />
+    <Compile Include="Config\RemoteGimx.cs" />
     <Compile Include="Config\Set.cs" />
     <Compile Include="Config\Settings.cs" />
     <Compile Include="Config\TitanOne.cs" />

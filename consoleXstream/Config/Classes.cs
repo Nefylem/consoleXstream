@@ -21,6 +21,7 @@
         public Display Display { get; set; }
         public TitanOne TitanOneConfig { get; set; }
         public ControllerMax ControllerMaxConfig { get; set; }
+        public RemoteGimx RemoteGimxConfig { get; set; }
         public BaseClass BaseClass { get; set; }
         public Vr Vr { get; private set; }
 
@@ -40,6 +41,7 @@
             Display = new Display(this);
             TitanOneConfig = new TitanOne(this);
             ControllerMaxConfig = new ControllerMax(this);
+            RemoteGimxConfig = new RemoteGimx(this);
             Vr = new Vr(this);
         }
     }
