@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace consoleXstream.Output
+namespace consoleXstream.Output.Gimx
 {
-    class Gimx
+    public class Gimx
     {
         public Gimx(BaseClass baseClass) { _class = baseClass; }
         private BaseClass _class;

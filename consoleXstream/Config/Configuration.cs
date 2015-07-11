@@ -29,6 +29,9 @@ namespace consoleXstream.Config
         public bool UseTitanOne { get; set; }
         public bool UseTitanOneApi { get; set; }
         public string TitanOneDevice { get; set; }
+        public bool UseGimxRemote { get; set; }
+        public string GimxAddress { get; set; }
+        public int GimxKeepAlive { get; set; }
 
         public string CaptureProfile { get; set; }
 

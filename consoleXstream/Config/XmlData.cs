@@ -77,6 +77,8 @@ namespace consoleXstream.Config
             strSave += _class.Set.CheckData("TitanOne");
             strSave += _class.Set.CheckData("UseTitanOne");
             strSave += _class.Set.CheckData("MenuLog");
+            strSave += _class.Set.CheckData("UseGimxRemote");
+            strSave += _class.Set.CheckData("GimxAddress");
 
             strSave += "</Configuration>";
 

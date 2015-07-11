@@ -58,7 +58,7 @@ namespace consoleXstream.Output
                 {
                     _MenuWait++;
                     if (_class.System.boolMenu == false)
-                        if (_MenuWait >= _MenuShow + 20)
+                        if (_MenuWait >= (_MenuShow + 80))
                             OpenMenu();
                 }
 
@@ -67,6 +67,10 @@ namespace consoleXstream.Output
                     Output[_class.Remap.RemapGamepad.Touch] = Convert.ToByte(100);
                 else
                     Output[_class.Remap.RemapGamepad.Back] = Convert.ToByte(100);
+            }
+            else
+            {
+                _MenuWait = 0;
             }
 
             if (_controls.Buttons.LeftShoulder) { Output[_class.Remap.RemapGamepad.LeftShoulder] = Convert.ToByte(100); }

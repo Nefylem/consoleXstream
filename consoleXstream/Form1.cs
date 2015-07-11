@@ -254,6 +254,8 @@ namespace consoleXstream
                 }
             }
 
+            if (_class.System.UseGimxRemote) _class.GimxRemote.initGimxRemote();
+
             if (_class.System.UseTitanOne) InitializeTitanOne();
 
             if (_class.System.CheckFps)
@@ -407,6 +409,9 @@ namespace consoleXstream
 
                 if (_class.System.UseTitanOne)
                     _class.TitanOne.Send();
+
+                if (_class.System.UseGimxRemote)
+                    _class.GimxRemote.CheckControllerInput();
             }
         }
 
