@@ -103,7 +103,10 @@
     <Compile Include="Menu\VR\Reposition.cs" />
     <Compile Include="Menu\VR\Resize.cs" />
     <Compile Include="Output\Classes.cs" />
-    <Compile Include="Output\ControllerMax.cs" />
+    <Compile Include="Output\CronusPlus\Classes.cs" />
+    <Compile Include="Output\CronusPlus\Define.cs" />
+    <Compile Include="Output\CronusPlus\Init.cs" />
+    <Compile Include="Output\CronusPlus\Write.cs" />
     <Compile Include="Output\Gamepad.cs" />
     <Compile Include="Output\Gimx\GimxMaps.cs" />
     <Compile Include="Output\Gimx\GimxRemote.cs" />
@@ -265,7 +268,6 @@
   <ItemGroup>
     <Folder Include="Dialog\" />
     <Folder Include="Notify\" />
-    <Folder Include="Output\ControllerMax\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

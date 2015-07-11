@@ -58,7 +58,6 @@ namespace consoleXstream.Output.TitanOne.GCMAPI
 
         public void Send()
         {
-            //_class.System.Debug("TOCheck.log", _activeDevice + " / " + _listDevices[_activeDevice]);
             if (!_isConnected)
             {
                 if (_class.MDefine.GcmapiConnect != null) _class.MDefine.GcmapiConnect((ushort) _class.Write.DevId);

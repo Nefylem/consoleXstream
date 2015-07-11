@@ -57,6 +57,7 @@ namespace consoleXstream.Output.Gimx
 
             gimxSocket.SendTo(gimxMap.buffer, controllerEndPoint);
 
+            
             // Check for reconnect cmd
             if (_controls.Buttons.Back && _controls.Buttons.X)
                 gimxSocket.SendTo(keepAlivePacket, wakeEndPoint);

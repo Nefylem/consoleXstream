@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using consoleXstream.Config;
 using consoleXstream.Input;
 

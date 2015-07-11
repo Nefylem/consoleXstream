@@ -28,7 +28,7 @@
             _class.Set.Add("ControllerMax", _class.System.UseControllerMax.ToString());
 
             if (_class.System.UseControllerMax)
-                _class.ControllerMax.initControllerMax();
+                _class.CronusPlus.Init();
         }
 
         public void changeControllerMax_TOAPI()

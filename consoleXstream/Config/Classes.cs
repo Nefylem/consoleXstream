@@ -1,4 +1,5 @@
-﻿namespace consoleXstream.Config
+﻿
+namespace consoleXstream.Config
 {
     public class Classes
     {
@@ -11,7 +12,7 @@
         public Set Set { get; set; }
         public Configuration System { get; set; }
         public VideoCapture.VideoCapture VideoCapture { get; set; }
-        public Output.ControllerMax ControllerMax { get; set; }
+        public Output.CronusPlus.Write CronusPlus { get; set; }
         public Output.TitanOne.Write TitanOne { get; set; }
         public VideoResolution VideoResolution { get; set; }
         public XmlData Xml { get; set; }

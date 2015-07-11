@@ -110,7 +110,7 @@ namespace consoleXstream
                 _class.System.SetInitialDisplay();
 
                 if (_class.System.UseControllerMax)
-                    _class.ControllerMax.closeControllerMaxInterface();
+                    _class.CronusMax.Close();
 
                 if (_class.System.UseInternalCapture)
                     _class.VideoCapture.CloseGraph();
@@ -244,7 +244,7 @@ namespace consoleXstream
                 if (!_class.System.UseTitanOneApi)
                 {
                     _class.System.Debug("[3] Configure ControllerMax API");
-                    _class.ControllerMax.initControllerMax();
+                    _class.CronusMax.Init();
                 }
                 else
                 {
@@ -413,7 +413,7 @@ namespace consoleXstream
                 if (_class.System.UseTitanOneApi)
                     _class.TitanOne.Send();
                 else
-                    _class.ControllerMax.Send();
+                    _class.CronusMax.Send();
                 return;
             }
 
@@ -572,8 +572,7 @@ namespace consoleXstream
 
             //_class.System.Debug("listAll.log", "check controllerMax");
 
-            if (_class.ControllerMax._gcapi_Unload != null)
-                _class.ControllerMax.closeControllerMaxInterface();
+            _class.CronusMax.Close();
 
 
             //_class.System.Debug("listAll.log", "setup update true");
@@ -671,7 +670,7 @@ namespace consoleXstream
 
         public void InitControllerMax()
         {
-            _class.ControllerMax.initControllerMax();
+            _class.CronusMax.Init();
         }
 
         public void InitTitanOne()

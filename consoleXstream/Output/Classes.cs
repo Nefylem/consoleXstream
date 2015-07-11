@@ -8,8 +8,6 @@ namespace consoleXstream.Output
 {
     public class Classes
     {
-        /*
-*/
 
     }
 }

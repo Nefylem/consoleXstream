@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using consoleXstream.Output.CronusPlus;
 using consoleXstream.Remap;
 
 namespace consoleXstream.Config
@@ -71,10 +72,10 @@ namespace consoleXstream.Config
             Class.Set.Data = new List<string>();
         }
 
-        public void GetClassHandles(VideoCapture.VideoCapture inVideo, Output.ControllerMax inMax, Output.TitanOne.Write inTo, VideoResolution inVid)
+        public void GetClassHandles(VideoCapture.VideoCapture inVideo, Write inMax, Output.TitanOne.Write inTo, VideoResolution inVid)
         {
             Class.VideoCapture = inVideo;
-            Class.ControllerMax = inMax;
+            Class.CronusPlus = inMax;
             Class.TitanOne = inTo;
             Class.VideoResolution = inVid;
         }

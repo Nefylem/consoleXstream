@@ -20,7 +20,7 @@ namespace consoleXstream
         public Keymap Keymap                                            { get; private set; }
         public Menu.ShowMenu Menu                                       { get; private set; }
 
-        public Output.ControllerMax ControllerMax                       { get; private set; }
+        public Output.CronusPlus.Write CronusMax                        { get; private set; }
         public Output.TitanOne.Write TitanOne                           { get; private set; }
         public Output.Gamepad Gamepad                                   { get; private set; }
         public Output.Gimx.Gimx Gimx                                    { get; private set; }
@@ -35,7 +35,7 @@ namespace consoleXstream
 
         private void Declare()
         {
-            ControllerMax = new Output.ControllerMax(this);
+            CronusMax = new Output.CronusPlus.Write(this);
             Gamepad = new Output.Gamepad(this);
             Gimx = new Output.Gimx.Gimx(this);
             GimxRemote = new Output.Gimx.GimxRemote(this);
@@ -60,7 +60,7 @@ namespace consoleXstream
 
             VideoCapture = new VideoCapture.VideoCapture(Home, System);
 
-            System.GetClassHandles(VideoCapture, ControllerMax, TitanOne, VideoResolution);
+            System.GetClassHandles(VideoCapture, CronusMax, TitanOne, VideoResolution);
         }
     }
 }
