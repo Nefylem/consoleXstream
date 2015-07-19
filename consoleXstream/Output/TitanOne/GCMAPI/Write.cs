@@ -56,7 +56,7 @@ namespace consoleXstream.Output.TitanOne.GCMAPI
             return _listDevices.Count > 0 ? _listDevices[_activeDevice] : "";
         }
 
-        public void Send()
+        public void Send(Gamepad.GamepadOutput player)
         {
             if (!_isConnected)
             {
@@ -64,16 +64,20 @@ namespace consoleXstream.Output.TitanOne.GCMAPI
                 _isConnected = true;
             }
 
-            if (_class.MDefine.GcmapiIsConnected(_activeDevice) == 1)
+            if (_class.MDefine.GcmapiIsConnected(player.Index - 1) == 1)
             {
-                _class.MDefine.GcmapiWrite(_activeDevice, _class.Gamepad.Output);
+                //todo: assign active divice to each player. For now, just assign player number to device, also menu options for multiplayer
+                _class.MDefine.GcmapiWrite(player.Index - 1, player.Output);
+                //_class.MDefine.GcmapiWrite(_activeIndex, player.Output);
 
                 if (!_class.System.UseRumble) return;
 
                 var report = new Define.GcmapiReport();
 
-                if (_class.MDefine.GcmapiRead(_activeDevice, ref report) != IntPtr.Zero)
-                    GamePad.SetState(PlayerIndex.One, report.Rumble[0], report.Rumble[1]);
+                if (_class.MDefine.GcmapiRead(player.Index - 1, ref report) != IntPtr.Zero)
+                {
+                    GamePad.SetState(player.PlayerIndex, report.Rumble[0], report.Rumble[1]);
+                }
             }
             else
             {

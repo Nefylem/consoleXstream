@@ -28,17 +28,26 @@ namespace consoleXstream.Output
         private int _MenuWait;
         private int _MenuShow;
 
-        public byte[] Output;
-
-        public void Check()
+        public class GamepadOutput
         {
-            _MenuShow = 35;
+            public int Index;
+            public byte[] Output;
+            public PlayerIndex PlayerIndex;
+        }
 
-            //Update gamepad status
-            _controls = GamePad.GetState(PlayerIndex.One);
+        public GamepadOutput Check(int index)
+        {
+            //todo: read menushow from config
+            var player = PlayerIndex.One;
+            if (index == 2) player = PlayerIndex.Two;
+            if (index == 3) player = PlayerIndex.Three;
+            if (index == 4) player = PlayerIndex.Four;
+
+            _MenuShow = 35;
+            _controls = GamePad.GetState(player);
 
             if (_XboxCount == 0) { _XboxCount = Enum.GetNames(typeof(Xbox)).Length; }
-            Output = new byte[_XboxCount];
+            var Output = new byte[_XboxCount];
 
             if (_controls.DPad.Left) { Output[_class.Remap.RemapGamepad.Left] = Convert.ToByte(100); }
             if (_controls.DPad.Right) { Output[_class.Remap.RemapGamepad.Right] = Convert.ToByte(100); }
@@ -117,47 +126,23 @@ namespace consoleXstream.Output
 
             var intTarget = -1;
             intTarget = _class.System.IsPs4ControllerMode == false ? _class.Remap.RemapGamepad.Back : _class.Remap.RemapGamepad.Touch;
+
             /*
-            //Back button. Wait until released as its also the menu button
-            if (intTarget > -1)
-            {
-                if (system.boolBlockMenuButton)
-                {
-                    if (output[intTarget] == 100)
-                    {
-                        _boolHoldBack = true;
-                        output[intTarget] = Convert.ToByte(0);
-                        _MenuWait++;
-                        if (!system.boolMenu)
-                        {
-                            if (_MenuWait >= _MenuShow)
-                            {
-                                _boolHoldBack = false;
-                                openMenu();
-                            }
-                        }
-                    }
-                    else
-                    {
-                        if (_boolHoldBack == true)
-                        {
-                            _boolHoldBack = false;
-                            output[intTarget] = Convert.ToByte(100);
-                            _MenuWait = 0;
-                        }
-                        else
-                            _MenuWait = 0;
-                    }
-                }
-            }
-            */
             //Dont think that needs to be here
-            if (_class.KeyboardInterface == null || _class.KeyboardInterface.output == null) return;
+            if (_class.KeyboardInterface != null || _class.KeyboardInterface.output == null) return;
             for (var intCount = 0; intCount < _XboxCount; intCount++)
             {
                 if (_class.KeyboardInterface.output[intCount] != 0)
                     Output[intCount] = _class.KeyboardInterface.output[intCount];
             }
+            */
+
+            return new GamepadOutput()
+            {
+                Output = Output,
+                Index = index,
+                PlayerIndex = player                    //Store this for returning rumble
+            };
         }
 
         private void NormalGamepad(ref double dblLx, ref double dblLy)
@@ -171,6 +156,7 @@ namespace consoleXstream.Output
                 var dblTheta = Math.Atan2(dblLy, dblLx);
                 var dblAngle = (90 - ((dblTheta * 180) / Math.PI)) % 360;
 
+                //todo: anyone with better trig want to speed this up?
                 if ((dblAngle < 0) && (dblAngle >= -45)) { dblNewX = (int)(100 / Math.Tan(dblTheta)); dblNewY = -100; }
                 if ((dblAngle >= 0) && (dblAngle <= 45)) { dblNewX = (int)(100 / Math.Tan(dblTheta)); dblNewY = -100; }
                 if ((dblAngle > 45) && (dblAngle <= 135)) { dblNewY = -(int)(Math.Tan(dblTheta) * 100); dblNewX = 100; }

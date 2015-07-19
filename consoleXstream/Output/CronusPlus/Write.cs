@@ -9,7 +9,7 @@ namespace consoleXstream.Output.CronusPlus
 
         private readonly Classes _class;
 
-        public void Send()
+        public void Send(Gamepad.GamepadOutput player)
         {
             if (_class.Define.Write == null) return;
 
@@ -17,11 +17,13 @@ namespace consoleXstream.Output.CronusPlus
 
             if ((_class.Define.IsConnected() != 1) && !boolOverride) return;
 
-            _class.Define.Write(_class.BaseClass.Gamepad.Output);
+            _class.Define.Write(player.Output);
 
             var report = new Define.GcapiReportControllermax();
-            if (_class.Define.Read(ref report) != IntPtr.Zero)
-                GamePad.SetState(PlayerIndex.One, report.Rumble[0], report.Rumble[1]);
+            if (_class.Define.Read(ref report) == IntPtr.Zero) return;
+
+            if (_class.BaseClass.System.UseRumble)
+                GamePad.SetState(player.PlayerIndex, report.Rumble[0], report.Rumble[1]);
 
             //TODO: Read report to see what authenticating controller is doing
         }

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Windows.Forms;
 using System.IO;
 using System.Reflection;
+using consoleXstream.Input;
 using consoleXstream.Output.TitanOne;
 
 namespace consoleXstream
@@ -400,20 +401,37 @@ namespace consoleXstream
 
         private void CheckControllerInput()
         {
-            _class.Gamepad.Check();
+            //todo: check menu for multiplayer settings
+            var player1 = _class.Gamepad.Check(1);
+            var player2 = _class.Gamepad.Check(2);
+            var player3 = _class.Gamepad.Check(3);
+            var player4 = _class.Gamepad.Check(4);
+            label1.Visible = true;
+            label2.Visible = true;
+            var display = player1.Output.Aggregate("", (current, bit) => current + bit.ToString());
+            var display2 = player2.Output.Aggregate("", (current, bit) => current + bit.ToString());
+            this.Text = display + " - " + display2;
 
+            //label1.Text = player1.Output.ToString();
+            //label2.Text = player2.Output.ToString();
+
+            //todo: check running gamepads. 
+            //Only using TO as test, only one with a multi dev api 
             if (_class.System.UseTitanOne)
             {
-                _class.TitanOne.Send();
+                _class.TitanOne.Send(player1);
+                _class.TitanOne.Send(player2);
+                _class.TitanOne.Send(player3);
+                _class.TitanOne.Send(player4);
                 return;
             }
 
             if (_class.System.UseControllerMax)
             {
                 if (_class.System.UseTitanOneApi)
-                    _class.TitanOne.Send();
+                    _class.TitanOne.Send(player1);
                 else
-                    _class.CronusMax.Send();
+                    _class.CronusMax.Send(player1);
                 return;
             }
 
@@ -421,7 +439,6 @@ namespace consoleXstream
                 _class.GimxRemote.CheckControllerInput();
         }
 
-        #region Video capture links to main form
         private void CheckRunningGraph()
         {
             if (_class.VideoCapture.BoolActiveVideo)
@@ -501,7 +518,6 @@ namespace consoleXstream
             //_class._videoCapture.ForceRebuildAfterResolution();
              */
         }
-        #endregion
 
         public void OpenMenu()
         {
@@ -566,20 +582,14 @@ namespace consoleXstream
                 ListBackupToDevices.Add(item);
             }
 
-            //_class.System.Debug("listAll.log", "clearList");
-
             ListToDevices = new List<string>();
-
-            //_class.System.Debug("listAll.log", "check controllerMax");
 
             _class.CronusMax.Close();
 
 
-            //_class.System.Debug("listAll.log", "setup update true");
             IsUpdatingTitanOneList = true;
             TitanOneListRefresh = 10;
             TitanOneListRefreshFail = false;
-            //_class.System.Debug("listAll.log", "list devices");
             _class.TitanOne.ListDevices(); 
         }
 

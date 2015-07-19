@@ -37,11 +37,11 @@ namespace consoleXstream.Output.TitanOne
         public void Initialize() { _class.Init.Open(); }
         public void Close() { _class.Init.Close(); }
 
-        public void Send()
+        public void Send(Gamepad.GamepadOutput player)
         {
             if (ApiMethod == Define.ApiMethod.Multi)
             {
-                _class.MWrite.Send();
+                _class.MWrite.Send(player);
                 return;
             }
 
@@ -51,8 +51,7 @@ namespace consoleXstream.Output.TitanOne
 
             if ((_class.Define.IsConnected() == 1) || boolOverride)
             {
-
-                //Block gamepad rumble
+                //Block authenticating gamepad rumble
                 //gcapi_WriteEX(uint8_t *outpacket, uint8_t size)
                 /*
                 [0xFF,0x01 : 2 byte, Packet Signature]
@@ -73,7 +72,10 @@ namespace consoleXstream.Output.TitanOne
     [Button States : 36 bytes - same format as gcapi_Write]
                  */
 
-                _class.Define.Write(_class.Gamepad.Output);
+                //No multi - api, so no point accepting controls from any gamepad here
+                if (player.Index != 1) return;
+
+                _class.Define.Write(player.Output);
 
                 if (!_class.System.UseRumble) return;
                 if (DevId == Define.DevPid.TitanOne)
